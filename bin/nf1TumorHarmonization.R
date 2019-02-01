@@ -12,7 +12,7 @@ plotMetadata<-function(fv.tab,prefix){
   tab.with.meta<-fv.tab%>%dplyr::select(c('id','specimenID','species','age','sex','tumorType','isCellLine','study'))%>%mutate(Sex=tolower(sex))%>%mutate(cellCulture=tolower(isCellLine))
 
   ##first plot: just summary of data by sex
-  ggplot(tab.with.meta)+geom_bar(aes(x=Sex,fill=tumorType))+ggtitle('NF1 RNA-seq samples')
+  ggplot(tab.with.meta)+geom_bar(aes(x=Sex,fill=tumorType),position='dodge')+ggtitle('NF1 RNA-seq samples')
   ggsave(paste(prefix,'metadataSummary.png',sep=''))
   tab.with.meta
 }
