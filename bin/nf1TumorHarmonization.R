@@ -29,11 +29,11 @@ analyzeMetdataWithGenes<-function(full.tab,tab.with.meta,prefix){
  
   ##EVALUATE NORMALIZED MATRIX
 # #look at some marker genes
-  ggplot(subset(genes.with.meta,Symbol%in%c('NF1','APOD','GFAP','EEF1A','S100B','CD74','KRT10')))+geom_jitter(aes(x=Symbol,y=zScore,col=study))+ggtitle('Selected gene counts')
+  ggplot(subset(genes.with.meta,Symbol%in%c('NF1','S100B','ATRX','NF2','SMARCB1','APOD','KRT10')))+geom_jitter(aes(x=Symbol,y=zScore,col=study))+ggtitle('Selected gene counts')
   ggsave(paste(prefix,'genesByStudy.png',sep=''))
   
 
-  ggplot(subset(genes.with.meta,Symbol%in%c('NF1','APOD','GFAP','EEF1A','S100B','CD74','KRT10')))+geom_jitter(aes(x=Symbol,y=zScore,col=tumorType))+ggtitle('Selected gene counts')
+  ggplot(subset(genes.with.meta,Symbol%in%c('NF1','APOD','ATRX','NF2','S100B','SMARCB1','KRT10')))+geom_jitter(aes(x=Symbol,y=zScore,col=tumorType))+ggtitle('Selected gene counts')
   ggsave(paste(prefix,'genesByTumor.png',sep=''))
   
   genes.with.meta
@@ -53,7 +53,7 @@ doPcaPlots<-function(full.tab,tab.with.meta,prefix){
   ###PCA ANALYSIS
   library(ggfortify)
   autoplot(prcomp(t(combined.mat)),data=tab.with.meta,shape='study',col='tumorType')
-  ggsave(paste(prefix,'PCA.png',sep=''))
+  ggsave(paste(prefix,'PCA.png',sep=''),width=10)
   loads=prcomp(combined.mat)$x
 
   genes1=rownames(combined.mat)[rev(order(loads[,1]))[1:25]]
@@ -62,13 +62,13 @@ doPcaPlots<-function(full.tab,tab.with.meta,prefix){
 
   #now take those loadings from pc1
   ggplot(subset(genes.with.meta,Symbol%in%genes1[1:10]))+geom_jitter(aes(x=Symbol,y=zScore,col=tumorType))+ggtitle('Selected gene counts from PC1')
-  ggsave(paste(prefix,'pc1_gene_loadings.png',sep=''))
+  ggsave(paste(prefix,'pc1_gene_loadings.png',sep=''),width=10)
   
   genes2=rownames(combined.mat)[rev(order(loads[,2]))[1:25]]
 
   #now take those loadings from pc1
   ggplot(subset(genes.with.meta,Symbol%in%genes2[1:10]))+geom_jitter(aes(x=Symbol,y=zScore,col=tumorType))+ggtitle('Selected gene counts from PC2')
-  ggsave(paste(prefix,'pc2_gene_loadings.png',sep=''))
+  ggsave(paste(prefix,'pc2_gene_loadings.png',sep=''),width=10)
   
 ##now maybe do some gsea?
 

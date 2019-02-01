@@ -70,10 +70,23 @@ full.tab<-rbind(cnf.genes,gli.genes,bio.genes)
 #now z score it
 with.z=full.tab%>%group_by(synId)%>%mutate(zScore=(totalCounts-mean(totalCounts+0.001,na.rm=T))/sd(totalCounts,na.rm=T))
 
+
+######RUN ANALYSIS AND STORE ON SYNAPSE
+this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-01-31/plotThreePublicDatasets.R'
+analysis.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/bin/nf1TumorHarmonization.R'
+
 ########now call basic metadata plots
 genes.with.meta=analyzeMetdataWithGenes(with.z,tab.with.metadata,prefix)
-met.file=paste(prefix,'metadataSummary.png',sep='')
+met.file=paste(prefix,'metadataSummary.png',sep='\\')
+
 dataset.dir='syn18134640'
+
+gz1=gzfile(paste(prefix,'tidiedData.csv.gz',sep=''))
+write.csv(genes.with.meta,gz1)
+
+sid=synStore(File(paste(prefix,'tidiedData.csv.gz',sep=''),parent=dataset.dir),used=unique(genes.with.meta$id),executed=c(this.script,analysis.script))
+
+sapply(paste(prefix,c('genesByStudy.png','genesByTumor.png','metadataSummary.png'),sep=''),function(x) synStore(File(x,parent=dataset.dir),used=sid$properties$id,executed=c(this.script,analysis.script)))
 
 
 ###now the pca
@@ -81,6 +94,7 @@ pc.files=doPcaPlots(with.z,tab.with.metadata,prefix)
 
 ###now upload data to appropriate places with provenance. 
 
-pca.dir='syn18134640'
+pca.dir='syn18134641'
+sapply(pc.files,function(x) synStore(File(x,parent=pca.dir),used=sid$properties$id,executed=c(this.script,analysis.script)))
 
 #ggplot(subset(genes.with.meta,Symbol=='GFAP'))+geom_point(aes(x=age,y=zScore,col=tumorType))+ggtitle('GFAP expression by age')
