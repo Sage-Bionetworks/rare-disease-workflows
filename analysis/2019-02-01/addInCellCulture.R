@@ -5,7 +5,7 @@ synLogin()
 
 source("../../bin/nf1TumorHarmonization.R")
 
-prefix=paste(lubridate::today(),'bioBank_glioma_cNF',sep='-')
+prefix=paste(lubridate::today(),'bioBank_glioma_cNF_pnf',sep='-')
 
 ##create each query separately for now :-/
 ##biobank returns sf files
@@ -99,7 +99,7 @@ write.csv(genes.with.meta,gz1)
 
 sid=synStore(File(paste(prefix,'tidiedData.csv.gz',sep=''),parent=dataset.dir),used=unique(genes.with.meta$id),executed=c(this.script,analysis.script))
 
-sapply(paste(prefix,c('genesByStudy.png','genesByTumor.png','metadataSummary.png'),sep=''),function(x) synStore(File(x,parent=dataset.dir),used=sid$properties$id,executed=c(this.script,analysis.script)))
+sapply(paste(prefix,c('genesByStudyTumor.png','metadataSummary.png'),sep=''),function(x) synStore(File(x,parent=dataset.dir),used=sid$properties$id,executed=c(this.script,analysis.script)))
 
 
 ###now the pca
