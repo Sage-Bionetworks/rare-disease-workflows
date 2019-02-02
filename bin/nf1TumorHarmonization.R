@@ -86,8 +86,38 @@ doPcaPlots<-function(full.tab,tab.with.meta,prefix){
   
 }
 
-###now do gsva
-#library(GSVA)
-#library(GSVAdata)
-#gsva(zscored,method='ssgsea',gset.idx.list=)
 
+singleGeneBoxplot<-function(genes.with.meta,gene='NF1'){
+  ggplot(subset(genes.with.meta,Symbol==gene))+geom_boxplot(aes(x=study,y=zScore,fill=tumorType))+coord_flip()+ggtitle(paste(gene,'expression'))
+  
+}
+
+runGSVA<-function(genes.with.meta){
+
+  ###now do gsva
+  library(GSVA)
+  library(GSVAdata)
+  mat<-reshape2::acast(genes.with.meta,Symbol~id,value.var='zScore')
+  missing<-which(apply(mat,1,function(x) any(is.na(x))))
+  mat<-mat[-missing,]
+  data("c2BroadSets")
+  
+  library(biomaRt)
+  #get mapping from enst to hgnc
+  mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
+  my_chr <- c(1:22,'X','Y')
+  map <- getBM(attributes=c("entrezgene","hgnc_symbol"),mart=mart,filters='chromosome_name',values=my_chr)
+  
+  entrez<-map[match(rownames(mat),map[,2]),1]
+  mat<-mat[which(!is.na(entrez)),]
+  rownames(mat)<-entrez[!is.na(entrez)]
+  res=gsva(mat,method='ssgsea',gset.idx.list=c2BroadSets)
+  library(pheatmap)
+  vars<-apply(res,1,var)
+ annotes=genes.with.meta%>%dplyr::select(id,age,Sex,tumorType,cellCulture,study)%>%unique
+ rownames(annotes)<-annotes$id
+ 
+  pheatmap(res[names(sort(vars)[1:50]),],labels_col=rep("",ncol(res)),fontsize_row = 8,clustering_method = 'ward.D2',annotation_col = dplyr::select(annotes,-id))
+  
+  res
+}
