@@ -92,6 +92,26 @@ singleGeneBoxplot<-function(genes.with.meta,gene='NF1'){
   
 }
 
+singleGeneBarplot<-function(genes.with.meta,gene='NF1'){
+  ggplot(subset(genes.with.meta,Symbol==gene))+geom_bar(aes(x=tumorType,y=zScore,fill=study),stat='identity',position='dodge')+ggtitle(paste(gene,'Expression'))+ggpubr::rotate_x_text()
+}
+
+
+getMvsF<-function(genes.with.meta){
+  #take log of counts
+  with.log=genes.with.meta%>%mutate(logCounts=log10(totalCounts+0.0001))
+  
+  ##now take mean across sex,tumor type and gene
+  res=with.log%>%group_by(tumorType,Symbol,Sex)%>%mutate(mcounts=mean(logCounts))%>%select(tumorType,Sex,Symbol,mcounts)%>%unique()%>%spread(Sex,mcounts)%>%mutate(MaleVsFemale=male-female)
+  res
+}
+diffExBoxplot<-function(res,gene='NF1'){
+
+  
+  ggplot(res)+geom_boxplot(aes(x=tumorType,y=MaleVsFemale),outlier.color=NA)+ylim(c(-1,1))+ggpubr::rotate_x_text()+geom_point(data=subset(res,Symbol==gene),mapping=aes(x=tumorType,y=MaleVsFemale),color='red')+ggtitle(paste('Log10 fold change of',gene,'in male vs. female'))
+  
+}
+
 runGSVA<-function(genes.with.meta){
 
   ###now do gsva
