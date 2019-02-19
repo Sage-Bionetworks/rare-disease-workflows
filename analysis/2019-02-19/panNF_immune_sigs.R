@@ -14,6 +14,7 @@ require(singleCellSeq)
 #call the heatmap rmd
 rmd<-system.file('heatmap_vis.Rmd',package='singleCellSeq')
 
+this.code='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-02-19/panNF_immune_sigs.R'
 #rownames(expData)<-expData$id
 
 #create matrix
@@ -22,9 +23,11 @@ missing=which(apply(combined.mat,1,function(x) any(is.na(x))))
 combined.mat=combined.mat[-missing,]
 
 #create phenData
-phenData<-expData%>%select(id,species,age,Sex,tumorType,isCellLine,study)%>%unique()
+phenData<-expData%>%select(id,age,Sex,tumorType,isCellLine,study)%>%unique()
 
 rownames(phenData)<-phenData$id
-kf<-rmarkdown::render(rmd,rmarkdown::html_document(),output_file=paste(getwd(),'/panNFHeatmap.html',sep=''),params=list(samp.mat=combined.mat,cell.annotations=phenData%>%select(-id),seqData=FALSE))
+phenData$isCellLine<-tolower(phenData$isCellLine)
+kf<-rmarkdown::render(rmd,rmarkdown::html_document(),output_file=paste(getwd(),'/',lubridate::today(),'panNFHeatmap.html',sep=''),params=list(samp.mat=combined.mat,cell.annotations=phenData%>%select(-id),seqData=TRUE))
 
-syn$store(synapse$File(kf,parentId=analysis_dir),used=syn_file)
+analysis_dir='syn18134642'
+syn$store(synapse$File(kf,parentId=analysis_dir),used=syn_file,executed=this.code)
