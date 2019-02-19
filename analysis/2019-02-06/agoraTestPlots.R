@@ -1,5 +1,5 @@
 ##agora test plots
-#try to recreate the analysis that agor does
+#try to recreate the analysis that agor
 
 library(synapser)
 synLogin()
