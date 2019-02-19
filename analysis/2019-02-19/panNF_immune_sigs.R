@@ -5,7 +5,7 @@ syn <- synapse$Synapse()
 syn$login()
 
 require(tidyverse)
-syn_file='syn18137070'
+syn_file='syn18349249'
 expData<-read.csv(gzfile(syn$get(syn_file)$path))
 
 require(singleCellSeq)
