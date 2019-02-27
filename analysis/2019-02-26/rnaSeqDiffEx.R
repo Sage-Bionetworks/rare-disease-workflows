@@ -70,8 +70,8 @@ library(pheatmap)
 df<-select(vars,c(study,Sex,tumorType))
 rownames(df)<-vars$id
 
-require(biomaRt)
-mart <- useMart('ensembl',dataset='hsapiens_gene_ensembl')
+#require(biomaRt)
+#mart <- useMart('ensembl',dataset='hsapiens_gene_ensembl')
 
 
 cnfRes=results(dds,contrast=list(c("tumorTypeCutaneous.Neurofibroma"),c('tumorTypeLow.Grade.Glioma','tumorTypeHigh.Grade.Glioma','tumorTypeMalignant.Peripheral.Nerve.Sheath.Tumor','tumorTypeMassive.Soft.Tissue.Neurofibroma','tumorTypeNeurofibroma','tumorTypePlexiform.Neurofibroma')),listValues=c(1,-1/6))
@@ -81,9 +81,9 @@ cgenes=subset(cnfRes,padj<0.01)
 
 pheatmap(log2(assay(dds)[cg,]+1),annotation_col=df,labels_col=rep("",ncol(assay(dds))),title='cNF diff ex genes')
 
-entrez_list <- getBM(filters = "hgnc_symbol", 
-  attributes = c("hgnc_symbol", "entrezgene"), 
-  values = rownames(cgenes), mart = mart)
+#entrez_list <- getBM(filters = "hgnc_symbol", 
+#  attributes = c("hgnc_symbol", "entrezgene"), 
+#  values = rownames(cgenes), mart = mart)
 
 pnfRes=results(dds,contrast=list(c("tumorTypePlexiform.Neurofibroma",'tumorTypeNeurofibroma'),c('tumorTypeLow.Grade.Glioma','tumorTypeHigh.Grade.Glioma','tumorTypeMalignant.Peripheral.Nerve.Sheath.Tumor','tumorTypeMassive.Soft.Tissue.Neurofibroma','tumorTypeCutaneous.Neurofibroma')),listValues=c(1/2,-1/5))
 
@@ -106,7 +106,7 @@ pheatmap(log2(assay(dds)[genes,]+1),annotation_col=df,labels_col=rep("",ncol(ass
 ## KEGG
 
 
-kk <- clusterProfiler::enrichKEGG(gene = gene, organism = "hsa", 
-  pAdjustMethod = "BH", pvalueCutoff = 0.05, qvalueCutoff = 0.05)
-head(summary(kk)[, -8])
+#kk <- clusterProfiler::enrichKEGG(gene = gene, organism = "hsa", 
+#  pAdjustMethod = "BH", pvalueCutoff = 0.05, qvalueCutoff = 0.05)
+#head(summary(kk)[, -8])
 
