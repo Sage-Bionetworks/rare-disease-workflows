@@ -6,7 +6,7 @@ syn$login()
 
 require(tidyverse)
 syn_file='syn18349249'
-expData<-read.csv(gzfile(syn$get(syn_file)$path))
+expData<-read.csv(gzfile(synGet(syn_file)$path))%>%subset(Symbol!='')
 
 require(singleCellSeq)
 #analysis_dir='syn11398941'
