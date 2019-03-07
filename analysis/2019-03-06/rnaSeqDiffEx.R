@@ -142,7 +142,7 @@ lapply(names(comp.list),function(comp){
     eg=entrez_list$log2FoldChange%>%set_names(entrez_list$entrezgene)
     kk <- clusterProfiler::enrichKEGG(gene = names(sort(abs(eg),decreasing=T)), organism = "hsa", 
       pAdjustMethod = "BH", pvalueCutoff = 0.05, qvalueCutoff = 0.05)
-    gg <- clusterProfiler::enrichGO(gene= names(sort(abs(eg),decreasing=T)),orgDb='org.Hs.eg.db',ont='BP',qvalueCutoff=0.05)
+    gg <- clusterProfiler::enrichGO(gene= names(sort(abs(eg),decreasing=T)),OrgDb='org.Hs.eg.db',ont='BP',qvalueCutoff=0.05)
     
     full.path<-summary(kk)%>%dplyr::select(ID,Description,GeneRatio,pvalue,p.adjust,qvalue,geneID)%>%mutate(genelist=paste(sapply(unlist(strsplit(geneID,split='/')),function(x) entrez_list[match(x,entrez_list$entrezgene),'gene']),collapse=','))%>%dplyr::select(-geneID)
     full.path$Ontology=rep('KEGG',nrow(full.path))
@@ -152,13 +152,14 @@ lapply(names(comp.list),function(comp){
    
     full.all<-rbind(full.go,full.path)
     
-      path.res=data.frame(diagnosis=rep('Neurofibromatosis 1',nrow(full.all)),comp=rep(comp,nrow(full.all)),tumorType=rep(gsub('.',' ',gsub('tumorType','',comp.list[[comp]][1]),fixed=T),nrow(kk)),full.all,stringsAsFactors=FALSE)
+      path.res=data.frame(diagnosis=rep('Neurofibromatosis 1',nrow(full.all)),comp=rep(comp,nrow(full.all)),tumorType=rep(gsub('.',' ',gsub('tumorType','',comp.list[[comp]][1]),fixed=T),nrow(full.all)),full.all,stringsAsFactors=FALSE)
 
     # qcnetplot(kk, showCategory=10,categorySize = "pvalue", foldChange = 2^eg)
     full.pa<<-rbind(full.pa,path.res)
     #post ranked pathways to gdb pathways 
     
 })
+
 #add to gene table
 tab<-syn$store(synapse$Table(geneExTable,full.gex),activity=synapse$Activity(name='differential expression',used=syn_file,executed=this.script))
 syn$store(synapse$Table(pathwayTable,full.pa),activity=synapse$Activity(name='pathway and process enrichment '),used=syn_file,executed=this.script)
