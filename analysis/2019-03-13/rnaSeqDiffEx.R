@@ -112,7 +112,7 @@ lapply(names(comp.list),function(comp){
         listValues=c(1/length(sampls),-1/length(setdiff(all.tt,sampls))))
     
     #visualize top 20
-    top.30=order(abs(res$log2FoldChange),decreasing=T)[1:30]
+    top.30=order(abs(res$padj),decreasing=F)[1:30]
     pheatmap(log2(assay(dds)[top.30,]+1),annotation_col=df,labels_col=rep("",ncol(assay(dds))),main=paste(comp,'diff ex genes'),filename=paste(prefix,'top30Heatmap.png',sep=''),cellheight=10,cellwith=10)
     #post heatmap to nexus  
     syn$store(synapse$File(paste(prefix,'top30Heatmap.png',sep=''),parent='syn18380760'),used=syn_file,executed=this.script)
