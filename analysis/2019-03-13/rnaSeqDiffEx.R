@@ -11,10 +11,10 @@ syn <- synapse$Synapse()
 syn$login()
 
 
-syn_file='syn18408380'
+syn_file='syn18421359'
 expData<-read.csv(gzfile(syn$get(syn_file)$path))%>%subset(Symbol!='')
 
-this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-03-08/rnaSeqDiffEx.R'
+this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-03-13/rnaSeqDiffEx.R'
 
 ####DO WE WANT THIS: remove cell culture!!
 expData<-subset(expData,isCellLine%in%c('false','FALSE'))
@@ -112,7 +112,7 @@ lapply(names(comp.list),function(comp){
         listValues=c(1/length(sampls),-1/length(setdiff(all.tt,sampls))))
     
     #visualize top 20
-    top.30=order(abs(res$log2FoldChange),decreasing=F)[1:30]
+    top.30=order(abs(res$log2FoldChange),decreasing=T)[1:30]
     pheatmap(log2(assay(dds)[top.30,]+1),annotation_col=df,labels_col=rep("",ncol(assay(dds))),main=paste(comp,'diff ex genes'),filename=paste(prefix,'top30Heatmap.png',sep=''),cellheight=10,cellwith=10)
     #post heatmap to nexus  
     syn$store(synapse$File(paste(prefix,'top30Heatmap.png',sep=''),parent='syn18380760'),used=syn_file,executed=this.script)
