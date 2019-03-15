@@ -1,12 +1,23 @@
 class: Workflow
-label: salmon-align-syn-ids
+label: synapse-get-salmon-quant-workflow
+id: synapse-get-salmon-quant-workflow
 cwlVersion: v1.0
 
-inputs: [samp_id,fv_id,index_path]
+inputs:
+  mate1-ids: []
+  mate2-ids: []
+  index-dir: index-file
+  synapse_config:
+    type: File
+  parent_id:
+    type: string
+  specimen_id:
+    type: string
 
 outputs: []
 
-requirements: []
+requirements:
+  - class: ScatterFeatureRequirement
 
 steps:
     download-mate1-files:
@@ -18,10 +29,9 @@ steps:
       in:
       out:
     run-salmon:
-      run:
+      run: salmon-quant-tool.cwl
       in:
-        out:
-    store-files:
-        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-command-line-cwl-tools/master/synapse-store-tool.cwl
-        in:
-        out:
+        mates1: mate1-files
+        mates2: mate2-files
+        index-dir: index-dir
+      out:
