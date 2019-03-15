@@ -1,26 +1,30 @@
 #!/usr/bin/env cwl-runner
 class: CommandLineTool
-id: run-salmon
-label: run-salmon
-cwlVersion: 1.0
+id: salmon-quant-tool
+label: salmon-quant-tool
+cwlVersion: v1.0
 
 requirements:
   -class: DockerRequirement
     dockerPull: combinelab/salmon
 
+baseCommand: [salmon, quant, "-l A"]
+
 inputs:
   mates1:
     type: array
-    items: string
+    items: File
     inputBinding:
       prefix: -1
   mates2:
     type: array
-    items: string
+    items: File
     inputBinding:
       prefix: -2
-  index:
-    type: File
+  index-dir:
+    type: string
+    inputBinding:
+      prefix: -i
 
 outputs:
   quants:
