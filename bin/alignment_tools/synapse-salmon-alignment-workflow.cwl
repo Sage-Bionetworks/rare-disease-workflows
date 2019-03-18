@@ -29,13 +29,18 @@ requirements:
     listing:
       - entryname: breakdownfiles.py
         entry:
-          #!/usr/bin/env python
-          import tsv
-          with open('fileview.tsv','r') as tsv:
-            lines=[line.strip().split('\t') for line in tsv]
-          specId=[ind for ind in range(len(lines[0])) if lines[0][ind]=='specimenID'][0]
-          all.s=l[set([l[i][specId] for i in range(len(lines)))]
-
+          #!/usr/bin/env python \
+          import pandas as pd \
+          res=pd.read_csv("query_result.tsv",delimiter='\t') \
+          gdf=res.groupby('specimenID') \
+          for key,value in gdf: \
+            rps=gdf.get_group(key).groupby('readPair') \
+            g1=[i for i in rps.get_group(1)['id']] \
+            g2=[i for i in rps.get_group(2)['id']] \
+            open(key+'mate1.txt','w').writelines(['\n'.join(g1)])
+            open(key+'mate2.txt','w').writelines(['\n'.join(g2)])
+          allspecs=set(res['specimenID'])
+          {'specimens':allspecs, 'mate1files':[k+'mate1.txt' for k in allspecs],'mate2files': [k+'mate2.txt' for k in allspecs]}
 
 
 outputs:
@@ -66,12 +71,16 @@ steps:
        out: [query_result.tsv]
     get-samples-from-fv:
       run: breakdownfiles.py
-      in: [query_result.tsv]
-      out: [specIdFiles]
+      in: []
+      out: [specIdNames, mate1files,mate2files]
     run-alignment-by-specimen:
       run: synapse-get-salmon-quant-workflow.cwl
+      scatter: specID
+      scatterMethod: dotproduct
       in:
-        specidfile: []
+        specID: specIdNames
+        mate1files: mate1files
+        mate2files: mate2files
       out: [salmonfile]
     get-clinical:
        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-command-line-cwl-tools/master/synapse-query-tool.cwl
