@@ -1,12 +1,12 @@
 synapse_config:
   class: File
   path: "/Users/sgosline/.synapseConfig"
-index_id: syn18134565
+indexid: syn18134565
 index-type: gencode
 #index-dir:
 #  class: Directory
 #  path: gencode_v29
-query: SELECT specimenID,id,readPair FROM syn11614202 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND parentId = 'syn7979306'  order by specimenID
+idquery: SELECT specimenID,id,readPair FROM syn11614202 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND parentId = 'syn7979306'  order by specimenID
 sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn11614202 where assay = 'rnaSeq' AND fileFormat = 'fastq' AND parentId='syn7979306'
 mate1-ids:
   class: File

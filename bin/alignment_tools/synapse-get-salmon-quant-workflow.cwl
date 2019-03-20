@@ -15,7 +15,6 @@ inputs:
   specimenId:
     type: string
 
-
 outputs: []
 
 requirements:
@@ -48,10 +47,11 @@ steps:
       synapseid: get-mate2-files/anyarray
       synapse_config: synapse_config
     out: [filepath]
-    # run-salmon:
-    #   run: salmon-quant-tool.cwl
-    #   in:
-    #     mates1: mate1-files
-    #     mates2: mate2-files
-    #     index-dir: index-dir
-    #   out:
+  run-salmon:
+    run: salmon-quant-tool.cwl
+    in:
+      mates1: get-mate-1-files/filepath
+      mates2: get-mate-2-files/filepath
+      index-dir: index-dir
+    out:
+      quants
