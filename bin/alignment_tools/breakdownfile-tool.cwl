@@ -11,8 +11,10 @@ requirements:
        entry: |
          #!/usr/bin/env python
          import json
+         import sys
          import pandas as pd
-         res = pd.read_csv("/Users/sgosline/Code/NEXUS/bin/alignment_tools/query_result.tsv",delimiter='\t')
+         fname=sys.argv[2]
+         res = pd.read_csv(fname,delimiter='\t')
          gdf = res.groupby('specimenID')
          for key,value in gdf:
             rps = gdf.get_group(key).groupby('readPair')
@@ -25,9 +27,10 @@ requirements:
          with open('cwl.json','w') as outfile:
            json.dump(res,outfile)
 inputs:
-  []
+ fileName: File 
 arguments:
   - valueFrom: breakdownfiles.py
+  - valueFrom: $(inputs.fileName)
 outputs:
   - id: specIds
     type: string[]

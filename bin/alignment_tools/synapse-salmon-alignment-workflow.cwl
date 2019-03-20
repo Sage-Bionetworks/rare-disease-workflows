@@ -38,7 +38,7 @@ steps:
     run-index:
       run: salmon-index-tool.cwl
       in:
-        index-file: []
+        index-file: get-index/filepath 
         index-dir: index-dir
         index-type: index-type
       out: [indexDir]
@@ -50,7 +50,8 @@ steps:
        out: [query_result]
     get-samples-from-fv:
       run: breakdownfile-tool.cwl
-      in: []
+      in: 
+         fileName: get-fv/query_result 
       out: [specIds,mate1files,mate2files] 
     run-alignment-by-specimen:
       run: synapse-get-salmon-quant-workflow.cwl
