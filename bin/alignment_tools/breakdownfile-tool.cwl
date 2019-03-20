@@ -29,7 +29,21 @@ inputs:
 arguments:
   - valueFrom: breakdownfiles.py
 outputs:
-  - id: jsonOut
-    type: File
+  - id: specIds
+    type: string[]
     outputBinding:
       glob: cwl.json
+      loadContents: true
+      outputEval: $(JSON.parse(self[0].contents)['specimens'])
+  - id: mate1files
+    type: File[]
+    outputBinding:
+      glob: cwl.json
+      loadContents: true
+      outputEval: $(JSON.parse(self[0].contents)['mate1files'])
+  - id: mate2files
+    type: File[]
+    outputBinding:
+      glob: cwl.json
+      loadContents: true
+      outputEval: $(JSON.parse(self[0].contents)['mate2files'])
