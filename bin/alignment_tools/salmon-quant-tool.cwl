@@ -5,31 +5,32 @@ label: salmon-quant-tool
 cwlVersion: v1.0
 
 requirements:
-  -class: DockerRequirement
+  - class: DockerRequirement
     dockerPull: combinelab/salmon
 
 baseCommand: [salmon, quant, "-l A"]
 
 inputs:
   mates1:
-    type: array
-    items: File
+    type: File[]
     inputBinding:
-      prefix: -1
+      position: 1
+      prefix: '-1'
+      itemSeparator: " "
   mates2:
-    type: array
-    items: File
+    type: File[]
     inputBinding:
-      prefix: -2
+      position: 2
+      prefix: '-2'
+      itemSeparator: " "
   index-dir:
-    type: string
+    type: Directory
     inputBinding:
       prefix: -i
-
+      position: 3
 outputs:
   quants:
     type: File
     outputBinding:
       glob: "*.sf"
 
-baseCommand: salmon

@@ -8,19 +8,21 @@ inputs:
     type: File
   mate2-ids:
     type: File
-#  index-dir:
- #   type: Directory
+  index-dir:
+    type: Directory
   synapse_config:
     type: File
   specimenId:
     type: string
 
-outputs: []
+outputs: 
+  quants:
+    type: File
 
 requirements:
   - class: ScatterFeatureRequirement
   - class: SubworkflowFeatureRequirement
-
+  - class: MultipleInputFeatureRequirement
 
 steps:
   get-mate1-files:
@@ -50,8 +52,13 @@ steps:
   run-salmon:
     run: salmon-quant-tool.cwl
     in:
-      mates1: get-mate-1-files/filepath
-      mates2: get-mate-2-files/filepath
-      index-dir: index-dir
+       mates1: 
+         source: download-mate1-files/filepath
+         linkMerge: merge_flattened
+       mates2: 
+         source: download-mate2-files/filepath
+         linkMerge: merge_flattened
+       index-dir: index-dir
     out:
-      quants
+      [quants]
+
