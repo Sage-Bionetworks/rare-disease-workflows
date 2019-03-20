@@ -5,6 +5,8 @@ baseCommand: python
 
 requirements:
  - class: InlineJavascriptRequirement
+ - class: DockerRequirement
+   dockerPull: amancevice/pandas
  - class: InitialWorkDirRequirement
    listing:
      - entryname: breakdownfiles.py
