@@ -15,7 +15,7 @@ requirements:
          import json
          import sys
          import pandas as pd
-         fname=sys.argv[2]
+         fname=sys.argv[1]
          res = pd.read_csv(fname,delimiter='\t')
          gdf = res.groupby('specimenID')
          for key,value in gdf:
@@ -25,7 +25,7 @@ requirements:
             open(key+'mate1.txt','w').writelines(['\n'.join(g1)])
             open(key+'mate2.txt','w').writelines(['\n'.join(g2)])
          allspecs=set(res['specimenID'])
-         res={'specimens':list(allspecs), 'mate1files':[k+'mate1.txt' for k in allspecs],'mate2files': [k+'mate2.txt' for k in allspecs]}
+         res={'specimens':list(allspecs), 'mate1files':[{'class':'File','path':k+'mate1.txt'} for k in allspecs],'mate2files': [{'class':'File','path':k+'mate2.txt'} for k in allspecs]}
          with open('cwl.json','w') as outfile:
            json.dump(res,outfile)
 inputs:

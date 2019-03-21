@@ -18,6 +18,10 @@ inputs:
 outputs: 
   quants:
     type: File
+    outputSource: run-salmon/quants
+  dirname:
+    type: Directory
+    outputSource: run-salmon/dirname
 
 requirements:
   - class: ScatterFeatureRequirement
@@ -31,7 +35,7 @@ steps:
       datafile: mate1-ids
     out: [anyarray]
   download-mate1-files:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-command-line-cwl-tools/master/synapse-get-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
     scatter: synapseid
     in:
       synapseid: get-mate1-files/anyarray
@@ -43,7 +47,7 @@ steps:
       datafile: mate2-ids
     out: [anyarray]
   download-mate2-files:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-command-line-cwl-tools/master/synapse-get-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
     scatter: synapseid
     in:
       synapseid: get-mate2-files/anyarray
@@ -54,11 +58,10 @@ steps:
     in:
        mates1: 
          source: download-mate1-files/filepath
-         linkMerge: merge_flattened
        mates2: 
          source: download-mate2-files/filepath
-         linkMerge: merge_flattened
        index-dir: index-dir
+       output: specimenId
     out:
-      [quants]
-
+       [quants,dirname]
+     
