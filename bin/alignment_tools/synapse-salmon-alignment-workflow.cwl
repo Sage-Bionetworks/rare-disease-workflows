@@ -24,13 +24,13 @@ requirements:
 
 outputs:
   out:
-    type: File
+    type: File[]
     outputBinding:
       glob: "*.sf"
 
 steps:
     get-index:
-      run:  https://raw.githubusercontent.com/Sage-Bionetworks/synapse-command-line-cwl-tools/master/synapse-get-tool.cwl
+      run:  https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
       in:
         synapseid: indexid
         synapse_config: synapse_config
@@ -43,7 +43,7 @@ steps:
         index-type: index-type
       out: [indexDir]
     get-fv:
-       run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-command-line-cwl-tools/master/synapse-query-tool.cwl
+       run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
        in:
          synapse_config: synapse_config
          query: idquery
@@ -65,13 +65,13 @@ steps:
         synapse_config: synapse_config
       out: [quants]
     get-clinical:
-       run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-command-line-cwl-tools/master/synapse-query-tool.cwl
+       run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
        in:
          synapse_config: synapse_config
          query: sample_query
        out: [query_result]
 
    # store-files:
-   #     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-command-line-cwl-tools/master/synapse-store-tool.cwl
+   #     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-store-tool.cwl
    #     in:
    #     out:

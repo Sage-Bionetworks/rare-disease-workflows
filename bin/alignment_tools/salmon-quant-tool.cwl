@@ -7,6 +7,8 @@ cwlVersion: v1.0
 requirements:
   - class: DockerRequirement
     dockerPull: combinelab/salmon
+#  - class: InitialWorkDirRequirement
+#    listing: $(inputs.output)
 
 baseCommand: [salmon, quant, -l, A, --validateMappings]
 
@@ -16,13 +18,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: '-1'
-      itemSeparator: " "
   mates2:
     type: File[]
     inputBinding:
       position: 2
       prefix: '-2'
-      itemSeparator: " "
   index-dir:
     type: Directory
     inputBinding:
@@ -38,5 +38,9 @@ outputs:
   quants:
     type: File
     outputBinding:
-     glob: "$(inputs.output).sf"
+     glob: "*/*.sf"
+  dirname:
+    type: Directory
+    outputBinding:
+      glob: $(inputs.output)
 
