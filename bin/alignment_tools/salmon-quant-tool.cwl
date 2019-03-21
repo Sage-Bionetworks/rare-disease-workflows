@@ -8,7 +8,7 @@ requirements:
   - class: DockerRequirement
     dockerPull: combinelab/salmon
 
-baseCommand: [salmon, quant, "-l A"]
+baseCommand: [salmon, quant, -l, A, --validateMappings]
 
 inputs:
   mates1:
@@ -28,9 +28,15 @@ inputs:
     inputBinding:
       prefix: -i
       position: 3
+  output:
+    type: string
+    inputBinding:
+      prefix: --output
+      position: 4
+
 outputs:
   quants:
     type: File
     outputBinding:
-      glob: "*.sf"
+     glob: "$(inputs.output).sf"
 

@@ -59,6 +59,7 @@ steps:
          source: download-mate2-files/filepath
          linkMerge: merge_flattened
        index-dir: index-dir
+       output: specimenId
     out:
       [quants]
 
