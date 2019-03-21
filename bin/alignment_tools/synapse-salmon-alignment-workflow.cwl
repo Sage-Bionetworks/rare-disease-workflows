@@ -16,7 +16,8 @@ inputs:
     type: string
   sample_query:
     type: string
-#three arrays - 1 for sample ids, 1 for mate1 synapse ids, 1 for mate2 synapse ids
+  parentid:
+    type: string
 
 requirements:
   - class: SubworkflowFeatureRequirement
@@ -63,13 +64,14 @@ steps:
         mate2-ids: get-samples-from-fv/mate2files
         index-dir: run-index/indexDir
         synapse_config: synapse_config
-      out: [quants]
+      out: [quants,dirname]
     get-clinical:
        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
        in:
          synapse_config: synapse_config
          query: sample_query
        out: [query_result]
+    join-fileview-by-specimen:
 
    # store-files:
    #     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-store-tool.cwl
