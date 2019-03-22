@@ -6,6 +6,7 @@ This is a short script that takes a list of specimenIDs and a list of files, and
 import pandas
 import sys
 import argparse
+import os
 
 
 if __name__ == '__main__':
@@ -48,10 +49,10 @@ if __name__ == '__main__':
     manifest=pandas.read_csv(args.manifest_file,sep='\t')
 
     #join specimens and synids into data frame
-    specToSyn=pandas.DataFrame({'specimenID':args.specimenIds,'path':args.filelist})
+    specToSyn=pandas.DataFrame({'specimenID':args.specimenIds,'path': [os.path.basename(a) for a in args.filelist]})
 
     #add in parent id #syn18457550
-    specToSyn['parentId']=args.parentId
+    specToSyn['parent']=args.parentId
 
     #join entire dataframe
     full_df=specToSyn.merge(manifest, on='specimenID')

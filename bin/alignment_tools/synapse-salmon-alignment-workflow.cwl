@@ -81,6 +81,7 @@ steps:
         run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
         in:
           synapse_config: synapse_config
+          files: run-alignment-by-specimen/quants
           manifest_file: join-fileview-by-specimen/newmanifest
         out:
           []
