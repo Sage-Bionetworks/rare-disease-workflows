@@ -24,10 +24,7 @@ requirements:
   - class: ScatterFeatureRequirement
 
 outputs:
-  out:
-    type: File[]
-    outputBinding:
-      glob: "*.sf"
+  out: []
 
 steps:
     get-index:
@@ -39,7 +36,7 @@ steps:
     run-index:
       run: salmon-index-tool.cwl
       in:
-        index-file: get-index/filepath 
+        index-file: get-index/filepath
         index-dir: index-dir
         index-type: index-type
       out: [indexDir]
@@ -51,9 +48,9 @@ steps:
        out: [query_result]
     get-samples-from-fv:
       run: breakdownfile-tool.cwl
-      in: 
-         fileName: get-fv/query_result 
-      out: [specIds,mate1files,mate2files] 
+      in:
+         fileName: get-fv/query_result
+      out: [specIds,mate1files,mate2files]
     run-alignment-by-specimen:
       run: synapse-get-salmon-quant-workflow.cwl
       scatter: [specimenId,mate1-ids,mate2-ids]
@@ -72,8 +69,18 @@ steps:
          query: sample_query
        out: [query_result]
     join-fileview-by-specimen:
-
-   # store-files:
-   #     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-store-tool.cwl
-   #     in:
-   #     out:
+      run: join-fileview-by-specimen
+      in:
+        files: run-alignment-by-specimen/quants
+        specimens: run-alignment-by-specimen/dirname
+        manifest: get-clinical/query_result
+        parentid: inputs.parentId
+      out:
+        [newmanifest]
+    store-files:
+        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
+        in:
+          synapse_config: synapse_config
+          manifest_file: join-fileview-by-specimen/newmanifest
+        out:
+          []
