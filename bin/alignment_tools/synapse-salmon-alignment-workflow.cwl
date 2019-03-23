@@ -16,6 +16,8 @@ inputs:
     type: string
   sample_query:
     type: string
+  scripts:
+    type: File[]
   parentid:
     type: string
 
@@ -69,12 +71,13 @@ steps:
          query: sample_query
        out: [query_result]
     join-fileview-by-specimen:
-      run: join-fileview-by-specimen
+      run: join-fileview-by-specimen-tool.cwl
       in:
-        files: run-alignment-by-specimen/quants
-        specimens: run-alignment-by-specimen/dirname
-        manifest: get-clinical/query_result
-        parentid: inputs.parentId
+        filelist: run-alignment-by-specimen/quants
+        scripts: scripts
+        specimenIds: run-alignment-by-specimen/dirname
+        manifest_file: get-clinical/query_result
+        parentid: parentid
       out:
         [newmanifest]
     store-files:

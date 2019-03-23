@@ -29,7 +29,7 @@ inputs:
     type: File
     inputBinding:
       prefix: --manifest_file
-  parentId:
+  parentid:
     type: string
     inputBinding:
       prefix: --parentId

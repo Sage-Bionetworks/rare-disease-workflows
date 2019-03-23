@@ -6,7 +6,7 @@ index-type: gencode
 index-dir: gencode_v29
 idquery: SELECT specimenID,id,readPair FROM syn11614202 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND parentId = 'syn7979306'  order by specimenID
 sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn11614202 where assay = 'rnaSeq' AND fileFormat = 'fastq' AND parentId = 'syn7979306'
-parentId: syn18407530
+parentid: syn18407530
 scripts:
   - class: File
     location: join-fileview-by-specimen.py
