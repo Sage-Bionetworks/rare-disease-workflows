@@ -39,7 +39,3 @@ outputs:
     type: File
     outputBinding:
      glob: "*/*.sf"
-  specimenId:
-    type: string
-    outputBinding:
-      glob: output
