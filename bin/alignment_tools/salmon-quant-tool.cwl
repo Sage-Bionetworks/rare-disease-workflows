@@ -38,4 +38,9 @@ outputs:
   quants:
     type: File
     outputBinding:
-     glob: "*/*.sf"
+      glob: ${ return '**/' + inputs.fastq1.basename }
+      outputEval: |
+        ${
+          self[0].basename = inputs.output + '_quants.sf';
+          return self[0]
+        }

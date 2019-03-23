@@ -24,7 +24,7 @@ expression: "${var lines = inputs.datafile.contents.split('\\n');
                for (i=0; i<lines.length;i++){
                    if(lines[i]!== \"\"){
                         newlines.push(lines[i]);
-                  }
-              }
+                    }
+                 }
                return { 'anyarray': newlines } ;
               }"

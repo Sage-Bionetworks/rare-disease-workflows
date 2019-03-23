@@ -18,10 +18,7 @@ inputs:
 outputs:
   quants:
     type: File
-    outputSource: run-salmon/quants
-  dirname:
-    type: string
-    outputSource: specimenId
+    outputSource: run-salmon/quants #rename-file/newfile
 
 requirements:
   - class: ScatterFeatureRequirement
@@ -64,3 +61,10 @@ steps:
        output: specimenId
     out:
        [quants]
+  # rename-file:
+  #   run: mv-tool.cwl
+  #   in:
+  #     from: run-salmon/quants
+  #     to: $(specimenId+'.sf')
+  #   out:
+  #     [newfile]
