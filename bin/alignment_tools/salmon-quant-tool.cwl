@@ -7,6 +7,7 @@ cwlVersion: v1.0
 requirements:
   - class: DockerRequirement
     dockerPull: combinelab/salmon
+  - class: InlineJavascriptRequirement
 #  - class: InitialWorkDirRequirement
 #    listing: $(inputs.output)
 
@@ -38,9 +39,10 @@ outputs:
   quants:
     type: File
     outputBinding:
-      glob: ${ return '**/' + inputs.fastq1.basename }
-      outputEval: |
-        ${
-          self[0].basename = inputs.output + '_quants.sf';
-          return self[0]
-        }
+      glob: "*/quant.sf"
+      #glob: ${ return '**/' + inputs.output.basename }
+      #outputEval: |
+      #  ${
+      #    self[0].basename = inputs.output + '_quants.sf';
+      #    return self[0]
+      #  }

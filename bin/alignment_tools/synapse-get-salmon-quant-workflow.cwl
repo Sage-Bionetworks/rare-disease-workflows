@@ -18,8 +18,11 @@ inputs:
 outputs:
   quants:
     type: File
-    outputSource: run-salmon/quants #rename-file/newfile
-
+    outputSource: rename-file/newfile
+  dirname:
+    type: string
+    outputSource: specimenId
+ 
 requirements:
   - class: ScatterFeatureRequirement
   - class: SubworkflowFeatureRequirement
@@ -61,10 +64,10 @@ steps:
        output: specimenId
     out:
        [quants]
-  # rename-file:
-  #   run: mv-tool.cwl
-  #   in:
-  #     from: run-salmon/quants
-  #     to: $(specimenId+'.sf')
-  #   out:
-  #     [newfile]
+  rename-file:
+    run: mv-tool.cwl
+    in:
+      fname: run-salmon/quants
+      newname: specimenId
+    out:
+      [newfile]

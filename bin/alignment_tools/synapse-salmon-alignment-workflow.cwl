@@ -63,7 +63,7 @@ steps:
         mate2-ids: get-samples-from-fv/mate2files
         index-dir: run-index/indexDir
         synapse_config: synapse_config
-      out: [quants]
+      out: [quants,dirname]
     get-clinical:
        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
        in:
