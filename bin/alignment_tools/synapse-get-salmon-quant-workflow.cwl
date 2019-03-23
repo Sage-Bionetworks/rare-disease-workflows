@@ -15,13 +15,13 @@ inputs:
   specimenId:
     type: string
 
-outputs: 
+outputs:
   quants:
     type: File
     outputSource: run-salmon/quants
   dirname:
-    type: Directory
-    outputSource: run-salmon/dirname
+    type: string
+    outputSource: run-salmon/specimenId
 
 requirements:
   - class: ScatterFeatureRequirement
@@ -56,12 +56,11 @@ steps:
   run-salmon:
     run: salmon-quant-tool.cwl
     in:
-       mates1: 
+       mates1:
          source: download-mate1-files/filepath
-       mates2: 
+       mates2:
          source: download-mate2-files/filepath
        index-dir: index-dir
        output: specimenId
     out:
-       [quants,dirname]
-     
+       [quants,specimenId]

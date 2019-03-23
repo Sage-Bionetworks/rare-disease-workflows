@@ -39,8 +39,7 @@ outputs:
     type: File
     outputBinding:
      glob: "*/*.sf"
-  dirname:
-    type: Directory
+  specimenId:
+    type: string
     outputBinding:
-      glob: $(inputs.output)
-
+      glob: output
