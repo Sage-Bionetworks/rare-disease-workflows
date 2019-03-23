@@ -21,7 +21,7 @@ outputs:
     outputSource: run-salmon/quants
   dirname:
     type: string
-    outputSource: run-salmon/specimenId
+    outputSource: specimenId
 
 requirements:
   - class: ScatterFeatureRequirement
