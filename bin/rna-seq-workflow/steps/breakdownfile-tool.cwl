@@ -1,4 +1,5 @@
-label: breakdwonfile-tool
+label: breakdownfile-tool
+id: breakdownfile-tool
 cwlVersion: v1.0
 class: CommandLineTool
 baseCommand: python
@@ -29,7 +30,7 @@ requirements:
          with open('cwl.json','w') as outfile:
            json.dump(res,outfile)
 inputs:
- fileName: File 
+ fileName: File
 arguments:
   - valueFrom: breakdownfiles.py
   - valueFrom: $(inputs.fileName)
