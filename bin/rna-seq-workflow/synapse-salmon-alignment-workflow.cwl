@@ -36,7 +36,7 @@ steps:
         synapse_config: synapse_config
       out: [filepath]
     run-index:
-      run: salmon-index-tool.cwl
+      run: steps/salmon-index-tool.cwl
       in:
         index-file: get-index/filepath
         index-dir: index-dir
@@ -49,7 +49,7 @@ steps:
          query: idquery
        out: [query_result]
     get-samples-from-fv:
-      run: breakdownfile-tool.cwl
+      run: steps/breakdownfile-tool.cwl
       in:
          fileName: get-fv/query_result
       out: [specIds,mate1files,mate2files]
@@ -71,7 +71,7 @@ steps:
          query: sample_query
        out: [query_result]
     join-fileview-by-specimen:
-      run: join-fileview-by-specimen-tool.cwl
+      run: steps/join-fileview-by-specimen-tool.cwl
       in:
         filelist: run-alignment-by-specimen/quants
         scripts: scripts

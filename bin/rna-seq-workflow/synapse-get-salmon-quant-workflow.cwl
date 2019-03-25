@@ -22,7 +22,7 @@ outputs:
   dirname:
     type: string
     outputSource: specimenId
- 
+
 requirements:
   - class: ScatterFeatureRequirement
   - class: SubworkflowFeatureRequirement
@@ -30,7 +30,7 @@ requirements:
 
 steps:
   get-mate1-files:
-    run: out-to-array-tool.cwl
+    run: steps/out-to-array-tool.cwl
     in:
       datafile: mate1-ids
     out: [anyarray]
@@ -42,7 +42,7 @@ steps:
       synapse_config: synapse_config
     out: [filepath]
   get-mate2-files:
-    run: out-to-array-tool.cwl
+    run: steps/out-to-array-tool.cwl
     in:
       datafile: mate2-ids
     out: [anyarray]
@@ -54,7 +54,7 @@ steps:
       synapse_config: synapse_config
     out: [filepath]
   run-salmon:
-    run: salmon-quant-tool.cwl
+    run: steps/salmon-quant-tool.cwl
     in:
        mates1:
          source: download-mate1-files/filepath
@@ -65,7 +65,7 @@ steps:
     out:
        [quants]
   rename-file:
-    run: mv-tool.cwl
+    run: steps/mv-tool.cwl
     in:
       fname: run-salmon/quants
       newname: specimenId
