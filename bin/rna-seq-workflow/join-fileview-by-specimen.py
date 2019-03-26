@@ -39,6 +39,21 @@ if __name__ == '__main__':
         nargs='+',
         required=True)
 
+    parser.add_argument(
+        '-u',
+        '--used',
+        type=str,
+        nargs='+',
+        required=False,
+        help='List of synapse ids used in this analysis')
+
+    parser.add_argument(
+        '-e',
+        '--executed',
+        type=str,
+        nargs='+',
+        required=False,
+        help='List of files used to execute this')
 
     args = parser.parse_args()
 
@@ -51,8 +66,13 @@ if __name__ == '__main__':
     #join specimens and synids into data frame
     specToSyn=pandas.DataFrame({'specimenID':args.specimenIds,'path': [os.path.basename(a) for a in args.filelist]})
 
-    #add in parent id #syn18457550
+
+    #add in parent id
     specToSyn['parent']=args.parentId
+
+    ##add in provenance
+    specToSyn['used']=args.used.join(',') ##what is the delimiter?
+    specTOSyn['executed']=args.executed.join(',')
 
     #join entire dataframe
     full_df=specToSyn.merge(manifest, on='specimenID')

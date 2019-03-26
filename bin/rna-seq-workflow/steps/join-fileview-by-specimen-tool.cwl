@@ -33,6 +33,14 @@ inputs:
     type: string
     inputBinding:
       prefix: --parentId
+  # used:
+  #   type: string[]
+  #   inputBinding:
+  #     prefix: --used
+  # executed:
+  #   type: string[]
+  #   inputBinding:
+  #     prefix: --executed
 
 outputs:
   newmanifest:
