@@ -43,6 +43,6 @@ outputs:
       #glob: ${ return '**/' + inputs.output.basename }
       #outputEval: |
       #  ${
-      #    self[0].basename = inputs.output + '_quants.sf';
+      #    self[0].basename = inputs.output + '_quant.sf';
       #    return self[0]
       #  }
