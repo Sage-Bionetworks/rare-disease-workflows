@@ -68,6 +68,6 @@ steps:
     run: steps/mv-tool.cwl
     in:
       fname: run-salmon/quants
-      newname: $("\""+specimenId+"\".sf")
+      newname: specimenId
     out:
       [newfile]

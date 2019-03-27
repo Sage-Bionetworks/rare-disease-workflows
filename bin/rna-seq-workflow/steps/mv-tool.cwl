@@ -6,17 +6,20 @@ cwlVersion: v1.0
 
 baseCommand: mv
 
+requirements:
+  InlineJavascriptRequirement: {}
+
+arguments: [$(inputs.fname),$(inputs.newname+'.sf')]
+
 inputs:
   fname:
       type: File
-      inputBinding:
-         position: 1
   newname:
       type: string
-      inputBinding:
-         position: 2
+
+
 outputs:
   newfile:
       type: File
       outputBinding:
-         glob: $(inputs.newname+'.sf')
+         glob: "*"
