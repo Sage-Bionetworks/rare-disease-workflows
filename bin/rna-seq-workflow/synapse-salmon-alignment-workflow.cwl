@@ -49,18 +49,18 @@ steps:
          query: idquery
        out: [query_result]
     get-samples-from-fv:
-      run: steps/breakdownfile-tool.cwl
+      run:
       in:
          fileName: get-fv/query_result
-      out: [specIds,mate1files,mate2files]
+      out: [specIds,mate1s,mate2s]
     run-alignment-by-specimen:
       run: synapse-get-salmon-quant-workflow.cwl
       scatter: [specimenId,mate1-ids,mate2-ids]
       scatterMethod: dotproduct
       in:
         specimenId: get-samples-from-fv/specIds
-        mate1-ids: get-samples-from-fv/mate1files
-        mate2-ids: get-samples-from-fv/mate2files
+        mate1-ids: get-samples-from-fv/mate1s
+        mate2-ids: get-samples-from-fv/mate2s
         index-dir: run-index/indexDir
         synapse_config: synapse_config
       out: [quants,dirname]

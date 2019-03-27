@@ -40,9 +40,8 @@ outputs:
     type: File
     outputBinding:
       glob: "*/quant.sf"
-      #glob: ${ return '**/' + inputs.output.basename }
-      #outputEval: |
-      #  ${
-      #    self[0].basename = inputs.output + '_quant.sf';
-      #    return self[0]
-      #  }
+      outputEval: |
+        ${
+          self[0].basename = inputs.output + '_quant.sf';
+          return self[0]
+        }
