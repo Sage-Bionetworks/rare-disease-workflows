@@ -49,18 +49,18 @@ steps:
          query: idquery
        out: [query_result]
     get-samples-from-fv:
-      run:
+      run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/Andrews_tools/breakdown.cwl
       in:
          fileName: get-fv/query_result
-      out: [specIds,mate1s,mate2s]
+      out: [names,mate1-id-arrays,mate2-id-arrays]
     run-alignment-by-specimen:
       run: synapse-get-salmon-quant-workflow.cwl
       scatter: [specimenId,mate1-ids,mate2-ids]
       scatterMethod: dotproduct
       in:
-        specimenId: get-samples-from-fv/specIds
-        mate1-ids: get-samples-from-fv/mate1s
-        mate2-ids: get-samples-from-fv/mate2s
+        specimenId: get-samples-from-fv/names
+        mate1-ids: get-samples-from-fv/mate1-id-arrays
+        mate2-ids: get-samples-from-fv/mate2-id-arrays
         index-dir: run-index/indexDir
         synapse_config: synapse_config
       out: [quants,dirname]

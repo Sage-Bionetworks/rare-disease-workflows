@@ -5,9 +5,9 @@ cwlVersion: v1.0
 
 inputs:
   mate1-ids:
-    type: File
+    type: string[]
   mate2-ids:
-    type: File
+    type: string[]
   index-dir:
     type: Directory
   synapse_config:
