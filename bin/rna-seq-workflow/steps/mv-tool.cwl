@@ -6,8 +6,8 @@ cwlVersion: v1.0
 
 baseCommand: mv
 
-inputs: 
-  fname: 
+inputs:
+  fname:
       type: File
       inputBinding:
          position: 1
@@ -19,4 +19,4 @@ outputs:
   newfile:
       type: File
       outputBinding:
-         glob: "*"
+         glob: $(inputs.newname+'.sf')
