@@ -75,7 +75,7 @@ steps:
       in:
         filelist: run-alignment-by-specimen/quants
         scripts: scripts
-        specimenIds: run-alignment-by-specimen/dirname
+        values: run-alignment-by-specimen/dirname
         manifest_file: get-clinical/query_result
         parentid: parentid
       out:

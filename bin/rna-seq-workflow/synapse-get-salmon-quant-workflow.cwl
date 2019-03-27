@@ -18,7 +18,7 @@ inputs:
 outputs:
   quants:
     type: File
-    outputSource: rename-file/newfile
+    outputSource: run-salmon/quants
   dirname:
     type: string
     outputSource: specimenId

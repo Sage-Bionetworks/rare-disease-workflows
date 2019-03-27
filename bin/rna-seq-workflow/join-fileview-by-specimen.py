@@ -39,6 +39,7 @@ if __name__ == '__main__':
         nargs='+',
         required=True,
         help='Values by which you would like to join the synapse ids')
+
     parser.add_argument(
         '-k',
         '--key',
@@ -46,7 +47,6 @@ if __name__ == '__main__':
         required=True,
         default='specimenID',
         help='Key on which you want to join')
-
 
     parser.add_argument(
         '-u',
