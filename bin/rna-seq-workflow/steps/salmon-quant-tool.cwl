@@ -11,7 +11,7 @@ requirements:
 #  - class: InitialWorkDirRequirement
 #    listing: $(inputs.output)
 
-baseCommand: [salmon, quant, -l, A, --validateMappings]
+baseCommand: [salmon, quant, -l, A, --validateMappings, --gcBias, --seqBias]
 
 inputs:
   mates1:
