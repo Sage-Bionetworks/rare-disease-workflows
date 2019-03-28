@@ -80,8 +80,10 @@ if __name__ == '__main__':
     specToSyn['parent']=args.parentId
 
     ##add in provenance
-    specToSyn['used']=args.used.join(',') ##what is the delimiter?
-    specTOSyn['executed']=args.executed.join(',')
+    if args.used is not None:
+        specToSyn['used']=args.used.join(',') ##what is the delimiter?
+    if args.executed is not None:
+        specToSyn['executed']=args.executed.join(',')
 
     #join entire dataframe
     full_df=specToSyn.merge(manifest, on='specimenID')

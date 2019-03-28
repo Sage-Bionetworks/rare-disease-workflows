@@ -4,8 +4,8 @@ synapse_config:
 indexid: syn18134565
 index-type: gencode
 index-dir: gencode_v29
-idquery: SELECT specimenID,id,readPair FROM syn11614200 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND readPair is not null AND species = 'Human'  order by specimenID limit 50
-sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName,experimentalCondition FROM syn11614200 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND readPair is not null AND species = 'Human'  order by specimenID limit 25
+idquery: SELECT specimenID,id,readPair FROM syn11614200 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND readPair is not null AND species = 'Human'  order by specimenID limit 20
+sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName,experimentalCondition FROM syn11614200 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND readPair is not null AND species = 'Human'  order by specimenID limit 10
 parentid: syn18468113
 scripts:
   - class: File
