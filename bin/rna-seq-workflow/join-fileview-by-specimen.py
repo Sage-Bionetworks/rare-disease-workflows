@@ -72,7 +72,7 @@ if __name__ == '__main__':
     manifest=pandas.read_csv(args.manifest_file,sep='\t')
 
     #join specimens and synids into data frame
-    specToSyn=pandas.DataFrame({'specimenID':args.specimenIds,'path': [os.path.basename(a) for a in args.filelist]})
+    specToSyn=pandas.DataFrame({args.key:args.values,'path': [os.path.basename(a) for a in args.filelist]})
 
 
     #add in parent id
