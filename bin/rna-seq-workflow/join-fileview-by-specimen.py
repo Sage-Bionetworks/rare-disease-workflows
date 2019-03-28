@@ -44,7 +44,6 @@ if __name__ == '__main__':
         '-k',
         '--key',
         type=str,
-        required=True,
         default='specimenID',
         help='Key on which you want to join')
 
@@ -86,6 +85,6 @@ if __name__ == '__main__':
         specToSyn['executed']=args.executed.join(',')
 
     #join entire dataframe
-    full_df=specToSyn.merge(manifest, on='specimenID')
+    full_df=specToSyn.merge(manifest, on=args.key)
 
     full_df.to_csv('new_manifest.tsv',sep='\t',index=False)

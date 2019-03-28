@@ -20,6 +20,8 @@ inputs:
     type: File[]
   parentid:
     type: string
+  group_by:
+    type: string
 
 requirements:
   - class: SubworkflowFeatureRequirement
@@ -51,16 +53,17 @@ steps:
     get-samples-from-fv:
       run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/Andrews_tools/breakdown.cwl
       in:
-         fileName: get-fv/query_result
-      out: [names,mate1-id-arrays,mate2-id-arrays]
+         query_tsv: get-fv/query_result
+         group_by_column: group_by
+      out: [names,mate1_id_arrays,mate2_id_arrays]
     run-alignment-by-specimen:
       run: synapse-get-salmon-quant-workflow.cwl
       scatter: [specimenId,mate1-ids,mate2-ids]
       scatterMethod: dotproduct
       in:
         specimenId: get-samples-from-fv/names
-        mate1-ids: get-samples-from-fv/mate1-id-arrays
-        mate2-ids: get-samples-from-fv/mate2-id-arrays
+        mate1-ids: get-samples-from-fv/mate1_id_arrays
+        mate2-ids: get-samples-from-fv/mate2_id_arrays
         index-dir: run-index/indexDir
         synapse_config: synapse_config
       out: [quants,dirname]
