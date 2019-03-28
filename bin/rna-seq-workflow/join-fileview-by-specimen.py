@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if(len(args.specimenIds)!=len(args.filelist)):
+    if(len(args.values)!=len(args.filelist)):
         print('specimcenIds and synids need to be the same length')
 
     #read in manifest
