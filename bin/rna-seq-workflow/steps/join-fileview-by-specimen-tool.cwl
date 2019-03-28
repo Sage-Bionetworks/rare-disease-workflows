@@ -21,10 +21,10 @@ inputs:
     type: File[]
     inputBinding:
       prefix: --filelist
-  specimenIds:
+  values:
     type: string[]
     inputBinding:
-      prefix: --specimenIds
+      prefix: --values
   manifest_file:
     type: File
     inputBinding:

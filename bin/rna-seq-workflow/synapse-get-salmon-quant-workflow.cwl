@@ -5,9 +5,9 @@ cwlVersion: v1.0
 
 inputs:
   mate1-ids:
-    type: File
+    type: string[]
   mate2-ids:
-    type: File
+    type: string[]
   index-dir:
     type: Directory
   synapse_config:
@@ -18,7 +18,7 @@ inputs:
 outputs:
   quants:
     type: File
-    outputSource: rename-file/newfile
+    outputSource: run-salmon/quants
   dirname:
     type: string
     outputSource: specimenId
@@ -29,32 +29,32 @@ requirements:
   - class: MultipleInputFeatureRequirement
 
 steps:
-  get-mate1-files:
-    run: steps/out-to-array-tool.cwl
-    in:
-      datafile: mate1-ids
-    out: [anyarray]
+  # get-mate1-files:
+  #   run: steps/out-to-array-tool.cwl
+  #   in:
+  #     datafile: mate1-ids
+  #   out: [anyarray]
   download-mate1-files:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
     scatter: synapseid
     in:
-      synapseid: get-mate1-files/anyarray
+      synapseid: mate1-ids
       synapse_config: synapse_config
     out: [filepath]
-  get-mate2-files:
-    run: steps/out-to-array-tool.cwl
-    in:
-      datafile: mate2-ids
-    out: [anyarray]
+  # get-mate2-files:
+  #   run: steps/out-to-array-tool.cwl
+  #   in:
+  #     datafile: mate2-ids
+  #   out: [anyarray]
   download-mate2-files:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
     scatter: synapseid
     in:
-      synapseid: get-mate2-files/anyarray
+      synapseid: mate2-ids
       synapse_config: synapse_config
     out: [filepath]
   run-salmon:
-    run: steps/salmon-quant-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/sara/tools/salmon-quant-tool.cwl
     in:
        mates1:
          source: download-mate1-files/filepath
@@ -64,10 +64,10 @@ steps:
        output: specimenId
     out:
        [quants]
-  rename-file:
-    run: steps/mv-tool.cwl
-    in:
-      fname: run-salmon/quants
-      newname: specimenId
-    out:
-      [newfile]
+  # rename-file:
+  #   run: steps/mv-tool.cwl
+  #   in:
+  #     fname: run-salmon/quants
+  #     newname: specimenId
+  #   out:
+  #     [newfile]
