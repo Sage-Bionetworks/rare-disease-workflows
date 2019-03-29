@@ -36,8 +36,9 @@ b=1
 mu=5e-04
 fname=paste(paste(lubridate::today(),w,b,mu,sep='_'),'.rds',sep='')
 all.genes<-unique(tab$gene)
+require(parallel)
 #TODO: make this multi-core, possibly break into smaller functions
-all.res <- lapply(names(prots), function(tumor){
+all.res <- mclapply(names(prots), function(tumor){
   #create viper signature from high vs. low
   cat(tumor)
   #print(high)

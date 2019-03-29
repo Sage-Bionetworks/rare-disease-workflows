@@ -1,27 +1,16 @@
 ###networks from proteins
 
 
-library(devtools)
-if(!require(PCSF)){
-  devtools::install_github('sgosline/PCSF')
-  library(PCSF)
-}
-if(!require(fendR)){
-  devtools::install_github('Sage-Bionetworks/fendR')
-  library(fendR)
-}
-
-
-
-
+library(PCSF)
+library(fendR)
 require(tidyverse)
-
+require(parallel)
 
 runNetworkOnTumorTypes<-function(w,b,mu,all.genes,prots,combined.graph,all.drugs){
 
   fname=paste(paste(lubridate::today(),w,b,mu,sep='_'),'.rds',sep='')
     #TODO: make this multi-core, possibly break into smaller functions
-    all.res <- lapply(names(prots), function(tumor){
+    all.res <- mclapply(names(prots), function(tumor){
       #create viper signature from high vs. low
       cat(tumor)
       #print(high)
@@ -34,15 +23,20 @@ runNetworkOnTumorTypes<-function(w,b,mu,all.genes,prots,combined.graph,all.drugs
         # print(v.res)
         pcsf.res.id <-fendR::runPcsfWithParams(ppi=combined.graph,terminals=abs(v.res),dummies=all.drugs,w=w,b=b,mu=mu,doRand=TRUE)
         pcsf.res <-fendR::renameDrugIds(pcsf.res.id,all.drugs)
-      
+         
         saveRDS(pcsf.res,file=newf)
       }
       
     drug.res <- igraph::V(pcsf.res)$name[which(igraph::V(pcsf.res)$type=='Compound')]
+    steiner <- igraph::V(pcsf.res)$name[which(igraph::V(pcsf.res)$type=='Steiner')]
+    prize.res <- igraph::V(pcsf.res)$name[which(igraph::V(pcsf.res)$type=='Terminal')]
+    
     cat(paste("Selected",length(drug.res),'drugs in the graph'))
     ##collect stats, store in synapse table
     list(network=pcsf.res,
       drugs=drug.res,
+      terms=prize.res,
+      steiners=steiner,
       w=w,
       b=b,
       mu=mu,
@@ -64,8 +58,6 @@ trackNetworkStats<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=
   
   #decouple pcsf.res.list into data frame
 
-  require(parallel)
-
   fin<-lapply(pcsf.res.list,function(x){
     #first store network
     network=x[['network']]
@@ -78,23 +70,21 @@ trackNetworkStats<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=
  #   ds=x[['compoundStats']]%>%dplyr::rename(Drug='Selected Drug',p.value='Drug Wilcoxon P-value')%>%dplyr::mutate('Drug Prize Value'=as.numeric(prize))%>%dplyr::ungroup()
     
 #    ds$`Drug Boxplot`=sapply(ds$figFile,function(y) synStore(File(y,parentId=plot.parent))$properties$id)
-    res=synapser::synStore(File(fname,parentId=pcsf.parent),used=c(viperTableId),executed=this.script)
-    
-    ds=ds%>%dplyr::select(-figFile,-prize)
+    res=synapser::synStore(File(fname,parentId=pcsf.parent),used=viperTableId,executed=this.script)
+   print(res$properties) 
+   # ds=ds%>%dplyr::select(-figFile,-prize)
     #store image file
     upl<-data.frame(tumorType=tumor,w=w,beta=b,mu=mu,
-      `Viper Proteins`=paste(sort(x$viperProts),collapse=','),
+      `Viper Proteins Selected`=paste(sort(x$terms),collapse=','),
       `Viper Table`=viperTableId,`Drugs selected`=paste(x$drugs,collapse=','),
-      `PCSF Result`=res$properties$id)
-    #                     check.names=F)
-    
-    upl2=merge(ds,upl)
+      `PCSF Result`=res$properties$id,`Num Drugs`=length(x$drugs),`Num Terminals`=length(x$terms),
+      `Steiner Nodes`=paste(sort(x$steiner),collapse=','),
+       `Num Steiner`=length(x$steiner),                   check.names=F)
+   print(upl) 
+    upl2=upl#merge(xxds,upl)
     
     tres<-synapser::synStore(Table(synTableId,upl2))
   })#,mc.cores=28)
-  #.parallel=TRUE,.paropts = list(.export=ls(.GlobalEnv)))
-  #  stopCluster(cl)
-  #store as synapse table
   
 }
 
@@ -106,8 +96,9 @@ synLogin()
 viper.table.id='syn18460033'
 synQuery=paste("SELECT * FROM",viper.table.id,"WHERE ( ( padj BETWEEN '8.401022050521E-25' AND '0.00001' ) )")
 
+this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-03-29/runNetworks.R'
 run<-function(){
-viper.prot.tab<-synTableQuery(synQuery)$asDataFrame()
+	viper.prot.tab<-synTableQuery(synQuery)$asDataFrame()
 
 ##Get graphs
 drug.graph <- fendR::loadDrugGraph()
@@ -115,7 +106,6 @@ combined.graph <-fendR::buildNetwork(drug.graph)
 all.drugs <- fendR::getDrugsFromGraph(drug.graph)
 
 
-this.script=''
 
 prots<-lapply(as.character(unique(viper.prot.tab$tumorType)),function(x) {
   res<-subset(viper.prot.tab,tumorType==x)$stat
