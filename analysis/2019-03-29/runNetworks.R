@@ -59,18 +59,13 @@ runNetworkOnTumorTypes<-function(w,b,mu,all.genes,prots,combined.graph,all.drugs
 #'@param esetFileId
 #'@param viperFileId
 #'
-trackNetworkStats<-function(pcsf.res.list,synTableId='',viperTableId='',dsetName='',  pcsf.parent='syn18482718',  plot.parent='syn18483807'){
+trackNetworkStats<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=viper.table.id, pcsf.parent='syn18482718',  plot.parent='syn18483807'){
 
   
-  this.script=''
   #decouple pcsf.res.list into data frame
-  
-  #  require(doMC)
-  #  cl <- makeCluster(nnodes=8)
+
   require(parallel)
-  # registerDoMC(cores=28)
-  
-  
+
   fin<-lapply(pcsf.res.list,function(x){
     #first store network
     network=x[['network']]
@@ -78,15 +73,16 @@ trackNetworkStats<-function(pcsf.res.list,synTableId='',viperTableId='',dsetName
     b=x[['b']]
     mu=x[['mu']]
     fname=x[['file']]
-    ko=x[['ko']]
-    wt=x[['wt']]
+    tumor=x[['tumor']]
+
     ds=x[['compoundStats']]%>%rename(Drug='Selected Drug',p.value='Drug Wilcoxon P-value')%>%mutate('Drug Prize Value'=as.numeric(prize))%>%ungroup()
+    
     ds$`Drug Boxplot`=sapply(ds$figFile,function(y) synStore(File(y,parentId=plot.parent))$properties$id)
-    res=synapser::synStore(File(fname,parentId=pcsf.parent),used=c(esetFileId,viperFileId),executed=this.script)
+    res=synapser::synStore(File(fname,parentId=pcsf.parent),used=c(viperTableId),executed=this.script)
     
     ds=ds%>%dplyr::select(-figFile,-prize)
     #store image file
-    upl<-data.frame(`NF1 KO`=ko,`NF1 WT`=wt,w=w,beta=b,mu=mu,
+    upl<-data.frame(tumorType=tumor,w=w,beta=b,mu=mu,
       `Viper Proteins`=paste(sort(x$viperProts),collapse=','),
       `Original eSet`=esetFileId,`Original metaViper`=viperFileId,
       `PCSF Result`=res$properties$id,`Dataset name`=dsetName,check.names=F)#,
@@ -107,7 +103,9 @@ trackNetworkStats<-function(pcsf.res.list,synTableId='',viperTableId='',dsetName
 
 require(synapser)
 synLogin()
-synQuery="SELECT * FROM syn18460033 WHERE ( ( padj BETWEEN '8.401022050521E-25' AND '0.00001' ) )"
+viper.table.id='syn18460033'
+synQuery=paste("SELECT * FROM",viper.table.id,"WHERE ( ( padj BETWEEN '8.401022050521E-25' AND '0.00001' ) )")
+
 viper.prot.tab<-synTableQuery(synQuery)$asDataFrame()
 
 ##Get graphs
@@ -115,6 +113,8 @@ drug.graph <- fendR::loadDrugGraph()
 combined.graph <-fendR::buildNetwork(drug.graph)
 all.drugs <- fendR::getDrugsFromGraph(drug.graph)
 
+
+this.script=''
 
 prots<-lapply(as.character(unique(viper.prot.tab$tumorType)),function(x) {
   res<-subset(viper.prot.tab,tumorType==x)$stat
@@ -124,23 +124,18 @@ names(prots)<-as.character(unique(viper.prot.tab$tumorType))
 
 all.genes<-unique(viper.prot.tab$gene)
 #all.params=all.params[1:10,]
+
 wvals=c(2,3,4,5)
-bvals=c(1,2,5,10)
+bvals=c(1,2,5,10,20)
 muvals=c(5e-05,5e-04,5e-03,5e-02)
 
 all.params=expand.grid(w=wvals,b=bvals,mu=muvals,dname=names(synIds))
 
-fr=mdply(.data=all.params,.fun=function(w,b,mu,dname){
+fr=mdply(.data=all.params,.fun=function(w,b,mu){
   
-  x=synIds[[dname]]
+  all.res<-runNetworkOnTumorTypes(w=w,b=b,mu=mu,
+    all.genes,prots,combined.graph,all.drugs)
   
-  all.res<-findDrugsWithTargetsAndGenes(eset.file=x$eset.file,
-    viper.file=x$viper.file,
-    genotype='nf1',
-    conditions=list(KOvsWT=list(KO=1,WT=0)),
-    w=w,b=b,mu=mu)
-  
-  
-  trackNetworkStats(all.res,esetFileId=x$eset.file,viperFileId=x$viper.file, dsetName=dname)
+  trackNetworkStats(all.res)
 },.parallel=TRUE)
 
