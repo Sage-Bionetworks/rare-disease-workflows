@@ -75,17 +75,17 @@ trackNetworkStats<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=
     fname=x[['file']]
     tumor=x[['tumor']]
 
-    ds=x[['compoundStats']]%>%rename(Drug='Selected Drug',p.value='Drug Wilcoxon P-value')%>%mutate('Drug Prize Value'=as.numeric(prize))%>%ungroup()
+ #   ds=x[['compoundStats']]%>%dplyr::rename(Drug='Selected Drug',p.value='Drug Wilcoxon P-value')%>%dplyr::mutate('Drug Prize Value'=as.numeric(prize))%>%dplyr::ungroup()
     
-    ds$`Drug Boxplot`=sapply(ds$figFile,function(y) synStore(File(y,parentId=plot.parent))$properties$id)
+#    ds$`Drug Boxplot`=sapply(ds$figFile,function(y) synStore(File(y,parentId=plot.parent))$properties$id)
     res=synapser::synStore(File(fname,parentId=pcsf.parent),used=c(viperTableId),executed=this.script)
     
     ds=ds%>%dplyr::select(-figFile,-prize)
     #store image file
     upl<-data.frame(tumorType=tumor,w=w,beta=b,mu=mu,
       `Viper Proteins`=paste(sort(x$viperProts),collapse=','),
-      `Original eSet`=esetFileId,`Original metaViper`=viperFileId,
-      `PCSF Result`=res$properties$id,`Dataset name`=dsetName,check.names=F)#,
+      `Viper Table`=viperTableId,`Drugs selected`=paste(x$drugs,collapse=','),
+      `PCSF Result`=res$properties$id)
     #                     check.names=F)
     
     upl2=merge(ds,upl)
@@ -106,6 +106,7 @@ synLogin()
 viper.table.id='syn18460033'
 synQuery=paste("SELECT * FROM",viper.table.id,"WHERE ( ( padj BETWEEN '8.401022050521E-25' AND '0.00001' ) )")
 
+run<-function(){
 viper.prot.tab<-synTableQuery(synQuery)$asDataFrame()
 
 ##Get graphs
@@ -138,4 +139,4 @@ fr=mdply(.data=all.params,.fun=function(w,b,mu){
   
   trackNetworkStats(all.res)
 },.parallel=TRUE)
-
+}
