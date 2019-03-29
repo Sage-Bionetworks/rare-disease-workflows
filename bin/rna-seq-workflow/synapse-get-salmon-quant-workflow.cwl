@@ -29,11 +29,6 @@ requirements:
   - class: MultipleInputFeatureRequirement
 
 steps:
-  # get-mate1-files:
-  #   run: steps/out-to-array-tool.cwl
-  #   in:
-  #     datafile: mate1-ids
-  #   out: [anyarray]
   download-mate1-files:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
     scatter: synapseid
@@ -41,11 +36,6 @@ steps:
       synapseid: mate1-ids
       synapse_config: synapse_config
     out: [filepath]
-  # get-mate2-files:
-  #   run: steps/out-to-array-tool.cwl
-  #   in:
-  #     datafile: mate2-ids
-  #   out: [anyarray]
   download-mate2-files:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
     scatter: synapseid
@@ -54,7 +44,7 @@ steps:
       synapse_config: synapse_config
     out: [filepath]
   run-salmon:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/sara/tools/salmon-quant-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/tools/salmon-quant-tool.cwl
     in:
        mates1:
          source: download-mate1-files/filepath
@@ -64,10 +54,3 @@ steps:
        output: specimenId
     out:
        [quants]
-  # rename-file:
-  #   run: steps/mv-tool.cwl
-  #   in:
-  #     fname: run-salmon/quants
-  #     newname: specimenId
-  #   out:
-  #     [newfile]

@@ -38,7 +38,7 @@ steps:
         synapse_config: synapse_config
       out: [filepath]
     run-index:
-      run: steps/salmon-index-tool.cwl
+      run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/tools/salmon-index-tool.cwl
       in:
         index-file: get-index/filepath
         index-dir: index-dir
