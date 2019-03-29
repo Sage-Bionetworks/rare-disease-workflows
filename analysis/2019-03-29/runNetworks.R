@@ -4,9 +4,11 @@
 library(PCSF)
 library(fendR)
 require(tidyverse)
-require(parallel)
+#require(parallel)
+library(foreach)
+require(doParallel)
 
-runNetworkOnTumorTypes<-function(w,b,mu,all.genes,prots,combined.graph,all.drugs){
+runNetworkOnTumorTypes<<-function(w,b,mu,all.genes,prots,combined.graph,all.drugs){
 
   fname=paste(paste(lubridate::today(),w,b,mu,sep='_'),'.rds',sep='')
     #TODO: make this multi-core, possibly break into smaller functions
@@ -45,7 +47,8 @@ runNetworkOnTumorTypes<-function(w,b,mu,all.genes,prots,combined.graph,all.drugs
       file=newf)
   }) 
 
-  }
+}
+
 #'
 #'trackNetworkStats takes a list of results from the drug test and shares them on synapse
 #'@param pcsf.res.list
@@ -53,9 +56,7 @@ runNetworkOnTumorTypes<-function(w,b,mu,all.genes,prots,combined.graph,all.drugs
 #'@param esetFileId
 #'@param viperFileId
 #'
-trackNetworkStats<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=viper.table.id, pcsf.parent='syn18482718',  plot.parent='syn18483807'){
-
-  
+trackNetworkStats<<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=viper.table.id, pcsf.parent='syn18482718',  plot.parent='syn18483807'){
   #decouple pcsf.res.list into data frame
 
   fin<-lapply(pcsf.res.list,function(x){
@@ -84,12 +85,9 @@ trackNetworkStats<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=
     upl2=upl#merge(xxds,upl)
     
     tres<-synapser::synStore(Table(synTableId,upl2))
-  })#,mc.cores=28)
+  },mc.cores=10)
   
 }
-
-
-
 
 require(synapser)
 synLogin()
@@ -97,36 +95,36 @@ viper.table.id='syn18460033'
 synQuery=paste("SELECT * FROM",viper.table.id,"WHERE ( ( padj BETWEEN '8.401022050521E-25' AND '0.00001' ) )")
 
 this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-03-29/runNetworks.R'
-run<-function(){
-	viper.prot.tab<-synTableQuery(synQuery)$asDataFrame()
+#run<-function(){
+ # cl=makeCluster(10)
+#  registerDoParallel(cl,cores=10)
+	viper.prot.tab<<-synTableQuery(synQuery)$asDataFrame()
 
 ##Get graphs
-drug.graph <- fendR::loadDrugGraph()
-combined.graph <-fendR::buildNetwork(drug.graph)
-all.drugs <- fendR::getDrugsFromGraph(drug.graph)
+  drug.graph <<- fendR::loadDrugGraph()
+  combined.graph <<-fendR::buildNetwork(drug.graph)
+  all.drugs <<- fendR::getDrugsFromGraph(drug.graph)
 
-
-
-prots<-lapply(as.character(unique(viper.prot.tab$tumorType)),function(x) {
-  res<-subset(viper.prot.tab,tumorType==x)$stat
-  names(res)<-subset(viper.prot.tab,tumorType==x)$gene
-  res})
-names(prots)<-as.character(unique(viper.prot.tab$tumorType))
-
-all.genes<-unique(viper.prot.tab$gene)
-#all.params=all.params[1:10,]
-
-wvals=c(2,3,4,5)
-bvals=c(1,2,5,10,20)
-muvals=c(5e-05,5e-04,5e-03,5e-02)
-
-all.params=expand.grid(w=wvals,b=bvals,mu=muvals,dname=names(synIds))
-
-fr=mdply(.data=all.params,.fun=function(w,b,mu){
+  prots<<-lapply(as.character(unique(viper.prot.tab$tumorType)),function(x) {
+    res<-subset(viper.prot.tab,tumorType==x)$stat
+    names(res)<-subset(viper.prot.tab,tumorType==x)$gene
+    res})
   
-  all.res<-runNetworkOnTumorTypes(w=w,b=b,mu=mu,
-    all.genes,prots,combined.graph,all.drugs)
+  names(prots)<-as.character(unique(viper.prot.tab$tumorType))
+
+  all.genes<<-unique(viper.prot.tab$gene)
+
+  wvals=c(2,3,4,5)
+  bvals=c(1,2,5,10,20)
+  muvals=c(5e-05,5e-04,5e-03,5e-02)
+
+  all.params=expand.grid(w=wvals,b=bvals,mu=muvals)
   
-  trackNetworkStats(all.res)
-},.parallel=TRUE)
-}
+  fr=plyr::mdply(.data=all.params,.fun=function(w,b,mu){
+    trackNetworkStats(runNetworkOnTumorTypes(w=w,b=b,mu=mu,
+      all.genes,prots,combined.graph,all.drugs))
+  })#,.parallel=TRUE,.paropts=list(.export=ls()))
+
+#stopCluster()
+
+#}
