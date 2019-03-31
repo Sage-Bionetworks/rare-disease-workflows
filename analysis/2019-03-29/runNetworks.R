@@ -12,7 +12,7 @@ runNetworkOnTumorTypes<<-function(w,b,mu,all.genes,prots,combined.graph,all.drug
 
   fname=paste(paste(lubridate::today(),w,b,mu,sep='_'),'.rds',sep='')
     #TODO: make this multi-core, possibly break into smaller functions
-    all.res <- mclapply(names(prots), function(tumor){
+    all.res <- lapply(names(prots), function(tumor){
       #create viper signature from high vs. low
       cat(tumor)
       #print(high)
@@ -55,6 +55,8 @@ runNetworkOnTumorTypes<<-function(w,b,mu,all.genes,prots,combined.graph,all.drug
 #'@param synTableId
 #'@param esetFileId
 #'@param viperFileId
+#'@export 
+#'
 #'
 trackNetworkStats<<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=viper.table.id, pcsf.parent='syn18482718',  plot.parent='syn18483807'){
   #decouple pcsf.res.list into data frame
@@ -85,7 +87,7 @@ trackNetworkStats<<-function(pcsf.res.list,synTableId='syn18483855',viperTableId
     upl2=upl#merge(xxds,upl)
     
     tres<-synapser::synStore(Table(synTableId,upl2))
-  },mc.cores=10)
+  })#,mc.cores=10)
   
 }
 
@@ -96,8 +98,8 @@ synQuery=paste("SELECT * FROM",viper.table.id,"WHERE ( ( padj BETWEEN '8.4010220
 
 this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-03-29/runNetworks.R'
 #run<-function(){
- # cl=makeCluster(10)
-#  registerDoParallel(cl,cores=10)
+  cl=makeCluster(10)
+  registerDoParallel(cl)
 	viper.prot.tab<<-synTableQuery(synQuery)$asDataFrame()
 
 ##Get graphs
@@ -120,11 +122,17 @@ this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/20
 
   all.params=expand.grid(w=wvals,b=bvals,mu=muvals)
   
-  fr=plyr::mdply(.data=all.params,.fun=function(w,b,mu){
-    trackNetworkStats(runNetworkOnTumorTypes(w=w,b=b,mu=mu,
-      all.genes,prots,combined.graph,all.drugs))
-  })#,.parallel=TRUE,.paropts=list(.export=ls()))
+  
+  foreach(b=iter(all.params,by='row')) %dopar% trackNetworkStats(runNetworkOnTumorTypes(w=b$w,b=b$b,mu=b$mu,all.genes,prots,combined.graph,all.drugs))
+  
+#  fr=plyr::mdply(.data=all.params,.fun=function(w,b,mu){
+#    print(paste(w,b,mu))
+#    res=runNetworkOnTumorTypes(w=w,b=b,mu=mu,all.genes,prots,combined.graph,all.drugs)
+#    print(res)
+#    trackNetworkStats(res)
+      
+#  },.parallel=TRUE,.paropts=list(.export=c("runNetworkOnTumorTypes","trackNetworkStats")))
 
-#stopCluster()
+stopCluster()
 
 #}
