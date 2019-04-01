@@ -20,7 +20,7 @@ We have tried to build the tool to be as generalizable as possible but for now w
 ### Running the tool
 
 To run the tool you should.
-1- Clone this repository
-2- `cd bin/rna-seq-workflow`
-3- Create your own YAML or JSON file with the above parameters
-4- `cwl-tool synapse-salmon-alignment-workflow.cwl myParams.yml`
+1 - Clone this repository
+2 - `cd bin/rna-seq-workflow`
+3 - Create your own YAML or JSON file with the above parameters
+4 - `cwl-tool synapse-salmon-alignment-workflow.cwl myParams.yml`
