@@ -12,7 +12,7 @@ runNetworkOnTumorTypes<<-function(w,b,mu,all.genes,prots,combined.graph,all.drug
 
   fname=paste(paste(lubridate::today(),w,b,mu,sep='_'),'.rds',sep='')
     #TODO: make this multi-core, possibly break into smaller functions
-    all.res <- mclapply(names(prots), function(tumor){
+    all.res <- lapply(names(prots), function(tumor){
       #create viper signature from high vs. low
       cat(tumor)
       #print(high)
@@ -55,6 +55,8 @@ runNetworkOnTumorTypes<<-function(w,b,mu,all.genes,prots,combined.graph,all.drug
 #'@param synTableId
 #'@param esetFileId
 #'@param viperFileId
+#'@export 
+#'
 #'
 trackNetworkStats<<-function(pcsf.res.list,
                              synTableId='syn18483855',
@@ -93,11 +95,16 @@ trackNetworkStats<<-function(pcsf.res.list,
     upl2=upl#merge(xxds,upl)
 
     tres<-synapser::synStore(Table(synTableId,upl2))
+<<<<<<< HEAD
   },mc.cores=10)
 
 }
 my.prod<-function(w,b,mu){
   return(w*b+mu)
+=======
+  })#,mc.cores=10)
+  
+>>>>>>> fd200b33f80ad47bdb60d041ff46d57108afeca7
 }
 
 require(synapser)
@@ -106,10 +113,16 @@ viper.table.id='syn18460033'
 synQuery=paste("SELECT * FROM",viper.table.id,"WHERE ( ( padj BETWEEN '8.401022050521E-25' AND '0.00001' ) )")
 
 this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-03-29/runNetworks.R'
+<<<<<<< HEAD
 run<-function(){
 
                                       # cl=makeCluster(10)
 #  registerDoParallel(cl,cores=10)
+=======
+#run<-function(){
+  cl=makeCluster(10)
+  registerDoParallel(cl)
+>>>>>>> fd200b33f80ad47bdb60d041ff46d57108afeca7
 	viper.prot.tab<<-synTableQuery(synQuery)$asDataFrame()
 
 ##Get graphs
@@ -131,13 +144,27 @@ run<-function(){
   muvals=c(5e-05,5e-04,5e-03,5e-02)
 
   all.params=expand.grid(w=wvals,b=bvals,mu=muvals)
+<<<<<<< HEAD
 
   fr=plyr::mdply(.data=all.params,.fun=function(w,b,mu){
     my.prod(w,b,mu)
   #  trackNetworkStats(runNetworkOnTumorTypes(w=w,b=b,mu=mu,
   #    all.genes,prots,combined.graph,all.drugs))
   },.parallel=TRUE)
+=======
+  
+  
+  foreach(b=iter(all.params,by='row')) %dopar% trackNetworkStats(runNetworkOnTumorTypes(w=b$w,b=b$b,mu=b$mu,all.genes,prots,combined.graph,all.drugs))
+  
+#  fr=plyr::mdply(.data=all.params,.fun=function(w,b,mu){
+#    print(paste(w,b,mu))
+#    res=runNetworkOnTumorTypes(w=w,b=b,mu=mu,all.genes,prots,combined.graph,all.drugs)
+#    print(res)
+#    trackNetworkStats(res)
+      
+#  },.parallel=TRUE,.paropts=list(.export=c("runNetworkOnTumorTypes","trackNetworkStats")))
+>>>>>>> fd200b33f80ad47bdb60d041ff46d57108afeca7
 
-#stopCluster()
+stopCluster()
 
 }
