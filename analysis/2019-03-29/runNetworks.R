@@ -18,21 +18,21 @@ runNetworkOnTumorTypes<<-function(w,b,mu,all.genes,prots,combined.graph,all.drug
       #print(high)
       v.res=prots[[tumor]]
       newf=paste(tumor,fname,sep='_')
-    
+
       if(file.exists(newf)){
         pcsf.res<-readRDS(newf)
       } else{
         # print(v.res)
         pcsf.res.id <-fendR::runPcsfWithParams(ppi=combined.graph,terminals=abs(v.res),dummies=all.drugs,w=w,b=b,mu=mu,doRand=TRUE)
         pcsf.res <-fendR::renameDrugIds(pcsf.res.id,all.drugs)
-         
+
         saveRDS(pcsf.res,file=newf)
       }
-      
+
     drug.res <- igraph::V(pcsf.res)$name[which(igraph::V(pcsf.res)$type=='Compound')]
     steiner <- igraph::V(pcsf.res)$name[which(igraph::V(pcsf.res)$type=='Steiner')]
     prize.res <- igraph::V(pcsf.res)$name[which(igraph::V(pcsf.res)$type=='Terminal')]
-    
+
     cat(paste("Selected",length(drug.res),'drugs in the graph'))
     ##collect stats, store in synapse table
     list(network=pcsf.res,
@@ -45,7 +45,7 @@ runNetworkOnTumorTypes<<-function(w,b,mu,all.genes,prots,combined.graph,all.drug
       viperProts=names(v.res),
       tumor=tumor,
       file=newf)
-  }) 
+  })
 
 }
 
@@ -56,7 +56,12 @@ runNetworkOnTumorTypes<<-function(w,b,mu,all.genes,prots,combined.graph,all.drug
 #'@param esetFileId
 #'@param viperFileId
 #'
-trackNetworkStats<<-function(pcsf.res.list,synTableId='syn18483855',viperTableId=viper.table.id, pcsf.parent='syn18482718',  plot.parent='syn18483807'){
+trackNetworkStats<<-function(pcsf.res.list,
+                             synTableId='syn18483855',
+                             viperTableId=viper.table.id,
+                             pcsf.parent='syn18482718',
+                             plot.parent='syn18483807'){
+
   #decouple pcsf.res.list into data frame
 
   fin<-lapply(pcsf.res.list,function(x){
@@ -69,24 +74,30 @@ trackNetworkStats<<-function(pcsf.res.list,synTableId='syn18483855',viperTableId
     tumor=x[['tumor']]
 
  #   ds=x[['compoundStats']]%>%dplyr::rename(Drug='Selected Drug',p.value='Drug Wilcoxon P-value')%>%dplyr::mutate('Drug Prize Value'=as.numeric(prize))%>%dplyr::ungroup()
-    
+
 #    ds$`Drug Boxplot`=sapply(ds$figFile,function(y) synStore(File(y,parentId=plot.parent))$properties$id)
     res=synapser::synStore(File(fname,parentId=pcsf.parent),used=viperTableId,executed=this.script)
-   print(res$properties) 
+   print(res$properties)
    # ds=ds%>%dplyr::select(-figFile,-prize)
     #store image file
     upl<-data.frame(tumorType=tumor,w=w,beta=b,mu=mu,
       `Viper Proteins Selected`=paste(sort(x$terms),collapse=','),
-      `Viper Table`=viperTableId,`Drugs selected`=paste(x$drugs,collapse=','),
-      `PCSF Result`=res$properties$id,`Num Drugs`=length(x$drugs),`Num Terminals`=length(x$terms),
+      `Viper Table`=viperTableId,
+      `Drugs selected`=paste(x$drugs,collapse=','),
+      `PCSF Result`=res$properties$id,
+      `Num Drugs`=length(x$drugs),
+      `Num Terminals`=length(x$terms),
       `Steiner Nodes`=paste(sort(x$steiner),collapse=','),
        `Num Steiner`=length(x$steiner),                   check.names=F)
-   print(upl) 
+   print(upl)
     upl2=upl#merge(xxds,upl)
-    
+
     tres<-synapser::synStore(Table(synTableId,upl2))
   },mc.cores=10)
-  
+
+}
+my.prod<-function(w,b,mu){
+  return(w*b+mu)
 }
 
 require(synapser)
@@ -95,8 +106,9 @@ viper.table.id='syn18460033'
 synQuery=paste("SELECT * FROM",viper.table.id,"WHERE ( ( padj BETWEEN '8.401022050521E-25' AND '0.00001' ) )")
 
 this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-03-29/runNetworks.R'
-#run<-function(){
- # cl=makeCluster(10)
+run<-function(){
+
+                                      # cl=makeCluster(10)
 #  registerDoParallel(cl,cores=10)
 	viper.prot.tab<<-synTableQuery(synQuery)$asDataFrame()
 
@@ -109,7 +121,7 @@ this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/20
     res<-subset(viper.prot.tab,tumorType==x)$stat
     names(res)<-subset(viper.prot.tab,tumorType==x)$gene
     res})
-  
+
   names(prots)<-as.character(unique(viper.prot.tab$tumorType))
 
   all.genes<<-unique(viper.prot.tab$gene)
@@ -119,12 +131,13 @@ this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/20
   muvals=c(5e-05,5e-04,5e-03,5e-02)
 
   all.params=expand.grid(w=wvals,b=bvals,mu=muvals)
-  
+
   fr=plyr::mdply(.data=all.params,.fun=function(w,b,mu){
-    trackNetworkStats(runNetworkOnTumorTypes(w=w,b=b,mu=mu,
-      all.genes,prots,combined.graph,all.drugs))
-  })#,.parallel=TRUE,.paropts=list(.export=ls()))
+    my.prod(w,b,mu)
+  #  trackNetworkStats(runNetworkOnTumorTypes(w=w,b=b,mu=mu,
+  #    all.genes,prots,combined.graph,all.drugs))
+  },.parallel=TRUE)
 
 #stopCluster()
 
-#}
+}
