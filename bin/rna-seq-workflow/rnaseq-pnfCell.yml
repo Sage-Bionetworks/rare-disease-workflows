@@ -4,8 +4,8 @@ synapse_config:
 indexid: syn18134565
 index-type: gencode
 index-dir: gencode_v29
-idquery: SELECT specimenID,readPair,id FROM syn8518944 WHERE ( ( "fileFormat" = 'fastq' ) ) and  assay = 'rnaSeq' AND (failedQC <>true OR failedQC is NULL) order by specimenID limit 8
-sample_query: SELECT distinct specimenID,sex,age,consortium,fundingAgency,dataType,assay,study, species,nf1Genotype,nf2Genotype,isCellLine FROM syn8518944 WHERE ( ( "fileFormat" = 'fastq' ) ) and  assay = 'rnaSeq' AND (failedQC <>true OR failedQC is NULL) order by specimenID limit 4
+idquery: SELECT specimenID,readPair,id FROM syn8518944 WHERE ( ( "fileFormat" = 'fastq' ) ) and  assay = 'rnaSeq' AND (failedQC <>true OR failedQC is NULL) order by specimenID 
+sample_query: SELECT distinct specimenID,sex,age,consortium,fundingAgency,dataType,assay,study, species,nf1Genotype,nf2Genotype,isCellLine FROM syn8518944 WHERE ( ( "fileFormat" = 'fastq' ) ) and  assay = 'rnaSeq' AND (failedQC <>true OR failedQC is NULL)
 parentid: syn18464516
 group_by: specimenID
 scripts:
