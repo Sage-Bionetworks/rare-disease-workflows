@@ -74,13 +74,14 @@ steps:
          query: sample_query
        out: [query_result]
     join-fileview-by-specimen:
-      run: steps/join-fileview-by-specimen-tool.cwl
+      run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
       in:
         filelist: run-alignment-by-specimen/quants
         scripts: scripts
         values: run-alignment-by-specimen/dirname
         manifest_file: get-clinical/query_result
         parentid: parentid
+        key: specimenID
       out:
         [newmanifest]
     store-files:
