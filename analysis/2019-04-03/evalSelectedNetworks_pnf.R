@@ -4,9 +4,9 @@ library(PCSF)
 library(synapser)
 synLogin()
 
-mpnst.net<-readRDS(synGet('syn18483779')$path)
+pnf.net<-readRDS(synGet('syn18485726')$path)
 
-res<-enrichment_analysis(mpnst.net)
+res<-enrichment_analysis(pnf.net)
 
 full.res=res$enrichment
 
@@ -33,7 +33,7 @@ p.val=lapply(all.drugs,function(d){
 })
 #now do correction
 
-tumorType='MPNST'
+tumorType='pNF'
 ##next test: see if we have cell line data!
 source("../../bin/plotDrugsAcrossCells.R")
 drug.plots<-unlist(lapply(unique(full.res$DrugsByBetweenness),function(druglist,tumorType){

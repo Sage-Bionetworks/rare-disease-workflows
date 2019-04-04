@@ -10,17 +10,21 @@ drug.map<-synTableQuery('SELECT distinct internal_id,std_name FROM syn17090819')
 
 tab.with.id<-tab%>%left_join(drug.map,by='internal_id')
 
-all.compounds<-unique(tab$std_name)
-all.models<-unique(tab$model_name)
-print(paste('Loaded',length(all.compounds),'compound response data over',length(all.mdoels)))
+all.compounds<-unique(tab.with.id$std_name)
+all.models<-unique(tab.with.id$model_name)
+print(paste('Loaded',length(all.compounds),'compound response data over',length(all.models),'models'))
 
 ##plot cells by drug and cell and tumor type
-plotDrugByCellAndTumor<-function(compoundName){
+plotDrugByCellAndTumor<-function(compoundName,tumorType){
   require(tidyverse)
   red.tab<-subset(tab.with.id,std_name==compoundName)%>%subset(response<300)%>%select(model_name,response,response_type,symptom_name,organism_name,disease_name)%>%unique()
-  ggplot(red.tab)+geom_jitter(aes(x=symptom_name,y=response,col=organism_name))+facet_grid(.~response_type)+ggtitle(paste(compoundName,'response across cells'))+theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  fname=paste('drugResponsesFrom',compoundName,'.png',sep='')
-  ggsave(fname)
+  fname=NULL
+  if(missing(tumorType)||tumorType%in%red.tab$symptom_name){
+    if(nrow(red.tab)>0){
+      ggplot(red.tab)+geom_jitter(aes(x=symptom_name,y=response,col=organism_name))+facet_grid(.~response_type)+ggtitle(paste(compoundName,'response across cells'))+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      fname=paste('drugResponsesFrom',compoundName,'with',tumorType,'.png',sep='')
+      ggsave(fname)
+    }}
   return(fname)
  # ggplot(red.tab)+geom_violin(aes(x=symptom_name,y=response,col=organism_name))+facet_grid(.~response_type)+ggtitle(paste(compoundName,'response across cells'))+theme(axis.text.x = element_text(angle = 45, hjust = 1))
   
