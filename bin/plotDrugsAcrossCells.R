@@ -3,8 +3,8 @@
 require(synapser)
 synLogin()
 synId='syn17462699'
-
-tab<-read.csv(synGet(synId)$path)%>%rename(internal_id='DT_explorer_internal_id')
+require(tidyverse)
+tab<-read.csv(synGet(synId)$path)%>%dplyr::rename(internal_id='DT_explorer_internal_id')
 
 drug.map<-synTableQuery('SELECT distinct internal_id,std_name FROM syn17090819')$asDataFrame()
 

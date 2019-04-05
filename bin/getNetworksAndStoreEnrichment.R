@@ -8,7 +8,7 @@ synProject='syn16941818'
 source("../../bin/plotDrugsAcrossCells.R")
 
 
-doStoreEnrichment<-function(networkfile,tumorType){
+doEnrichment<-function(networkfile){
   net=readRDS(synGet(networkfile)$path)
   #get the enrichment
   res<-enrichment_analysis(net)
@@ -28,10 +28,13 @@ doStoreEnrichment<-function(networkfile,tumorType){
     full.res=full.res[-small.genes,]
   
   ##now figure out if there are overlaps of drugs in this tumor type
-  sapply(full.res$DrugsByBetweenness,function(druglist){
+  full.res$HasCellLineData=sapply(full.res$DrugsByBetweenness,function(druglist){
     drug<-unlist(strsplit(druglist,split=';'))
     drugs.with.data<-intersect(drug,all.compounds)
+    return(length(drugs.with.data)>0)
   })
-  tab.dat=full.res%>%select('Cluster','Term','Overlap','Adjusted.P.value','Genes','DrugsByBetweenness','HasCellLineData')
   
-}
+  tab.dat=full.res%>%select('Cluster','Term','Overlap','Adjusted.P.value','Genes','DrugsByBetweenness','HasCellLineData')
+
+  return(tab.dat)
+  }
