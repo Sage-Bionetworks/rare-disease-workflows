@@ -5,7 +5,10 @@ library(synapser)
 synLogin()
 
 all.tcga<-read.csv(synGet('syn4311114')$path,sep='\t',header=T)
+clin.data<-synTableQuery('select distinct patient_barcode, diseaseTitle,acronym from syn3281840')$asDataFrame()
 
+pat.names<-colnames(all.tcga)
+ind.ids<-sapply(pat.names[2:length(pat.names)],function(x) paste(unlist(strsplit(x,split='.',fixed=T))[1:3],collapse='-'))
 this.script=''
 library(aracne.networks)
 #get aracne networks
