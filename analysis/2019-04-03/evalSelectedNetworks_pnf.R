@@ -49,7 +49,7 @@ drug.plots<-unlist(lapply(unique(full.res$DrugsByBetweenness),function(druglist,
 ##we're still missing good visualizations of drug subnetworks
 getSubnetOfCluster<-function(network,cluster){
   sg=induced_subgraph(network,which(V(network)$group==cluster))
-  class(sg)<-c('PCSF','igraph')
+  class(sg)<-c('PCSFe','igraph')
   return(sg)
   
 }
