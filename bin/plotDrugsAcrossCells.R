@@ -63,7 +63,7 @@ plotDoseResponseCurve<-function(compoundName,tumorTypes,scaleY = F, minLogDose =
       dplyr::mutate(y_scale = purrr::map(y, scale)) %>% ##scale y to clean up across d-rs 
       dplyr::select(-data, -model) %>% 
       tidyr::unnest(.preserve=ic50) %>% 
-      dplyr::group_by(drug_screen_id) %>% 
+      dplyr::group_by(symptom_name) %>% 
       dplyr::mutate(mean_ic50 = signif(mean(unlist(ic50), na.rm = T),3)) %>% 
       ungroup()
     
@@ -73,28 +73,38 @@ plotDoseResponseCurve<-function(compoundName,tumorTypes,scaleY = F, minLogDose =
   if(missing(tumorTypes)||tumorTypes%in%red.tab$symptom_name){
     if(nrow(red.tab)>0){
       if(scaleY == F){
-      ggplot(red.tab)+
+      plt <- ggplot(red.tab)+
         geom_path(aes(x=x,y=y,col=symptom_name, group=as.factor(drug_screen_id)))+
-          labs(title = paste0(compoundName, " mean IC50: ", red.tab$mean_ic50, " uM"),
+          labs(title = paste0(compoundName),
                x = expression("log10(["*mu*"M])"), 
                y = "% viability",
                col = "Tumor Type")  +
           theme_bw() +
           theme(axis.text = element_text(size = 12),
                 axis.title = element_text(size = 15))
+        tbl <- gridExtra::tableGrob(red.tab %>% 
+                                      select(symptom_name, mean_ic50) %>% 
+                                      set_names(c("Tumor Type", 'Mean IC50 ([uM])')) %>% 
+          distinct())
+        p <- gridExtra::arrangeGrob(plt, tbl, heights=c(3,1))
       }else{
-        ggplot(red.tab)+
+       plt <- ggplot(red.tab)+
           geom_path(aes(x=x,y=y_scale,col=symptom_name, group=as.factor(drug_screen_id)))+
-          labs(title = paste0(compoundName, " mean IC50: ", red.tab$mean_ic50, " uM"),
+          labs(title = paste0(compoundName),
                x = expression("log10(["*mu*"M])"), 
                y = "scaled % viability",
                col = "Tumor Type") +
           theme_bw() +
           theme(axis.text = element_text(size = 12),
                 axis.title = element_text(size = 15))
+        tbl <- gridExtra::tableGrob(red.tab %>% 
+                                        select(symptom_name, mean_ic50) %>% 
+                                      set_names(c("Tumor Type", 'Mean IC50 ([uM])')) %>% 
+                                        distinct())
+        p <- gridExtra::arrangeGrob(plt, tbl, heights=c(3,1))
       }
       fname=paste0('drugResponsesFrom',compoundName,'with',paste0(tumorTypes, collapse = "_"),'.png')
-      ggsave(fname)
+      ggsave(fname, p)
     }
     }
   
@@ -104,3 +114,4 @@ plotDoseResponseCurve<-function(compoundName,tumorTypes,scaleY = F, minLogDose =
 ##examples:
 #plotDoseResponseCurve("ENMD-2076", c("pNF"), scaleY = F, minDosesPerGroup = 2, minLogDose = -6)
 #plotDoseResponseCurve("PF-3758309", c("pNF", "MPNST"), scaleY = F, minDosesPerGroup = 2, minLogDose = -6)
+
