@@ -28,7 +28,7 @@ for condition in conds:
     #run metaviper
     cmd="Rscript ../../../drug-target-expression-network/bin/runMetaViper.R --input newTab.csv --output "+mv+' --idtype hugo --condition \"'+condition+'\"'
     print(cmd)
- #   os.system(cmd)
+    os.system(cmd)
 
     #then run pcsf
     mo=re.sub(' ','',condition)+'net.rds'
@@ -40,3 +40,4 @@ for condition in conds:
 #now with all three run the meta-analysis
 newcmd='Rscript ../../../drug-target-expression-network/bin/metaNetworkComparisons.R --input '+','.join(allnets)
 print(newcmd)
+os.system(newcmd)
