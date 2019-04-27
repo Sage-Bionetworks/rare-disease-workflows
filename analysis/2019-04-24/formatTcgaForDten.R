@@ -9,7 +9,7 @@ clin.data<-synTableQuery('select distinct patient_barcode, diseaseTitle,acronym 
 
 pat.names<-colnames(all.tcga)
 ind.ids<-sapply(pat.names[2:length(pat.names)],function(x) paste(unlist(strsplit(x,split='.',fixed=T))[1:3],collapse='-'))
-this.script=''
+this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-04-24/formatTcgaForDten.R'
 
 entrez.genes<-sapply(as.character(all.tcga$gene_id),function(x) unlist(strsplit(x,split='|',fixed=T))[2])
 rownames(all.tcga)<-entrez.genes
