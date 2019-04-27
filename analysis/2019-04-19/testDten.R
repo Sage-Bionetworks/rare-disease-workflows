@@ -21,16 +21,16 @@ mclapply(conds,function(condition){
     #run metaviper
     cmd=paste("Rscript /usr/local/bin/runMetaViper.R --input newTab.csv --output",mv,'--idtype hugo --condition \"',condition,'\"')
     print(cmd)
-    system(cmd)
+#    system(cmd)
 
     #then run pcsf
     mo=paste(gsub(' ','',condition),'net.rds',sep='')
     allnets.append(mo)
     cmd = paste("Rscript /usr/local/bin/runNetworkFromGenes.R --input",mv," --condition \"",condition,"\" --b 3 --mu 5e-05 --w 2 --output",mo)
     print(cmd)
-    system(cmd)
+ #   system(cmd)
 })
 #now with all three run the meta-analysis
 newcmd=paste('Rscript /usr/local/bin/metaNetworkComparisons.R --input ',paste(allnets,collapse=','))
 print(newcmd)
-system(newcmd)
+#system(newcmd)
