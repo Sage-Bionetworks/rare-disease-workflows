@@ -12,7 +12,7 @@ results = syn.tableQuery(query).asDataFrame()
 
 refgenome=syn.get('syn18082228').path#i hope this is it
 bamdir='syn18632539'
-this.script=''
+this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-04-29/convertCramToBam.py'
 #get fastq files
 for row in results:
     synid=row.id
@@ -27,6 +27,6 @@ for row in results:
     #store files with annotations
     annotes=syn.getAnnotations(fileEnt)
     annotes['fileFormat']='bam'
-    ent=syn.File(bamfile,description='BAM file',parent=bamdir)
+    ent=syn.File(bamfile,description='BAM file',parent=bamdir,annotations=annotes)
     activity=syn.Activity(used=syndi,executed=this.script)
-    syn.store()
+    syn.store(ent,activity=activity)
