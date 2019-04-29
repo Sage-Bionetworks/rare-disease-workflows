@@ -5,7 +5,7 @@ require(synapser)
 
 synLogin()
 
-bam.files=c(synGet('syn18084363')$path,synGet('syn18083649')$path)
+bam.files=c(synGet('syn18632911')$path,synGet('syn18633015')$path)
 
 target.file<-synGet('syn18078824')$path
 
@@ -25,8 +25,7 @@ counts$GC <- getGCcontent(target, reference.file)
 
 
 counts$GC.sq <- counts$GC^2
-counts$bg <- generateBackground(sample.names, counts,
-  + median)
+counts$bg <- generateBackground(sample.names, counts, median)
  counts$log.bg <- log(counts$bg + 0.1)
  counts$width <- width(counts)
  fit.list <- lapply(sample.names, function(sample.name) {
