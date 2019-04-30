@@ -8,6 +8,8 @@ runCnvAnalysis<-function(bam.file.list,ncores){
    target.file<-synGet('syn18078824')$path
    reference<-synGet('syn18082228')$path
 
+   bam.files<-mclapply(bam.file.list,function(x) synGet(x)$path,mc.cores=ncores)
+   sample.names<-names(bam.file.list)
    target.df <- read.delim(target.file, header = FALSE)
    target <- GRanges(seqname = target.df[, 1], IRanges(start = target.df[, 2] + 1, end = target.df[, 3]))
 
