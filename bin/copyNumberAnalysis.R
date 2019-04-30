@@ -21,8 +21,8 @@ for (i in 1:length(bam.files)) {
    res=indexBam(bam.files[i])
    mcols(counts)[[sample.names[i]]] <- countBamInGRanges(bam.files[i],target)
    }
-counts$GC <- getGCcontent(target, reference.file)
-
+counts$GC <- getGCcontent(target, reference)
+chroms=seqlevels(target)
 
 counts$GC.sq <- counts$GC^2
 counts$bg <- generateBackground(sample.names, counts, median)
@@ -30,9 +30,12 @@ counts$bg <- generateBackground(sample.names, counts, median)
  counts$width <- width(counts)
  fit.list <- lapply(sample.names, function(sample.name) {
    lapply(seqlevels(target), function(seq.name) {
+   #   print(seq.name)
     exomeCopy(counts[seqnames(counts) == seq.name],
       sample.name, X.names = c("log.bg", "GC",
        "GC.sq", "width"), S = 0:4, d = 2)
       })
     })
  compiled.segments <- compileCopyCountSegments(fit.list)
+ 
+ 
