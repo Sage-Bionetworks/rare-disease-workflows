@@ -7,7 +7,7 @@ synLogin()
 all.files<-synTableQuery("SELECT * FROM syn13363852 WHERE ( ( \"assay\" = 'exomeSeq' ) AND ( \"fileFormat\" = 'bam' ) )")$asDataFrame()
 
 parent='syn18634452'
-this.script=''
+this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-04-30/dopNFCopyNumber.R'
 bam.files=all.files$id
 names(bam.files)<-all.files$specimenID
 
