@@ -1,6 +1,6 @@
 ##copy number detection
 library(exomeCopy)
-
+library(Rsamtools)
 require(synapser)
 
 synLogin()
@@ -18,8 +18,8 @@ target <- GRanges(seqname = target.df[, 1], IRanges(start = target.df[, 2] + 1, 
 counts <- target
 
 for (i in 1:length(bam.files)) {
-   mcols(counts)[[sample.names[i]]] <- countBamInGRanges(bam.files[i],
-     target)
+   res=indexBam(bam.files[i])
+   mcols(counts)[[sample.names[i]]] <- countBamInGRanges(bam.files[i],target)
    }
 counts$GC <- getGCcontent(target, reference.file)
 
