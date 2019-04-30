@@ -16,7 +16,7 @@ runCnvAnalysis<-function(bam.file.list,ncores){
    counts <- target
 
 for (i in 1:length(bam.files)) {
-   res=indexBam(bam.files[i])
+   res=indexBam(bam.files[[i]])
    mcols(counts)[[sample.names[i]]] <- countBamInGRanges(bam.files[i],target)
    }
 counts$GC <- getGCcontent(target, reference)
