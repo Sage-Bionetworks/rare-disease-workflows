@@ -10,7 +10,7 @@ parent='syn18634452'
 this.script='https://raw.githubusercontent.com/sgosline/NEXUS/master/analysis/2019-04-30/dopNFCopyNumber.R'
 bam.files=all.files$id
 names(bam.files)<-all.files$specimenID
-
+print(bam.files)
 comp.segs<-runCnvAnalysis(bam.files,12)
 
 seg.pngs<-plotSegs(comp.segs)
@@ -29,11 +29,11 @@ for(fi in c('pNFSegs.csv',seg.pngs)){
 #now store distinct files
 specs<-unique(all.files$specimenID)
 lapply(specs,function(x){
-  mdf=subset(df,sample==x)
+  mdf=subset(df,sample=x)
   annotes<-as.list(all.files[which(all.files$specimenID==x),9:48])
   annotes$assay='exomeSeq'
   annotes$resourceType='analysis'
   fname=paste('pNFSegsSample',x,'.csv',sep='')
   write.csv(mdf,file=fname)
-  synStore(File(fname,annotations=annotes,parentId=parent),used='',executed=this.script)
+  synStore(File(fname,annotations=annotes,parentId=parent),used=all.files$id,executed=this.script)
 })
