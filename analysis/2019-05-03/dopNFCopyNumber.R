@@ -18,4 +18,5 @@ plotBetterCopies(segdata,prefix='all',all.only=F)
 
 sapply(unique(segdata$individualID),function(x){
   plotBetterCopies(subset(segdata,individualID==x),prefix=x,all.only=T)
+  
 })
