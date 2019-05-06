@@ -3,6 +3,40 @@ library(exomeCopy)
 library(Rsamtools)
 require(synapser)
 require(parallel)
+library(GenVisR)
+
+require(tidyverse)
+plotBetterCopies<-function(segfile,prefix='',all.only=TRUE){
+     
+   new.tab<-segfile%>%rename(chromosome='seqnames',sample='specimenID',segmean='copy.count')
+   
+   if(!all.only){
+   cnSpec(subset(new.tab,tumorType=='Plexiform Neurofibroma'),
+      genome = "hg38", #jhu is based on hg38, which is different from our b37
+      plot_title = "pNF Copy Altered Single Sample Graphic")
+ggsave(paste0('pnfvals.png'))   
+
+   mpnst.vals=cnSpec(subset(new.tab,tumorType=='Malignant Peripheral Nerve Sheath Tumor'),
+             genome = "hg38", #jhu is based on hg38, which is different from our b37
+           plot_title = "MPNST Copy Altered Single Sample Graphic")
+   mpnst.vals
+   ggsave(paste0(prefix,'mpnstVals.png'))
+   
+
+   na.vals=cnSpec(subset(new.tab,is.na(tumorType)),
+      genome = "hg38", #jhu is based on hg38, which is different from our b37
+      plot_title = "NF Copy Altered Single Sample Graphic")
+   na.vals
+   ggsave(paste0(prefix,'normalvals.png'))
+   
+}
+
+      cnSpec(new.tab,genome='hg38',plot_title = 'Copy Altered Samples')      
+      ggsave(paste0(prefix,'allsamps.png'))
+      
+      
+   ##per-patient values
+}
 
 runCnvAnalysis<-function(bam.file.list,ncores){
    target.file<-synGet('syn18078824')$path
