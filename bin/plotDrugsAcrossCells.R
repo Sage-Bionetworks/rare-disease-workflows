@@ -45,7 +45,9 @@ nplr_dosage_response <- function(df){
 }
 
 get_ic50 <- function(mod){
-  nplr::getEstimates(mod)[5,3]
+  #res=NA
+  res<-nplr::getEstimates(mod)[5,3]
+  return(res)
 }
 
 plotDoseResponseCurve<-function(compoundName,tumorTypes=all.tumor.types,scaleY = F, minLogDose = -6, minDosesPerGroup = 5){
@@ -58,6 +60,8 @@ plotDoseResponseCurve<-function(compoundName,tumorTypes=all.tumor.types,scaleY =
       dplyr::filter(symptom_name %in% tumorTypes) %>% 
       tidyr::nest(-drug_screen_id, -symptom_name, -drug_name) %>% 
       dplyr::mutate(model = purrr::map(data, nplr_dosage_response)) %>% ##4 or 5 param logistic regression of curve
+      subset(!is.na(model)) %>%
+      
       dplyr::mutate(ic50 = purrr::map(model, get_ic50) )%>% 
       dplyr::mutate(x = purrr::map(model, nplr::getXcurve)) %>% ##extract x and y fitted curve values
       dplyr::mutate(y = purrr::map(model, nplr::getYcurve)) %>% 
