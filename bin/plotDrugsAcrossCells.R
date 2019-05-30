@@ -12,6 +12,7 @@ tab.with.id<-tab%>%left_join(drug.map,by='internal_id')
 
 all.compounds<-unique(tab.with.id$std_name)
 all.models<-unique(tab.with.id$model_name)
+all.tumor.types<-unique(tab.with.id$symptom_name)
 print(paste('Loaded',length(all.compounds),'compound response data over',length(all.models),'models'))
 
 ##plot cells by drug and cell and tumor type
@@ -47,7 +48,7 @@ get_ic50 <- function(mod){
   nplr::getEstimates(mod)[5,3]
 }
 
-plotDoseResponseCurve<-function(compoundName,tumorTypes,scaleY = F, minLogDose = -6, minDosesPerGroup = 5){
+plotDoseResponseCurve<-function(compoundName,tumorTypes=all.tumor.types,scaleY = F, minLogDose = -6, minDosesPerGroup = 5){
 
     red.tab <- subset(screening_data_with_id,std_name==compoundName) %>% 
       dplyr::group_by(drug_screen_id) %>% 
@@ -103,7 +104,7 @@ plotDoseResponseCurve<-function(compoundName,tumorTypes,scaleY = F, minLogDose =
                                         distinct())
         p <- gridExtra::arrangeGrob(plt, tbl, heights=c(3,1))
       }
-      fname=paste0('drugResponsesFrom',compoundName,'with',paste0(tumorTypes, collapse = "_"),'.png')
+      fname=paste0('doseResponsesFrom',compoundName,'with',paste0(tumorTypes, collapse = "_"),'.png')
       ggsave(fname, p)
     }
     }
