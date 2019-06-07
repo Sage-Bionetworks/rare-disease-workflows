@@ -38,7 +38,7 @@ steps:
         synapse_config: synapse_config
       out: [filepath]
     run-index:
-      run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/tools/salmon-index-tool.cwl
+      run:https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/salmon-index-tool.cwl
       in:
         index-file: get-index/filepath
         index-dir: index-dir
@@ -80,7 +80,7 @@ steps:
         values: run-alignment-by-specimen/dirname
         manifest_file: get-clinical/query_result
         parentid: parentid
-        key: specimenID
+        key: group_by
       out:
         [newmanifest]
     store-files:
