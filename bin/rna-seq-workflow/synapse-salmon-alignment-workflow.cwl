@@ -26,7 +26,9 @@ requirements:
   - class: ScatterFeatureRequirement
 
 outputs:
-  out: []
+  manifest:
+    type: File
+    outputSource: join-fileview-by-specimen/newmanifest
 
 steps:
     get-index:
