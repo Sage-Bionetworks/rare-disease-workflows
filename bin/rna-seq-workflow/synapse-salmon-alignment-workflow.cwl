@@ -51,7 +51,7 @@ steps:
          query: idquery
        out: [query_result]
     get-samples-from-fv:
-      run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/Andrews_tools/breakdown.cwl
+      run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown.cwl
       in:
          query_tsv: get-fv/query_result
          group_by_column: group_by
