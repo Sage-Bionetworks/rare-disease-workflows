@@ -44,7 +44,7 @@ steps:
       synapse_config: synapse_config
     out: [filepath]
   run-salmon:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/tools/salmon-quant-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/salmon-quant-tool.cwl
     in:
        mates1:
          source: download-mate1-files/filepath
