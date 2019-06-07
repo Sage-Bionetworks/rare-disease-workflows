@@ -16,8 +16,6 @@ inputs:
     type: string
   sample_query:
     type: string
-  scripts:
-    type: File[]
   parentid:
     type: string
   group_by:
