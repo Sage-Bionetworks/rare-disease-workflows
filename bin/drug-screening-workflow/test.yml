@@ -1,0 +1,11 @@
+{
+    "synapseid": "syn17100888",
+    "output": "TEST",
+    "parentid": "syn8720432",
+    "synapse_config": {
+        "class": "File",
+        "metadata": {},
+        "path": "/Users/rallaway/.synapseConfig",
+        "secondaryFiles": []
+    }
+}
