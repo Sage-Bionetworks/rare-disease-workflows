@@ -1,6 +1,0 @@
-
-##################################################
- Uploading file to Synapse storage 
-##################################################
-
-Created/Updated entity: syn19082444	WORKFLOWTEST_dose_response_metrics.csv
