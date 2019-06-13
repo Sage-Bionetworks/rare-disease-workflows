@@ -21,9 +21,9 @@ inputs:
       position: 3
 outputs:
   - id: metrics
-    type: File?
+    type: File
     outputBinding:
-      glob: '*/.csv'
+      glob: '*.csv'
 label: dose-response-fitting-tool
 requirements:
   - class: ResourceRequirement

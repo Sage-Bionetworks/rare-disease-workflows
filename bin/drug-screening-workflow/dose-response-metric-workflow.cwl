@@ -52,7 +52,7 @@ steps:
     out:
       - id: metrics
     run: ./dose-response-fitting-tool.cwl
-    label: dose-response-fitting-tool
+    label: dose_response-fitting_tool
     'sbg:x': 410.9230651855469
     'sbg:y': 147.76922607421875
   - id: store_data
