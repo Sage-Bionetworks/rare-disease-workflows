@@ -12,7 +12,7 @@ inputs:
 outputs:
   reference-fasta:
     type: File
-    outputSource: unzip-vep-index/index-file
+    outputSource: unzip-fasta-file/fasta-file
 
 steps:
   get-vep-index:
@@ -26,3 +26,9 @@ steps:
     in:
       file: get-vep-index/filepath
     out: [index-file]
+  unzip-fasta-file:
+    run: steps/unzip-file.cwl
+    in:
+      file: unzip-vep-index/index-file
+    out:
+      [fasta-file]
