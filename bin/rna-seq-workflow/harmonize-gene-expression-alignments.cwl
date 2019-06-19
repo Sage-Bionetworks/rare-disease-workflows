@@ -27,9 +27,12 @@ requirements:
   - class: ScatterFeatureRequirement
 
 outputs:
-  tidied-matrix:
-    type: File
-    outputSource: harmonize-counts/harmonized-df
+  manifest-list:
+    type: File[]
+    outputSource: do-align/manifest
+  #tidied-matrix:
+  #  type: File
+  #  outputSource: harmonize-counts/harmonized-df
 
 steps:
   do-align:
@@ -47,7 +50,7 @@ steps:
       group_by: group_by
     out:
       [manifest]
-  harmonize-counts:
-    run: steps/merge-to-matrix-tool
-    in: do-align/manifest
-    out: harmonized-df
+#  harmonize-counts:
+ #   run: steps/merge-to-matrix-tool.cwl
+ #   in: do-align/manifest
+ #   out: harmonized-df
