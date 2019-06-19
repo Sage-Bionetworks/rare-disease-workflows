@@ -8,7 +8,7 @@ requirements:
   InlineJavascriptRequirement: {}
 
 expression: |
-  ${ var maf_file_name=(inputs.vcf.basename) + ".maf";
+  ${ var maf_file_name=(inputs.vcf.nameroot) + ".maf";
      return maf_file_name;
   }
 
