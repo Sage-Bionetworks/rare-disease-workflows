@@ -3,6 +3,9 @@ label: get-vcf-run-vep
 id: get-vcf-run-vep
 cwlVersion: v1.0
 
+requirements:
+  InlineJavascriptRequirement: {}
+
 inputs:
   indexfile:
     type: File
@@ -10,7 +13,11 @@ inputs:
     type: string
   synapse_config:
     type: File
+
 outputs:
+  vcf-id:
+    type: string
+    outputSource: vcfid
   maffile:
     type: File
     outputSource: run-vep/maf-file

@@ -55,7 +55,7 @@ steps:
       synapse_config: synapse_config
       indexfile: get-index-file/index-file
     out:
-      [maffile]
+      [vcf-id,maffile]
     get-clinical:
        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
        in:
@@ -65,8 +65,8 @@ steps:
     join-fileview-by-specimen:
       run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
       in:
-        filelist: run-alignment-by-specimen/quants
-        values: run-alignment-by-specimen/dirname
+        filelist: get-vcf-run-vep/maffile
+        values: get-vcf-run-vep/vcf-id
         manifest_file: get-clinical/query_result
         parentid: parentid
         key: group_by
