@@ -6,7 +6,7 @@ baseCommand: perl
 
 requirements:
   - class: DockerRequirement
-    dockerPull: sagebionetworks/genie
+    dockerPull: sagebionetworks/genie:vcf2maf-develop
 
 inputs:
   input-vcf:
