@@ -12,17 +12,17 @@ inputs:
   input-vcf:
     type: File
     inputBinding:
-      position: 2
+      position: 1
       prefix: --input-vcf
   output-maf:
     type: string
     inputBinding:
-      position: 3
+      position: 2
       prefix: --output-maf
   ref-fasta:
     type: File
     inputBinding:
-      position: 4
+      position: 3
       prefix: --ref-fasta
 
 outputs:
