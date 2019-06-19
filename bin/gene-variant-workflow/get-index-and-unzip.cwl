@@ -31,4 +31,4 @@ steps:
     in:
       file: unzip-vep-index/index-file
     out:
-      [fasta-file]
+      [index-file]
