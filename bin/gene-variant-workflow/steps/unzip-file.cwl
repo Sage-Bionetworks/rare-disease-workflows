@@ -13,4 +13,4 @@ outputs:
   index-file:
     type: File
     outputBinding:
-      glob: "*.fa"
+      glob: "*"

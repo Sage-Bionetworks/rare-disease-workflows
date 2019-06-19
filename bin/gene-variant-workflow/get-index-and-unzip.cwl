@@ -3,16 +3,18 @@ label: get-index-and-unzip
 cwlVersion: v1.0
 class: Workflow
 
+
 inputs:
   vep-file-id:
     type: string
   synapse_config:
     type: File
-
+  indexfile:
+    type: File
 outputs:
   reference-fasta:
     type: File
-    outputSource: unzip-fasta-file/fasta-file
+    outputSource: unzip-fasta-file/index-file
 
 steps:
   get-vep-index:
@@ -29,6 +31,6 @@ steps:
   unzip-fasta-file:
     run: steps/unzip-file.cwl
     in:
-      file: unzip-vep-index/index-file
+      file: indexfile 
     out:
       [index-file]
