@@ -1,6 +1,12 @@
 vep-file-id: syn18491780
-synapse_config: /home/sgosline/.synapseConfig
+synapse_config:
+  class: File
+  path: /home/sgosline/.synapseConfig
 parentid: syn19289180
 group_by: specimenID
 input-query: SELECT id,specimenID FROM syn16858331 WHERE ( ( "fileFormat" = 'vcf' ) AND ( "diagnosis" = 'Neurofibromatosis 1' ) AND ( "isMultiSpecimen" = 'FALSE' ) AND ( "assay" = 'exomeSeq' ) )
 clinical-query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn16858331
+vcf-id: syn18080117
+indexfile:
+  class: File
+  path: .vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa.gz
