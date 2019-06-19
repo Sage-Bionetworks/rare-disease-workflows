@@ -15,15 +15,25 @@ all.models<-unique(tab.with.id$model_name)
 all.tumor.types<-unique(tab.with.id$symptom_name)
 print(paste('Loaded',length(all.compounds),'compound response data over',length(all.models),'models'))
 
+
+#let's focus on teh drugs that are most variable!
+findVariableDrugs<-function(){
+  drug.dat<-tab.with.id
+  res=drug.dat%>%group_by(std_name,response_type)%>%mutate(variance=var(response))%>%select(std_name,response_type,variance)%>%unique()%>%arrange(desc(variance))
+  res<-subset(res,variance!=Inf)
+  res<-subset(res,!is.na(std_name))
+  res
+}
+
 ##plot cells by drug and cell and tumor type
-plotDrugByCellAndTumor<-function(compoundName,tumorType){
+plotDrugByCellAndTumor<-function(compoundName,tumorType=all.tumor.types){
   require(tidyverse)
   red.tab<-subset(tab.with.id,std_name==compoundName)%>%subset(response<300)%>%select(model_name,response,response_type,symptom_name,organism_name,disease_name)%>%unique()
   fname=NULL
-  if(missing(tumorType)||tumorType%in%red.tab$symptom_name){
+  if(missing(tumorType)||length(intersect(tumorType,red.tab$symptom_name))>0){
     if(nrow(red.tab)>0){
       ggplot(red.tab)+geom_jitter(aes(x=symptom_name,y=response,col=organism_name))+facet_grid(.~response_type)+ggtitle(paste(compoundName,'response across cells'))+theme(axis.text.x = element_text(angle = 45, hjust = 1))
-      fname=paste('drugResponsesFrom',compoundName,'with',tumorType,'.png',sep='')
+      fname=paste('drugResponsesFrom',compoundName,'with',paste(tumorType,collapse='_'),'.png',sep='')
       ggsave(fname)
     }}
   return(fname)

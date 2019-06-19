@@ -1,0 +1,6 @@
+vep-file-id: syn18491780
+synapse_config: /home/sgosline/.synapseConfig
+parentid: syn19289180
+group_by: specimenID
+input-query: SELECT id,specimenID FROM syn16858331 WHERE ( ( "fileFormat" = 'vcf' ) AND ( "diagnosis" = 'Neurofibromatosis 1' ) AND ( "isMultiSpecimen" = 'FALSE' ) AND ( "assay" = 'exomeSeq' ) )
+clinical-query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn16858331

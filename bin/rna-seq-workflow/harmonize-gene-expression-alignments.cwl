@@ -48,6 +48,6 @@ steps:
     out:
       [manifest]
   harmonize-counts:
-    run:
+    run: steps/merge-to-matrix-tool
     in: do-align/manifest
     out: harmonized-df
