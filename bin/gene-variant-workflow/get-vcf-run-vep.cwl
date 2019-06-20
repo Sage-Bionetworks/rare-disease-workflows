@@ -29,6 +29,10 @@ steps:
       synapseid: vcfid
       synapse_config: synapse_config
     out: [filepath]
+  unzip-vcf:
+    run: steps/unzip-file.cwl
+    in: get-vcf/filepath
+    out: 
   make-maf-file:
     run: steps/make-maf-file.cwl
     in:
