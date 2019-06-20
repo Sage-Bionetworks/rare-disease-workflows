@@ -2,7 +2,9 @@ label: unzip-file
 id: unzip-file
 class: CommandLineTool
 cwlVersion: v1.0
-baseCommand: gunzip
+baseCommand: gzip
+stdout: index.fa
+arguments: ["-d","-c"]
 
 inputs:
   file:
@@ -10,7 +12,5 @@ inputs:
     inputBinding:
       position: 1
 outputs:
-   index-file:
-    type: File
-    outputBinding:
-      glob: "*"
+  index-file:
+    type: stdout  

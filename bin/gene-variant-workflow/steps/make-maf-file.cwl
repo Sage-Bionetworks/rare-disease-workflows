@@ -3,7 +3,6 @@ label: make-maf-file
 cwlVersion: v1.0
 class: ExpressionTool
 
-
 requirements:
   InlineJavascriptRequirement: {}
 

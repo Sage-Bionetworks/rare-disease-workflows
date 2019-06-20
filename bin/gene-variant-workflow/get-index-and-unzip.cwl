@@ -9,8 +9,6 @@ inputs:
     type: string
   synapse_config:
     type: File
-  indexfile:
-    type: File
 outputs:
   reference-fasta:
     type: File

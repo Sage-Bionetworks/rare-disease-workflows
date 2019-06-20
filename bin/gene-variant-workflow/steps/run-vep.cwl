@@ -7,9 +7,23 @@ baseCommand: perl #/root/vcf2maf-1.6.17/vcf2maf.pl
 requirements:
   - class: DockerRequirement
     dockerPull: sgosline/vcf2maf
+  - class: InitialWorkDirRequirement
+    listing:
+       - entry: $(inputs.input_vcf)
+         writable: true
+       - entry: $(inputs.ref_fasta)
+         writable: true
+       - entry: $(inputs.vepdir)
+         writable: true
+       - entry: $(inputs.dotvepdir)
+         writable: true
 
 inputs:
-  input-vcf:
+  vepdir:
+    type: Directory
+  dotvepdir:
+    type: Directory
+  input_vcf:
     type: File
     inputBinding:
       position: 1
@@ -19,7 +33,7 @@ inputs:
     inputBinding:
       position: 2
       prefix: --output-maf
-  ref-fasta:
+  ref_fasta:
     type: File
     inputBinding:
       position: 3

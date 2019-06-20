@@ -33,13 +33,11 @@ steps:
     run: steps/make-maf-file.cwl
     in:
       vcf: get-vcf/filepath
-    out:
-      [maf_file_name]
+    out: [maf_file_name]
   run-vep:
     run: steps/run-vep.cwl
     in:
       ref-fasta: indexfile
-      input-vcf: get-vcf/filepath
+      input_vcf: get-vcf/filepath
       output-maf: make-maf-file/maf_file_name
-    out:
-      [maf-file]
+    out: [maf-file]
