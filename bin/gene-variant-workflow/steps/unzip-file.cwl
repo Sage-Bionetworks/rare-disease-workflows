@@ -2,7 +2,7 @@ label: unzip-file
 id: unzip-file
 class: CommandLineTool
 cwlVersion: v1.0
-baseCommand: unzip
+baseCommand: gunzip
 
 inputs:
   file:
@@ -10,7 +10,7 @@ inputs:
     inputBinding:
       position: 1
 outputs:
-  index-file:
+   index-file:
     type: File
     outputBinding:
       glob: "*"

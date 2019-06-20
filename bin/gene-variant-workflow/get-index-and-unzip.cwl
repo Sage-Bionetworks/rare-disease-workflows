@@ -24,13 +24,13 @@ steps:
       synapse_config: synapse_config
     out: [filepath]
   unzip-vep-index:
-    run: steps/unzip-file.cwl
+    run: steps/unzip-dir.cwl
     in:
       file: get-vep-index/filepath
-    out: [index-file]
+    out: [index-dir]
   unzip-fasta-file:
     run: steps/unzip-file.cwl
     in:
-      file: indexfile 
+      file: unzip-vep-index/index-dir 
     out:
       [index-file]
