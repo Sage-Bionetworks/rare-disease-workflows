@@ -32,7 +32,7 @@ steps:
   unzip-vcf:
     run: steps/unzip-file.cwl
     in: get-vcf/filepath
-    out: 
+    out:
   make-maf-file:
     run: steps/make-maf-file.cwl
     in:
