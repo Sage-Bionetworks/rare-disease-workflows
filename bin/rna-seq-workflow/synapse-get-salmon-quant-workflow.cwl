@@ -53,4 +53,4 @@ steps:
        index-dir: index-dir
        output: specimenId
     out:
-       [quants]
+      [quants]

@@ -96,3 +96,9 @@ steps:
           manifest_file: join-fileview-by-specimen/newmanifest
         out:
           []
+# harmonize-counts:
+#   run: steps/merge-to-matrix-tool.cwl
+#   in:
+#     manifest: join-fileview-by-specimen
+#     files: run-alignment-by-specimen/quants
+#   out: [harmonized-df]
