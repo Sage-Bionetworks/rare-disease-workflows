@@ -29,7 +29,12 @@ outputs:
   manifest:
     type: File
     outputSource: join-fileview-by-specimen/newmanifest
-
+  files:
+    type: File[]
+    outputSource: run-alignment-by-specimen/quants
+  sampnames:
+    type: string[]
+    outputSource: run-alignment-by-specimen/dirname
 steps:
     get-index:
       run:  https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
