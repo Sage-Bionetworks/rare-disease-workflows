@@ -4,6 +4,12 @@ id: variant-call-from-synapse
 cwlVersion: v1.0
 
 inputs:
+  indexfile:
+    type: File
+  vepdir:
+    type: Directory
+  dotvepdir:
+    type: Directory
   vep-file-id:
     type: string
   clinical-query:
@@ -32,7 +38,6 @@ outputs:
 
 
 steps:
-
   get-fv:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
     in:
@@ -48,6 +53,7 @@ steps:
   get-index-file:
     run: get-index-and-unzip.cwl
     in:
+      indexfile: indexfile
       vep-file-id: vep-file-id
       synapse_config: synapse_config
     out:
@@ -56,6 +62,8 @@ steps:
     run: get-vcf-run-vep.cwl
     scatter: vcfid
     in:
+      vepdir: vepdir
+      dotvepdir: dotvepdir
       vcfid: [get-samples-from-fv/names]
       synapse_config: synapse_config
       indexfile: get-index-file/reference-fasta

@@ -10,3 +10,9 @@ vcfid: syn18080117
 indexfile:
   class: File
   path: index.fa
+vepdir:
+  class: Directory
+  path: vep
+dotvepdir:
+  class: Directory
+  path: .vep

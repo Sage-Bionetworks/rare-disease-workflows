@@ -13,6 +13,10 @@ inputs:
     type: string
   synapse_config:
     type: File
+  vepdir:
+    type: Directory
+  dotvepdir:
+    type: Directory
 
 outputs:
   vcf-id:
@@ -31,8 +35,9 @@ steps:
     out: [filepath]
   unzip-vcf:
     run: steps/unzip-file.cwl
-    in: get-vcf/filepath
-    out:
+    in: 
+      file: get-vcf/filepath
+    out: [index-file]
   make-maf-file:
     run: steps/make-maf-file.cwl
     in:
@@ -41,7 +46,9 @@ steps:
   run-vep:
     run: steps/run-vep.cwl
     in:
-      ref-fasta: indexfile
+      dotvepdir: dotvepdir
+      vepdir: vepdir
+      ref_fasta: indexfile
       input_vcf: get-vcf/filepath
       output-maf: make-maf-file/maf_file_name
     out: [maf-file]

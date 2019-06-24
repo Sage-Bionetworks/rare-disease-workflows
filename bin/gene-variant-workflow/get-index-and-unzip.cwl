@@ -9,6 +9,9 @@ inputs:
     type: string
   synapse_config:
     type: File
+  indexfile: 
+    type: File
+
 outputs:
   reference-fasta:
     type: File
@@ -29,6 +32,6 @@ steps:
   unzip-fasta-file:
     run: steps/unzip-file.cwl
     in:
-      file: unzip-vep-index/index-dir 
+      file: indexfile
     out:
       [index-file]
