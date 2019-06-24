@@ -4,8 +4,6 @@ id: variant-call-from-synapse
 cwlVersion: v1.0
 
 inputs:
-  indexfile:
-    type: File
   vepdir:
     type: Directory
   dotvepdir:
@@ -53,7 +51,6 @@ steps:
   get-index-file:
     run: get-index-and-unzip.cwl
     in:
-      indexfile: indexfile
       vep-file-id: vep-file-id
       synapse_config: synapse_config
     out:
