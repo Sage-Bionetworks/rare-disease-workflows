@@ -39,11 +39,10 @@ steps:
         query: input-query
     out: [query_result]
   get-samples-from-fv:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown-by-row.cwl
     in:
         query_tsv: get-fv/query_result
-        group_by_column: group_by
-    out: [names]
+    out: [id_array]
   get-index-file:
     run: get-index-and-unzip.cwl
     in:
