@@ -14,6 +14,12 @@ outputs:
   reference-fasta:
     type: File
     outputSource: unzip-fasta-file/index-file
+  dotvep-dir:
+    type: Directory
+    outputSource: unzip-vep-index/dotvep-dir
+  vep-dir:
+    type: Directory
+    outputSource: unzip-vep-index/vep-dir
 
 steps:
   get-vep-index:
@@ -26,10 +32,10 @@ steps:
     run: steps/unzip-dir.cwl
     in:
       file: get-vep-index/filepath
-    out: [index-dir]
+    out: [index-file,dotvep-dir,vep-dir]
   unzip-fasta-file:
     run: steps/unzip-file.cwl
     in:
-      file: unzip-vep-index/index-dir
+      file: unzip-vep-index/gz-index-file
     out:
       [index-file]

@@ -102,3 +102,5 @@ steps:
 #     manifest: join-fileview-by-specimen
 #     files: run-alignment-by-specimen/quants
 #   out: [harmonized-df]
+# store-to-table:
+#   run: steps/synapse-update-table.cwl

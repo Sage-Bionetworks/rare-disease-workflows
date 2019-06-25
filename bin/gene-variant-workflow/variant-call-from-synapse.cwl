@@ -4,10 +4,6 @@ id: variant-call-from-synapse
 cwlVersion: v1.0
 
 inputs:
-  vepdir:
-    type: Directory
-  dotvepdir:
-    type: Directory
   vep-file-id:
     type: string
   clinical-query:
@@ -54,13 +50,13 @@ steps:
       vep-file-id: vep-file-id
       synapse_config: synapse_config
     out:
-      [reference-fasta]
+      [reference-fasta,dotvep-dir,vep-dir]
   get-vcf-run-vep:
     run: get-vcf-run-vep.cwl
     scatter: vcfid
     in:
-      vepdir: vepdir
-      dotvepdir: dotvepdir
+      vepdir: get-index-file/vep-dir
+      dotvepdir: get-index-file/dotvep-dir
       vcfid: [get-samples-from-fv/names]
       synapse_config: synapse_config
       indexfile: get-index-file/reference-fasta
