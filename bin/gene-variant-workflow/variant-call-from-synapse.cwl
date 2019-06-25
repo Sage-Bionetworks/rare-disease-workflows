@@ -43,11 +43,10 @@ steps:
         query: input-query
     out: [query_result]
   get-samples-from-fv:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown-by-row.cwl
     in:
         query_tsv: get-fv/query_result
-        group_by_column: group_by
-    out: [names]
+    out: [id_array]
   get-index-file:
     run: get-index-and-unzip.cwl
     in:
@@ -61,7 +60,7 @@ steps:
     in:
       vepdir: vepdir
       dotvepdir: dotvepdir
-      vcfid: [get-samples-from-fv/names]
+      vcfid: get-samples-from-fv/id_array
       synapse_config: synapse_config
       indexfile: get-index-file/reference-fasta
     out:

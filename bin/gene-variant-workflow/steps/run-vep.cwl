@@ -2,7 +2,7 @@ label: run-vep
 id: run-vep
 cwlVersion: v1.0
 class: CommandLineTool
-baseCommand: perl #/root/vcf2maf-1.6.17/vcf2maf.pl
+baseCommand: perl 
 
 requirements:
   - class: DockerRequirement
@@ -48,4 +48,3 @@ outputs:
 arguments:
   ["/root/vcf2maf-1.6.17/vcf2maf.pl"]
 
-#  --input-vcf /root/vcf2maf-1.6.17/tests/test.vcf --output-maf /root/vcf2maf-1.6.17/tests/test.vep.maf --ref-fasta /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
