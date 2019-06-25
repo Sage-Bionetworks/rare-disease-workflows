@@ -32,7 +32,7 @@ steps:
     run: steps/unzip-dir.cwl
     in:
       file: get-vep-index/filepath
-    out: [index-file,dotvep-dir,vep-dir]
+    out: [gz-index-file,dotvep-dir,vep-dir]
   unzip-fasta-file:
     run: steps/unzip-file.cwl
     in:
