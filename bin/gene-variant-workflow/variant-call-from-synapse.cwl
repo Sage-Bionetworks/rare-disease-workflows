@@ -56,7 +56,7 @@ steps:
     in:
       vepdir: get-index-file/vep-dir
       dotvepdir: get-index-file/dotvep-dir
-      vcfid: [get-samples-from-fv/names]
+      vcfid: get-samples-from-fv/id_array
       synapse_config: synapse_config
       indexfile: get-index-file/reference-fasta
     out:
