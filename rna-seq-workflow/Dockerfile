@@ -1,12 +1,13 @@
 FROM r-base
 
-RUN apt-get install -y net-tools
 RUN apt-get update -qq && apt-get -y install libffi-dev
+RUN apt-get install -y net-tools
 
-RUN Rscript -e 'install.packages(c("dplyr", "tidyr", "plyr","optparse"))'
+RUN Rscript -e 'install.packages(c("dplyr", "tidyr", "plyr","optparse","BiocManager"))'
 
+RUN Rscript -e "BiocManager::install()"
 RUN Rscript -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'http://cran.fhcrc.org'))"
-RUN Rscript -e "source('http://bioconductor.org/biocLite.R')" -e "biocLite(biomaRt)" -e "biocLite('topGO')"  -e "biocLite('org.Hs.eg.db')"
+RUN Rscript -e "BiocManager::install('biomaRt')"
 
 COPY steps/merge-aligned-files.R /usr/local/bin/merge-aligned-files.R
 
