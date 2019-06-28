@@ -26,6 +26,12 @@ outputs:
   manifest-file:
     type: File
     outputSource: join-fileview-by-specimen/newmanifest
+  maf-files:
+    type: File[]
+    outputSource: get-vcf-run-vep/maffile
+  synids:
+    type: string[]
+    outputSource: get-vcf-run-vep/vcf-id
 #  tidied-matrix:
 #    type: File
 #    outputSource: harmonize-counts/harmonized-df
@@ -77,11 +83,11 @@ steps:
       key: group_by
     out:
       [newmanifest]
-  store-files:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
-    in:
-      synapse_config: synapse_config
-      files: get-vcf-run-vep/maffile
-      manifest_file: join-fileview-by-specimen/newmanifest
-    out:
-      []
+ # store-files:
+ #   run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
+ #   in:
+ #     synapse_config: synapse_config
+ #     files: get-vcf-run-vep/maffile
+ #     manifest_file: join-fileview-by-specimen/newmanifest
+ #   out:
+ #     []

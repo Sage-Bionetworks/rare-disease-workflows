@@ -3,16 +3,10 @@ synapse_config:
   class: File
   path: /home/sgosline/.synapseConfig
 parentid: syn19289180
-group_by: specimenID
+group_by: mafid
 input-query: SELECT id FROM syn16858331 WHERE ( ( "fileFormat" = 'vcf' ) AND ( "diagnosis" = 'Neurofibromatosis 1' ) AND ( "isMultiSpecimen" = 'FALSE' ) AND ( "assay" = 'exomeSeq' ) ) limit 5
-clinical-query: SELECT distinct id,specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn16858331
+clinical-query: SELECT distinct id as mafid,specimenID,individualID,assay,dataType,sex,consortium,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn16858331
 vcfid: syn18080117
 indexfile:
   class: File
   path: index.fa
-vepdir:
-  class: Directory
-  path: vep
-dotvepdir:
-  class: Directory
-  path: .vep

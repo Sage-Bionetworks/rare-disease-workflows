@@ -5,7 +5,7 @@ cwlVersion: v1.0
 
 requirements:
   InlineJavascriptRequirement: {}
-
+  StepInputExpressionRequirement: {}
 inputs:
   indexfile:
     type: File
@@ -33,16 +33,11 @@ steps:
       synapseid: vcfid
       synapse_config: synapse_config
     out: [filepath]
-  unzip-vcf:
-    run: steps/unzip-file.cwl
-    in: 
-      file: get-vcf/filepath
-    out: [index-file]
-  make-maf-file:
-    run: steps/make-maf-file.cwl
-    in:
-      vcf: get-vcf/filepath
-    out: [maf_file_name]
+ # make-maf-file:
+ #   run: steps/make-maf-file.cwl
+ #   in:
+ #     vcf: get-vcf/filepath
+ #   out: [maf_file_name]
   run-vep:
     run: steps/run-vep.cwl
     in:
@@ -50,5 +45,7 @@ steps:
       vepdir: vepdir
       ref_fasta: indexfile
       input_vcf: get-vcf/filepath
-      output-maf: make-maf-file/maf_file_name
+      output-maf:
+         source: get-vcf/filepath
+         valueFrom: $(self.nameroot + '.maf')
     out: [maf-file]

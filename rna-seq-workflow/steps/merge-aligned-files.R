@@ -5,9 +5,11 @@ getArgs<-function(){
 
   option_list <- list(
       make_option(c("-f", "--files"), dest='files',help='Comma-delimited list of count files'),
-      make_option(c("-m", "--manifest"),dest='manifest',help='Comma-delimited list of manifest files'),
+      make_option(c("-m", "--manifest"),dest='manifest',help='Single list of manifest file'),
 #      make_option(c("-s", "--samples"),dest='samples',help='Comma-delimited list of samples'),
-      make_option(c("-o", "--output"), default="merged-tidied.df.tsv", dest='output',help = "output file name"))
+      make_option(c("-o", "--output"), default="merged-tidied.df.tsv", dest='output',help = "output file name"),
+      make_option(c("-p", "--tableparentid"), dest='tableparentid',help='Synapse id of project containing data model',default=""),
+      make_option(c("-n", "--tablename"), default="Default Table", dest='tablename',help='Name of table'))
 
     args=parse_args(OptionParser(option_list = option_list))
 
@@ -16,17 +18,35 @@ getArgs<-function(){
 
 #prefix=paste(lubridate::today(),'coding_only_bioBank_glioma_cNF_pnf',sep='-')
 
-main<-function(){
-    args<-getArgs()
+# Get synapse ID of files based on path and parent in manifest
+# @export
+# @requires synapser
+getIdsFromPathParent<-function(path.parent.df){
+  require(synapser)
+  
+  synid<-apply(path.parent.df,1,function(x){
+  
+    children<-synapser::synGetChildren(x[['parent']])$asList()
+    for(c in children)
+      if(c$name==x[['path']])
+        return(c$id)})
+  
+  path.parent.df$used=synid
+  return(select(path.parent.df,c(path,used)))
+}
 
+main<-function(){
+
+    args<-getArgs()
+  print(args)
     ##here we have all the file metadata we need
-    all.manifests<-do.call(lapply(args$manifest,function(x) read.csv(x,header=T)))
+    all.manifests<-read.csv(args$manifest,header=T,sep='\t')
     print('Manifest dimensions')
     print(dim(all.manifests))
 
     #here we have all the counts
-    all.count.files<-do.call(lapply(args$files,function(x){
-        tab<-read.table(x,header=T)
+    all.count.files<-do.call(rbind,lapply(unlist(strsplit(args$files,split=',')),function(x){
+        tab<-read.table(x,header=T,sep='\t')
         tab$fname=rep(x,nrow(tab))
         return(tab)
     }))
@@ -39,11 +59,24 @@ main<-function(){
 
                                         #now join with manifest
     require(dplyr)
-    tidied.df<-genes.with.names%>%left_join(all.manifest)
-    write.table(tidied,df,file=args$output)
+    tidied.df<-genes.with.names%>%rename(path='fname')%>%left_join(all.manifests,by='path')
+    
+    ##get synapse id of origin file by parent and path
+    syn.ids<-getIdsFromPathParent(select(tidied.df,c('path','parent'))%>%unique())
+    
+    with.prov<-tidied.df%>%left_join(syn.ids,by='path')
+    
+    if(args$tableparentid!=""){
+      saveToTable(with.prov,args$tablename,args$tableparentid)
+    }
+#    write.table(with.prov,file=args$output)
 
 }
 
+# @export
+# @requires synapser
+# @requires dplyr
+# @requires tidyr
 annotateGenesFilterGetCounts<-function(genetab,genemap){
     require(tidyr)
     require(dplyr)
@@ -63,7 +96,7 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
         dplyr::inner_join(genemap,by='ensembl_transcript_id')
     print(paste('table after join:',nrow(full.tab)))
                                         #filter out genes
-    red.tab<-subset(full.tab,Symbol%in%genes[,1])
+    red.tab<-subset(full.tab,hgnc_symbol%in%genes[,1])
     print(paste('table with protein coding:',nrow(red.tab)))
 
 
@@ -82,8 +115,59 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
 
 }
 
+# creates a new table unless one already exists
+# reqires synapser
+# @export
+saveToTable<-function(tidied.df,tablename,parentId){
+  require(synapser)
+  ##first see if there is a table with an existing name
+  children<-synapser::synGetChildren(parentId)$asList()
+  id<-NULL
+  for(c in children)
+    if(c$name==tablename)
+      id<-c$id
+  if(is.null(id)){
+    synapser::synStore(synapser::synBuildTable(tablename,parentId,tidied.df))
+  }else{
+    saveResultsToExistingTable(tidied.df,id)
+  }
+}
+
+ 
+# @requires synapser
+# @export
+saveResultsToExistingTable<-function(tidied.df,tableid){
+  require(synapser)
+  #first get table schema
+  orig.tab<-synGet(tableid)
+  
+  #then get column names
+  cur.cols<-sapply(as.list(synGetTableColumns(orig.tab)),function(x) x$name)
+  
+  #how are they different?
+  missing.cols<-setdiff(cur.cols,names(tidied.df))
+  
+  #then add in values
+  for(a in missing.cols){
+    tidied.df<-data.frame(tidied.df,rep(NA,nrow(tidied.df)))
+    colnames(tidied.df)[ncol(tidied.df)]<-a
+  }
+  
+  other.cols<-setdiff(names(tidied.df),cur.cols)
+  for(a in other.cols){
+    if(is.numeric(tidied.df[,o]))
+      orig.tab$addColumn(synapser::Column(name=o,columnType="DOUBLE"))
+    else{
+      orig.tab$addColumn(synapser::Column(name=o,type="STRING",maximumSize=100))
+    }
+  }
+  
+  #store to synapse
+  synapser::synStore(synapser::Table(orig.tab,tidied.df))
+}
 
 
+# @requires biomaRt
 getGeneMap<-function(){
 #####NOW DOWNLOAD COUNTS
     library(biomaRt)
