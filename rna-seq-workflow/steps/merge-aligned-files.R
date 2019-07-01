@@ -23,14 +23,14 @@ getArgs<-function(){
 # @requires synapser
 getIdsFromPathParent<-function(path.parent.df){
   require(synapser)
-  
+
   synid<-apply(path.parent.df,1,function(x){
-  
+
     children<-synapser::synGetChildren(x[['parent']])$asList()
     for(c in children)
       if(c$name==x[['path']])
         return(c$id)})
-  
+
   path.parent.df$used=synid
   return(select(path.parent.df,c(path,used)))
 }
@@ -40,7 +40,7 @@ main<-function(){
     args<-getArgs()
   print(args)
     ##here we have all the file metadata we need
-    all.manifests<-read.csv(args$manifest,header=T,sep='\t')
+    all.manifests<-read.table(args$manifest,header=T,sep='\t')
     print('Manifest dimensions')
     print(dim(all.manifests))
 
@@ -60,12 +60,12 @@ main<-function(){
                                         #now join with manifest
     require(dplyr)
     tidied.df<-genes.with.names%>%rename(path='fname')%>%left_join(all.manifests,by='path')
-    
+
     ##get synapse id of origin file by parent and path
     syn.ids<-getIdsFromPathParent(select(tidied.df,c('path','parent'))%>%unique())
-    
+
     with.prov<-tidied.df%>%left_join(syn.ids,by='path')
-    
+
     if(args$tableparentid!=""){
       saveToTable(with.prov,args$tablename,args$tableparentid)
     }
@@ -133,26 +133,26 @@ saveToTable<-function(tidied.df,tablename,parentId){
   }
 }
 
- 
+
 # @requires synapser
 # @export
 saveResultsToExistingTable<-function(tidied.df,tableid){
   require(synapser)
   #first get table schema
   orig.tab<-synGet(tableid)
-  
+
   #then get column names
   cur.cols<-sapply(as.list(synGetTableColumns(orig.tab)),function(x) x$name)
-  
+
   #how are they different?
   missing.cols<-setdiff(cur.cols,names(tidied.df))
-  
+
   #then add in values
   for(a in missing.cols){
     tidied.df<-data.frame(tidied.df,rep(NA,nrow(tidied.df)))
     colnames(tidied.df)[ncol(tidied.df)]<-a
   }
-  
+
   other.cols<-setdiff(names(tidied.df),cur.cols)
   for(a in other.cols){
     if(is.numeric(tidied.df[,o]))
@@ -161,7 +161,7 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
       orig.tab$addColumn(synapser::Column(name=o,type="STRING",maximumSize=100))
     }
   }
-  
+
   #store to synapse
   synapser::synStore(synapser::Table(orig.tab,tidied.df))
 }
