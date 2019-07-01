@@ -1,0 +1,12 @@
+synapse_config:
+  class: File
+  path: "/home/sgosline/.synapseConfig"
+indexid: syn18134565
+index-type: gencode
+index-dir: gencode_v29
+idquery: SELECT id,specimenID,readPair FROM syn13363852 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "fileFormat" = 'fastq' ) ) order by specimenID
+sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName FROM syn13363852 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "fileFormat" = 'fastq' ) )
+parentid: syn18407530
+group_by: specimenID
+tableparentid: syn16941818
+tablename: Harmonized Gene Counts
