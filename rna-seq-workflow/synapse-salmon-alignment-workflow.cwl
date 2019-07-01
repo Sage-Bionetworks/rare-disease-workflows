@@ -20,6 +20,9 @@ inputs:
     type: string
   group_by:
     type: string
+  tableparentid:
+    type: string[]
+  tablename: string[]
 
 requirements:
   - class: SubworkflowFeatureRequirement
@@ -96,11 +99,12 @@ steps:
           manifest_file: join-fileview-by-specimen/newmanifest
         out:
           []
-# harmonize-counts:
-#   run: steps/merge-to-matrix-tool.cwl
-#   in:
-#     manifest: join-fileview-by-specimen
-#     files: run-alignment-by-specimen/quants
-#   out: [harmonized-df]
-# store-to-table:
-#   run: steps/synapse-update-table.cwl
+    harmonize-counts:
+      run: steps/merge-to-synapse-tool.cwl
+      in:
+        manifest: join-fileview-by-specimen
+        files: run-alignment-by-specimen/quants
+        tableparentid: tableparentid
+        tablename: tablename
+        synapse_config: synapse_config
+      out: []
