@@ -4,10 +4,9 @@ synapse_config:
 indexid: syn18134565
 index-type: gencode
 index-dir: gencode_v29
-idquery: SELECT specimenID,id,readPair FROM syn11614200 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND readPair is not null AND species = 'Human'  order by specimenID 
-sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName,experimentalCondition FROM syn11614200 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND readPair is not null AND species = 'Human'  order by specimenID 
+idquery: SELECT specimenID,id,readPair FROM syn11614200 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND readPair is not null AND species = 'Human'  order by specimenID
+sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName,experimentalCondition FROM syn11614200 WHERE assay = 'rnaSeq' AND fileFormat = 'fastq' AND readPair is not null AND species = 'Human'  order by specimenID
 parentid: syn18468113
 group_by: specimenID
-scripts:
-  - class: File
-    location: join-fileview-by-specimen.py
+tableparentid: syn16941818,syn16941818
+tablename: Harmonized Gene Counts, Public Harmonized Gene Counts
