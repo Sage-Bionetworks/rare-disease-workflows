@@ -1,7 +1,7 @@
 FROM r-base
 
-RUN apt-get update -qq && apt-get -y install libffi-dev
-RUN apt-get install -y net-tools && apt-get install -y libssl-dev && apt-get install -y libcurl4-openssl-dev && apt-get install -y libxml2-dev
+RUN apt-get update -qq && apt-get -y install libssl-dev && apt-get -y install libffi-dev
+RUN apt-get install -y net-tools && apt-get install -y libcurl4-openssl-dev && apt-get install -y libxml2-dev
 
 RUN Rscript -e 'install.packages(c("dplyr", "tidyr", "plyr","optparse","BiocManager"))'
 
