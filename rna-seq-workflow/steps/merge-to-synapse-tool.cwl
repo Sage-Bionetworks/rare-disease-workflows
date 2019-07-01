@@ -29,15 +29,17 @@ inputs:
       prefix: --files
       itemSeparator: ","
   tableparentid:
-    type: string
+    type: string[]
     inputBinding:
       position: 3
       prefix: --tableparentid
+      itemSeparator: ","
   tablename:
-    type: string
+    type: string[]
     inputBinding:
       position: 4
       prefix: --tablename
+      itemSeparator: ","
 
 outputs:
   []
