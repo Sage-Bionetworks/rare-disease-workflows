@@ -7,11 +7,16 @@ baseCommand: Rscript
 requirements:
    - class: DockerRequirement
      dockerPull: nfosi/merge-counts-to-synapse
-
+   - class: InitialWorkDirRequirement
+     listing:
+        entryname: .synapseConfig
+        entry: $(inputs.synapse_config)
 arguments:
   - /usr/local/bin/merge-aligned-files.R
 
 inputs:
+  synapse_config:
+   type: File
   manifest:
     type: File
     inputBinding:
