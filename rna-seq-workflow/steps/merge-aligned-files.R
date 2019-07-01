@@ -9,7 +9,7 @@ getArgs<-function(){
 #      make_option(c("-s", "--samples"),dest='samples',help='Comma-delimited list of samples'),
       make_option(c("-o", "--output"), default="merged-tidied.df.tsv", dest='output',help = "output file name"),
       make_option(c("-p", "--tableparentid"), dest='tableparentid',help='List of synapse ids of projects containing data model',default=""),
-      make_option(c("-n", "--tablename"), default="Default Table", dest='tablename',help='Comma-delimited list of table names')
+      make_option(c("-n", "--tablename"), default="Default Table", dest='tablename',help='Comma-delimited list of table names'))
 
     args=parse_args(OptionParser(option_list = option_list))
 
@@ -70,7 +70,7 @@ main<-function(){
         synids=unlist(strsplit(args$tableparentid,split=','))
         tabnames=unlist(strsplit(args$tablename,split=','))
         if(length(synids)!=length(tabnames))
-            print "Number of synids must match number of table names"
+            print("Number of synids must match number of table names")
         else
             for(a in length(synids))
                 saveToTable(with.prov,tabnames[a],synids[a])
