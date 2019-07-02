@@ -25,8 +25,9 @@ getIdsFromPathParent<-function(path.parent.df){
   require(synapser)
 
   synid<-apply(path.parent.df,1,function(x){
-
-    children<-synapser::synGetChildren(x[['parent']])$asList()
+   print(x[['parent']])
+   children<-synapser::synGetChildren(x[['parent']])$asList()
+    #print(children)
     for(c in children)
       if(c$name==x[['path']])
         return(c$id)})
@@ -47,7 +48,7 @@ main<-function(){
     #here we have all the counts
     all.count.files<-do.call(rbind,lapply(unlist(strsplit(args$files,split=',')),function(x){
         tab<-read.table(x,header=T,sep='\t')
-        tab$fname=rep(x,nrow(tab))
+        tab$fname=rep(basename(x),nrow(tab))
         return(tab)
     }))
     print("Count dimensions")
@@ -69,10 +70,12 @@ main<-function(){
     if(args$tableparentid!=""){
         synids=unlist(strsplit(args$tableparentid,split=','))
         tabnames=unlist(strsplit(args$tablename,split=','))
+	print(synids)
+	print(tabnames)
         if(length(synids)!=length(tabnames))
             print("Number of synids must match number of table names")
         else
-            for(a in length(synids))
+            for(a in 1:length(synids))
                 saveToTable(with.prov,tabnames[a],synids[a])
     }
 #    write.table(with.prov,file=args$output)
@@ -152,7 +155,8 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
 
   #how are they different?
   missing.cols<-setdiff(cur.cols,names(tidied.df))
-
+ # print('orig table')
+ # print(dim(tidied.df))
   #then add in values
   for(a in missing.cols){
     tidied.df<-data.frame(tidied.df,rep(NA,nrow(tidied.df)))
@@ -167,9 +171,12 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
       orig.tab$addColumn(synapser::Column(name=o,type="STRING",maximumSize=100))
     }
   }
-
+ # print('final table')
+ # print(dim(tidied.df))
   #store to synapse
-  synapser::synStore(synapser::Table(orig.tab,tidied.df))
+  stab<-synapser::Table(orig.tab,tidied.df)
+  print(stab)
+  synapser::synStore(stab)
 }
 
 
