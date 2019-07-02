@@ -39,7 +39,7 @@ getIdsFromPathParent<-function(path.parent.df){
 main<-function(){
 
     args<-getArgs()
-  print(args)
+#  print(args)
     ##here we have all the file metadata we need
     all.manifests<-read.table(args$manifest,header=T,sep='\t')
     print('Manifest dimensions')
@@ -136,6 +136,7 @@ saveToTable<-function(tidied.df,tablename,parentId){
     if(c$name==tablename)
       id<-c$id
   if(is.null(id)){
+      print('No table found, creating new one')
     synapser::synStore(synapser::synBuildTable(tablename,parentId,tidied.df))
   }else{
     saveResultsToExistingTable(tidied.df,id)
@@ -146,7 +147,8 @@ saveToTable<-function(tidied.df,tablename,parentId){
 # @requires synapser
 # @export
 saveResultsToExistingTable<-function(tidied.df,tableid){
-  require(synapser)
+    require(synapser)
+    print(paste(tableid,'already exists with that name, adding'))
   #first get table schema
   orig.tab<-synGet(tableid)
 
@@ -154,7 +156,8 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
   cur.cols<-sapply(as.list(synGetTableColumns(orig.tab)),function(x) x$name)
 
   #how are they different?
-  missing.cols<-setdiff(cur.cols,names(tidied.df))
+    missing.cols<-setdiff(cur.cols,names(tidied.df))
+#    print(paste("DF missing:",paste(missing.cols,collapse=',')))
  # print('orig table')
  # print(dim(tidied.df))
   #then add in values
@@ -163,7 +166,8 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     colnames(tidied.df)[ncol(tidied.df)]<-a
   }
 
-  other.cols<-setdiff(names(tidied.df),cur.cols)
+    other.cols<-setdiff(names(tidied.df),cur.cols)
+ #   print(paste("Syn table missing:",paste(other.cols,collapse=',')))
   for(a in other.cols){
     if(is.numeric(tidied.df[,o]))
       orig.tab$addColumn(synapser::Column(name=o,columnType="DOUBLE"))
@@ -172,9 +176,11 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     }
   }
  # print('final table')
- # print(dim(tidied.df))
+                                        # print(dim(tidied.df))
+    print(orig.tab)
+    print(head(as.data.frame(tidied.df)))
   #store to synapse
-  stab<-synapser::Table(orig.tab,tidied.df)
+  stab<-synapser::Table(orig.tab$properties$id,as.data.frame(tidied.df))
   print(stab)
   synapser::synStore(stab)
 }
