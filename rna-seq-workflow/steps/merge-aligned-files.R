@@ -177,11 +177,11 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
   }
  # print('final table')
                                         # print(dim(tidied.df))
-    print(orig.tab)
-    print(head(as.data.frame(tidied.df)))
+  #  print(orig.tab)
+  #  print(head(as.data.frame(tidied.df)))
   #store to synapse
   stab<-synapser::Table(orig.tab$properties$id,as.data.frame(tidied.df))
-  print(stab)
+  #print(stab)
   synapser::synStore(stab)
 }
 
