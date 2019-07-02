@@ -15,7 +15,8 @@ We have tried to build the tool to be as generalizable as possible but for now w
 | idquery | Specific query to pull down `id`,`specimenID`, and `readPair` for fastq files||
 | sample_query | Specific Synapse query to get relevant clinical information to add to annotations||
 | parentid | Synapse id to use as destination to upload files||
-| scripts | This is currently a script in the local directory, will make this a docker image ||
+| tableparentid | This is where the table will live||
+| tablename | Name of synapse table to be created or added to
 
 ### Running the tool
 
