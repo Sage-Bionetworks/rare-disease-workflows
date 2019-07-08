@@ -102,7 +102,7 @@ steps:
     harmonize-counts:
       run: steps/merge-to-synapse-tool.cwl
       in:
-        manifest: join-fileview-by-specimen
+        manifest: join-fileview-by-specimen/newmanifest
         files: run-alignment-by-specimen/quants
         tableparentid: tableparentid
         tablename: tablename
