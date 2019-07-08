@@ -8,5 +8,7 @@ idquery: SELECT id,specimenID,readPair FROM syn13363852 WHERE ( ( "assay" = 'rna
 sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName FROM syn13363852 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "fileFormat" = 'fastq' ) )
 parentid: syn17077846
 group_by: specimenID
-tableparentid: syn16941818
-tablename: Harmonized Gene Counts
+tableparentid: 
+        - syn16941818
+tablename: 
+        - Harmonized Gene Counts
