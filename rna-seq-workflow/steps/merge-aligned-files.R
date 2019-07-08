@@ -25,7 +25,7 @@ getIdsFromPathParent<-function(path.parent.df){
   require(synapser)
 
   synid<-apply(path.parent.df,1,function(x){
-   print(x[['parent']])
+  # print(x[['parent']])
    children<-synapser::synGetChildren(x[['parent']])$asList()
     #print(children)
     for(c in children)
@@ -33,13 +33,13 @@ getIdsFromPathParent<-function(path.parent.df){
         return(c$id)})
 
   path.parent.df$used=synid
-  return(select(path.parent.df,c(path,used)))
+  return(dplyr::select(path.parent.df,c(path,used)))
 }
 
 main<-function(){
 
     args<-getArgs()
-#  print(args)
+#  print(args)y
     ##here we have all the file metadata we need
     all.manifests<-read.table(args$manifest,header=T,sep='\t')
     print('Manifest dimensions')
