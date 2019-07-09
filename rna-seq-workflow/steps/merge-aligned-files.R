@@ -30,7 +30,9 @@ getIdsFromPathParent<-function(path.parent.df){
     #print(children)
     for(c in children)
       if(c$name==basename(x[['path']]))
-        return(c$id)})
+        return(c$id)
+      else
+      return(NA)})
   print(synid)
   path.parent.df<-data.frame(path.parent.df,used=rep(synid,nrow(path.parent.df)))
   return(dplyr::select(path.parent.df,c(path,used)))
