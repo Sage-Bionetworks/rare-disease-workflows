@@ -91,14 +91,14 @@ steps:
         key: group_by
       out:
         [newmanifest]
-    store-files:
-        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
-        in:
-          synapse_config: synapse_config
-          files: run-alignment-by-specimen/quants
-          manifest_file: join-fileview-by-specimen/newmanifest
-        out:
-          []
+#    store-files:
+#        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
+#        in:
+#          synapse_config: synapse_config
+#          files: run-alignment-by-specimen/quants
+#          manifest_file: join-fileview-by-specimen/newmanifest
+#        out:
+#          []
     harmonize-counts:
       run: steps/merge-to-synapse-tool.cwl
       in:
