@@ -175,14 +175,21 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
       orig.tab$addColumn(synapser::Column(name=o,type="STRING",maximumSize=100))
     }
   }
- # print('final table')
-                                        # print(dim(tidied.df))
+  print('final table')
+    print(dim(tidied.df))
+    chsize=100000
+    chunks=floor(nrow(tidied.df)/chsize)
+    print(paste('into',chunks,'chunks'))
   #  print(orig.tab)
   #  print(head(as.data.frame(tidied.df)))
-  #store to synapse
-  stab<-synapser::Table(orig.tab$properties$id,as.data.frame(tidied.df))
-  #print(stab)
-  synapser::synStore(stab)
+                                        #store to synapse
+    for(i in 0:chunks){
+        print(paste('storing chunk',i))
+        cdf<-tidied.df[i*chsize+1:(i+1)*chsize,]
+        stab<-synapser::Table(orig.tab$properties$id,cdf))
+
+    synapser::synStore(stab)
+    }
 }
 
 
