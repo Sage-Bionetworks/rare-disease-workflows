@@ -29,10 +29,12 @@ getIdsFromPathParent<-function(path.parent.df){
    children<-synapser::synGetChildren(x[['parent']])$asList()
     #print(children)
     for(c in children)
-      if(c$name==x[['path']])
-        return(c$id)})
+      if(c$name==basename(x[['path']]))
+        return(c$id)
+      else
+      return(NA)})
   print(synid)
-  path.parent.df<-data.frame(path.parent.df,used=synid)
+  path.parent.df<-data.frame(path.parent.df,used=rep(synid,nrow(path.parent.df)))
   return(dplyr::select(path.parent.df,c(path,used)))
 }
 
