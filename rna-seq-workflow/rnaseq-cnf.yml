@@ -8,5 +8,9 @@ idquery: SELECT specimenID,id,readPair FROM syn11614202 WHERE assay = 'rnaSeq' A
 sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn11614202 where assay = 'rnaSeq' AND fileFormat = 'fastq' AND parentId = 'syn7979306'
 parentid: syn18407530
 group_by: specimenID
-tableparentid: syn16941818,syn16941818
-tablename: Harmonized Gene Counts, Public Harmonized Gene Counts
+tableparentid: 
+        - syn16941818
+        - syn16941818
+tablename: 
+        - Harmonized Gene Counts
+        - Public Harmonized Gene Counts
