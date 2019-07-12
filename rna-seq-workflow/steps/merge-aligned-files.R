@@ -191,7 +191,9 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
                                         #store to synapse
     for(i in 0:chunks){
         print(paste('storing chunk',i))
-        cdf<-tidied.df[i*chsize+1:(i+1)*chsize,]
+    	inds=seq(i*chsize+1,min((i+1)*chsize,nrow(tidied.df)))
+        cdf<-tidied.df[inds,]
+	print(dim(cdf))
         stab<-synapser::Table(orig.tab$properties$id,cdf)
         synapser::synStore(stab)
     }
