@@ -62,18 +62,22 @@ main<-function(){
 
                                         #now join with manifest
     require(dplyr)
-    tidied.df<-genes.with.names%>%rename(path='fname')%>%left_join(all.manifests,by='path')
+    tidied.df<-genes.with.names%>%rename(path='fname')%>%left_join(all.manifests,by='path')%>%unique()
+    print(paste("table with manifest:"))
+    print(dim(tidied.df))
 
     ##get synapse id of origin file by parent and path
     syn.ids<-getIdsFromPathParent(select(tidied.df,c('path','parent'))%>%unique())
 
-    with.prov<-tidied.df%>%left_join(syn.ids,by='path')
+    with.prov<-tidied.df%>%left_join(syn.ids,by='path')%>%unique()
+    print('With provenance:')
+    print(dim(with.prov))
 
     if(args$tableparentid!=""){
         synids=unlist(strsplit(args$tableparentid,split=','))
         tabnames=unlist(strsplit(args$tablename,split=','))
-	print(synids)
-	print(tabnames)
+        print(synids)
+        print(tabnames)
         if(length(synids)!=length(tabnames))
             print("Number of synids must match number of table names")
         else
@@ -159,17 +163,17 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
 
   #how are they different?
     missing.cols<-setdiff(cur.cols,names(tidied.df))
-#    print(paste("DF missing:",paste(missing.cols,collapse=',')))
+    print(paste("DF missing:",paste(missing.cols,collapse=',')))
  # print('orig table')
  # print(dim(tidied.df))
   #then add in values
   for(a in missing.cols){
-    tidied.df<-data.frame(tidied.df,rep(NA,nrow(tidied.df)))
+    tidied.df<-cbind(tidied.df,rep(NA,nrow(tidied.df)))
     colnames(tidied.df)[ncol(tidied.df)]<-a
   }
 
     other.cols<-setdiff(names(tidied.df),cur.cols)
- #   print(paste("Syn table missing:",paste(other.cols,collapse=',')))
+    print(paste("Syn table missing:",paste(other.cols,collapse=',')))
   for(a in other.cols){
     if(is.numeric(tidied.df[,o]))
       orig.tab$addColumn(synapser::Column(name=o,columnType="DOUBLE"))
@@ -188,9 +192,8 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     for(i in 0:chunks){
         print(paste('storing chunk',i))
         cdf<-tidied.df[i*chsize+1:(i+1)*chsize,]
-        stab<-synapser::Table(orig.tab$properties$id,cdf))
-
-    synapser::synStore(stab)
+        stab<-synapser::Table(orig.tab$properties$id,cdf)
+        synapser::synStore(stab)
     }
 }
 
