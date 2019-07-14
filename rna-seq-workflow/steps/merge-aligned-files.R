@@ -175,10 +175,10 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     other.cols<-setdiff(names(tidied.df),cur.cols)
     print(paste("Syn table missing:",paste(other.cols,collapse=',')))
   for(a in other.cols){
-    if(is.numeric(tidied.df[,o]))
-      orig.tab$addColumn(synapser::Column(name=o,columnType="DOUBLE"))
+    if(is.numeric(tidied.df[,a]))
+      orig.tab$addColumn(synapser::Column(name=a,columnType="DOUBLE"))
     else{
-      orig.tab$addColumn(synapser::Column(name=o,type="STRING",maximumSize=100))
+      orig.tab$addColumn(synapser::Column(name=a,type="STRING",maximumSize=100))
     }
   }
   print('final table')
@@ -192,6 +192,7 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     for(i in 0:chunks){
         print(paste('storing chunk',i))
         cdf<-tidied.df[i*chsize+1:(i+1)*chsize,]
+        print(dim(cdf))
         stab<-synapser::Table(orig.tab$properties$id,cdf)
         synapser::synStore(stab)
     }
