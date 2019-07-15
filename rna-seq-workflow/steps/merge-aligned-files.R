@@ -180,6 +180,7 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     else{
       orig.tab$addColumn(synapser::Column(name=a,type="STRING",maximumSize=100))
     }
+    synStore(orig.tab)
   }
   print('final table')
     print(dim(tidied.df))
