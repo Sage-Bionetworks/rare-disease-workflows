@@ -35,7 +35,7 @@ getIdsFromPathParent<-function(path.parent.df){
           return(NA)}
   })
   print(synid)
-  path.parent.df<-data.frame(path.parent.df,used=rep(synid,nrow(path.parent.df)))
+  path.parent.df<-data.frame(path.parent.df,used=synid)#rep(synid,nrow(path.parent.df)))
   return(dplyr::select(path.parent.df,c(path,used)))
 }
 
