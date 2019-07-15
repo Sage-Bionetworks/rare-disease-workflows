@@ -179,7 +179,7 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     if(is.numeric(tidied.df[,a]))
       orig.tab$addColumn(synapser::Column(name=a,columnType="DOUBLE"))
     else{
-      orig.tab$addColumn(synapser::Column(name=a,columnT ype="STRING",maximumSize=100))
+      orig.tab$addColumn(synapser::Column(name=a,columnType="STRING",maximumSize=100))
     }
     synStore(orig.tab)
   }
