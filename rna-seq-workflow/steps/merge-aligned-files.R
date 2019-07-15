@@ -28,11 +28,12 @@ getIdsFromPathParent<-function(path.parent.df){
   # print(x[['parent']])
    children<-synapser::synGetChildren(x[['parent']])$asList()
     #print(children)
-    for(c in children)
+    for(c in children){
       if(c$name==basename(x[['path']]))
         return(c$id)
       else
-      return(NA)})
+          return(NA)}
+  })
   print(synid)
   path.parent.df<-data.frame(path.parent.df,used=rep(synid,nrow(path.parent.df)))
   return(dplyr::select(path.parent.df,c(path,used)))
@@ -178,7 +179,7 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     if(is.numeric(tidied.df[,a]))
       orig.tab$addColumn(synapser::Column(name=a,columnType="DOUBLE"))
     else{
-      orig.tab$addColumn(synapser::Column(name=a,columnType="STRING",maximumSize=100))
+      orig.tab$addColumn(synapser::Column(name=a,columnT ype="STRING",maximumSize=100))
     }
     synStore(orig.tab)
   }
