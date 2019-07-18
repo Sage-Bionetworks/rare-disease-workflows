@@ -5,6 +5,11 @@ The goal of this repository is to faciliate harmonization across rare-disease da
 
 ![Alt text](doc/workflowCats.png?raw=true "Workflows")
 
-## Raw data processing workflows
+## Data Harmonization workflows
+We have built a number of workflows that re-process raw data uploaded to Synapse to create a single data repository.
+| Data Type | Description | Location |
+| --- | --- | --- |
+RNA-Seq | This workflow runs | (rna-seq-workflow|
+Exome-Seq | test | test|
 
 ## Analysis workflows
