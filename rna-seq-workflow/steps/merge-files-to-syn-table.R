@@ -179,9 +179,9 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
   for(a in other.cols){
 	   print(paste('adding',a))
     if(is.numeric(tidied.df[,a]))
-      orig.tab$addColumn(synapser::Column(name=a,columnType="DOUBLE"))
+      orig.tab$addColumn(synStore(synapser::Column(name=a,columnType="DOUBLE")))
     else{
-      orig.tab$addColumn(synapser::Column(name=a,columnType="STRING",maximumSize=100))
+      orig.tab$addColumn(synStore(synapser::Column(name=a,columnType="STRING",maximumSize=100)))
     }
     print('storing')
     synStore(orig.tab)

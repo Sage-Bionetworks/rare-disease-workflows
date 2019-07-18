@@ -9,7 +9,7 @@ RUN Rscript -e "BiocManager::install()"
 RUN Rscript -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'http://cran.fhcrc.org'))"
 RUN Rscript -e "BiocManager::install('biomaRt',update=TRUE,ask=FALSE)"
 
-COPY steps/merge-aligned-files.R /usr/local/bin/merge-aligned-files.R
+COPY steps/merge-files-to-syn-table.R /usr/local/bin/merge-files-to-syn-table.R
 
 RUN chmod 777 /usr/local/bin/merge-aligned-files.R
 
