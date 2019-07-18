@@ -12,7 +12,7 @@ requirements:
         - entryname: .synapseConfig
           entry: $(inputs.synapse_config)
 arguments:
-  - /usr/local/bin/merge-aligned-files.R
+  - /usr/local/bin/merge-files-to-syn-table.R 
 
 inputs:
   synapse_config:
