@@ -176,12 +176,15 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
     other.cols<-setdiff(names(tidied.df),cur.cols)
     print(paste("Syn table missing:",paste(other.cols,collapse=',')))
   for(a in other.cols){
+	   print(paste('adding',a))
     if(is.numeric(tidied.df[,a]))
       orig.tab$addColumn(synapser::Column(name=a,columnType="DOUBLE"))
     else{
       orig.tab$addColumn(synapser::Column(name=a,columnType="STRING",maximumSize=100))
     }
+    print('storing')
     synStore(orig.tab)
+    print('retriving')
     orig.tab<-synGet(orig.tab$properties$id)
 
   }
