@@ -4,7 +4,9 @@ This workflow will consume a set of vcf files to create per-sample files and/or 
 
 # Running the workflow: 
 
-Modify the `gene-variant.yml` config file: 
+## Configure the workflow
+
+This is done by editing the following parameters in `gene-variant.yml`: 
 
 `vep-file-id:` vep file synapse id. we use the GENIE project vep (syn18491780)
 
@@ -18,8 +20,9 @@ Modify the `gene-variant.yml` config file:
 
 `input-query:` synapse fileview query to get VCF ids for conversion to maf. eg `SELECT id FROM syn16858331 WHERE ( ( "fileFormat" = 'vcf' ) AND ( "diagnosis" = 'Neurofibromatosis 1' ) AND ( "isMultiSpecimen" = 'FALSE' ) AND ( "assay" = 'exomeSeq' ) ) limit 5`
 
-clinical-query: synapse fileview query with metadata for vcfs, eg `SELECT distinct id as mafid,specimenID,individualID,assay,dataType,sex,consortium,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn16858331`
+`clinical-query:` synapse fileview query with metadata for vcfs, eg `SELECT distinct id as mafid,specimenID,individualID,assay,dataType,sex,consortium,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn16858331`
 
+## Run with cwltool/cwl-runner
 
 Once this file has been updated simply run:
 `cwltool --relax-path-checks variant-call-from-synapse.cwl gene-variant.yml`
