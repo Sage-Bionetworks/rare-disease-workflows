@@ -24,4 +24,4 @@ clinical-query: synapse fileview query with metadata for vcfs, eg `SELECT distin
 Once this file has been updated simply run:
 `cwltool --relax-path-checks variant-call-from-synapse.cwl gene-variant.yml`
 
-`--relax-path-checks` is a required flag for this workflow. At the time of writing, `toil` does not support this parameter and therefore cannot be used (see https://github.com/DataBiosphere/toil/issues/1782). 
+`--relax-path-checks` is a required flag for this workflow. At the time of writing, `toil` does not support this parameter and therefore cannot be used (see toil issue [#1782](https://github.com/DataBiosphere/toil/issues/1782)). 
