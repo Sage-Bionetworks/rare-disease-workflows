@@ -169,8 +169,9 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
  # print(dim(tidied.df))
   #then add in values
   for(a in missing.cols){
+	   print(paste('adding',a))
     tidied.df<-cbind(tidied.df,rep(NA,nrow(tidied.df)))
-    colnames(tidied.df)[ncol(tidied.df)]<-a
+    names(tidied.df)[ncol(tidied.df)]<-a
   }
 
     other.cols<-setdiff(names(tidied.df),cur.cols)
