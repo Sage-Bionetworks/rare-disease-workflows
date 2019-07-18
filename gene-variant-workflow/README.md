@@ -10,7 +10,7 @@ Modify the `gene-variant.yml` config file:
 
 `synapse_config:
   class: File
-  path:` path to local synapse config file, e.g. ~/.synapseConfig
+  path:` absolute path to local synapse config file, e.g. /Users/rallaway/.synapseConfig
   
 `parentid:` maf destination folder on synapse
 
@@ -20,6 +20,6 @@ Modify the `gene-variant.yml` config file:
 
 clinical-query: synapse fileview query with metadata for vcfs, eg `SELECT distinct id as mafid,specimenID,individualID,assay,dataType,sex,consortium,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn16858331`
 
-indexfile:
-  class: File
-  path: index.fa
+
+Once this file has been updated simply run:
+`cwltool variant-call-from-synapse.cwl gene-variant.yml`
