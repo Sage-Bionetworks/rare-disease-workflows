@@ -1,12 +1,11 @@
 vep-file-id: syn18491780
 synapse_config:
   class: File
-  path: /home/sgosline/.synapseConfig
-parentid: syn19289180
+  path: /Users/rallaway/.synapseConfig
+parentid: syn20540114
 group_by: mafid
-input-query: SELECT id FROM syn16858331 WHERE ( ( "fileFormat" = 'vcf' ) AND ( "diagnosis" = 'Neurofibromatosis 1' ) AND ( "isMultiSpecimen" = 'FALSE' ) AND ( "assay" = 'exomeSeq' ) ) limit 5
-clinical-query: SELECT distinct id as mafid,specimenID,individualID,assay,dataType,sex,consortium,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn16858331
-vcfid: syn18080117
+input-query: SELECT id FROM syn11818313 WHERE ( ( "fileFormat" = 'vcf' ) AND ( "isMultiSpecimen" = 'FALSE' ) AND ( "assay" = 'exomeSeq' ) ) 
+clinical-query: SELECT distinct id as mafid,specimenID,individualID,assay,dataType,sex,consortium,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn11818313
 indexfile:
   class: File
   path: index.fa
