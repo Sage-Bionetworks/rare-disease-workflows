@@ -170,19 +170,21 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
   #then add in values
   for(a in missing.cols){
 	   print(paste('adding',a))
-    tidied.df<-cbind(tidied.df,rep(NA,nrow(tidied.df)))
+    tidied.df<-cbind(as.data.frame(tidied.df),rep(NA,nrow(tidied.df)))
     names(tidied.df)[ncol(tidied.df)]<-a
   }
 
     other.cols<-setdiff(names(tidied.df),cur.cols)
     print(paste("Syn table missing:",paste(other.cols,collapse=',')))
   for(a in other.cols){
-	   print(paste('adding',a))
-    if(is.numeric(tidied.df[,a]))
-      orig.tab$addColumn(synStore(synapser::Column(name=a,columnType="DOUBLE")))
-    else{
-      orig.tab$addColumn(synStore(synapser::Column(name=a,columnType="STRING",maximumSize=100)))
+	   print(paste('creating',a))
+    if(is.numeric(tidied.df[,a])){
+      nc=synStore(Column(name=a,columnType='DOUBLE'))
+    }else{
+      nc=synStore(Column(name=a,columnType='STRING',maximumSize=100))
     }
+    print('adding')
+    orig.tab$addColumn(nc)
     print('storing')
     synStore(orig.tab)
     print('retriving')
