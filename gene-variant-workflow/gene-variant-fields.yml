@@ -1,0 +1,11 @@
+vep-file-id: syn18491780
+synapse_config:
+  class: File
+  path: /Users/rallaway/.synapseConfig
+parentid: syn20540114
+group_by: mafid
+input-query: SELECT id FROM syn11818313 WHERE ( ( "fileFormat" = 'vcf' ) AND ( "isMultiSpecimen" = 'FALSE' ) AND ( "assay" = 'exomeSeq' ) ) 
+clinical-query: SELECT distinct id as mafid,specimenID,individualID,assay,dataType,sex,consortium,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName from syn11818313
+indexfile:
+  class: File
+  path: index.fa
