@@ -80,4 +80,6 @@ steps:
     label: run-vep
     'sbg:x': 635.9327392578125
     'sbg:y': 111
-requirements: []
+requirements: 
+  - class: StepInputExpressionRequirement
+
