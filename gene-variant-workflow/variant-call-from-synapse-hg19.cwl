@@ -30,6 +30,12 @@ inputs:
     'sbg:x': 0
     'sbg:y': 0
 outputs:
+  - id: maf-files
+    outputSource:
+      - get-vcf-run-vep/maffile
+    type: 'File[]'
+    'sbg:x': 898.4661865234375
+    'sbg:y': 186
   - id: manifest-file
     outputSource:
       - join-fileview-by-specimen/newmanifest
@@ -38,16 +44,10 @@ outputs:
     'sbg:y': 214
   - id: synids
     outputSource:
-      - get_vcf_run_vep/vcf-id
-    type: string
-    'sbg:x': 889.9430541992188
-    'sbg:y': 499.2405090332031
-  - id: maf-files
-    outputSource:
-      - get_vcf_run_vep/maffile
-    type: File
-    'sbg:x': 889.9430541992188
-    'sbg:y': 669.1953125
+      - get-vcf-run-vep/vcf-id
+    type: 'string[]'
+    'sbg:x': 898.4661865234375
+    'sbg:y': 79
 steps:
   - id: get-clinical
     in:
@@ -87,8 +87,8 @@ steps:
       - id: vep-dir
     run: get-index-and-unzip.cwl
     label: get-index-and-unzip
-    'sbg:x': 179.52896118164062
-    'sbg:y': 13.710394859313965
+    'sbg:x': 173.453125
+    'sbg:y': 79
   - id: get-samples-from-fv
     in:
       - id: query_tsv
@@ -98,30 +98,9 @@ steps:
     run: >-
       https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown-by-row.cwl
     label: breakdown-by-row-tool
-    'sbg:x': 368.735107421875
-    'sbg:y': 464.71209716796875
-  - id: join-fileview-by-specimen
-    in:
-      - id: filelist
-        source:
-          - get_vcf_run_vep/maffile
-      - id: key
-        source: group_by
-      - id: manifest_file
-        source: get-clinical/query_result
-      - id: parentid
-        source: parentid
-      - id: values
-        source:
-          - get_vcf_run_vep/vcf-id
-    out:
-      - id: newmanifest
-    run: >-
-      https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
-    label: join-fileview-by-specimen-tool
-    'sbg:x': 898.4661865234375
-    'sbg:y': 321
-  - id: get_vcf_run_vep
+    'sbg:x': 451.26654052734375
+    'sbg:y': 214
+  - id: get-vcf-run-vep
     in:
       - id: dotvepdir
         source: get-index-file/dotvep-dir
@@ -136,9 +115,33 @@ steps:
     out:
       - id: maffile
       - id: vcf-id
-    run: ./get-vcf-run-vep-hg19.cwl
+    run: get-vcf-run-vep-hg19.cwl
     label: get-vcf-run-vep
-    'sbg:x': 608.0247192382812
-    'sbg:y': 415.0246887207031
+    scatter:
+      - vcfid
+    'sbg:x': 638.2509155273438
+    'sbg:y': 267.5
+  - id: join-fileview-by-specimen
+    in:
+      - id: filelist
+        source:
+          - get-vcf-run-vep/maffile
+      - id: key
+        source: group_by
+      - id: manifest_file
+        source: get-clinical/query_result
+      - id: parentid
+        source: parentid
+      - id: values
+        source:
+          - get-vcf-run-vep/vcf-id
+    out:
+      - id: newmanifest
+    run: >-
+      https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
+    label: join-fileview-by-specimen-tool
+    'sbg:x': 898.4661865234375
+    'sbg:y': 321
 requirements:
   - class: SubworkflowFeatureRequirement
+  - class: ScatterFeatureRequirement
