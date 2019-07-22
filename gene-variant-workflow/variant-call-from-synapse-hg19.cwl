@@ -115,7 +115,7 @@ steps:
     out:
       - id: maffile
       - id: vcf-id
-    run: get-vcf-run-vep-hg19.cwl
+    run: get-vcf-run-vep-hg19_to_grch37.cwl
     label: get-vcf-run-vep
     scatter:
       - vcfid
