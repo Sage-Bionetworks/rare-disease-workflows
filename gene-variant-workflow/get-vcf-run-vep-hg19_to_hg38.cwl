@@ -87,8 +87,11 @@ steps:
     out:
       - id: hg38vcf
       - id: rejected
-    run: steps/liftover-vcf.cwl
+    run: steps/liftover_hg19tohg38.cwl
     label: liftover-vcf
     'sbg:x': 538
     'sbg:y': 127
-requirements: []
+requirements:
+  - class: MultipleInputFeatureRequirement
+  - class: StepInputExpressionRequirement
+  - class: InlineJavascriptRequirement

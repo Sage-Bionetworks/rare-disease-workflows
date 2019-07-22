@@ -94,3 +94,5 @@ steps:
     'sbg:y': 127
 requirements:
   - class: MultipleInputFeatureRequirement
+  - class: StepInputExpressionRequirement
+  - class: InlineJavascriptRequirement
