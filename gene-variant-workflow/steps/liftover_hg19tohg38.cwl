@@ -1,5 +1,7 @@
 class: CommandLineTool
 cwlVersion: v1.0
+$namespaces:
+  sbg: 'https://www.sevenbridges.com/'
 id: liftover_vcf
 baseCommand:
   - bash
@@ -25,7 +27,7 @@ requirements:
     ramMin: 8000
     coresMin: 0
   - class: DockerRequirement
-    dockerPull: nfosi/liftover
+    dockerPull: nfosi/liftover-hg19-to-hg38
   - class: InitialWorkDirRequirement
     listing:
       - entry: $(inputs.hg19vcf)

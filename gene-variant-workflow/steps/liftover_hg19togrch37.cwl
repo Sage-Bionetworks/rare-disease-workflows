@@ -27,7 +27,7 @@ requirements:
     ramMin: 8000
     coresMin: 0
   - class: DockerRequirement
-    dockerPull: nfosi/liftover_hg19_to_grch37
+    dockerPull: nfosi/liftover-hg19-to-grch37
   - class: InitialWorkDirRequirement
     listing:
       - entry: $(inputs.hg19vcf)
