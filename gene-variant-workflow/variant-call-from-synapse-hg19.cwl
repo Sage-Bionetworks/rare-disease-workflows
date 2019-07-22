@@ -25,10 +25,10 @@ inputs:
     type: File
     'sbg:x': 0
     'sbg:y': 107
-  - id: vep-file-id
-    type: string
-    'sbg:x': 0
-    'sbg:y': 0
+  - id: vep_zip
+    type: File
+    'sbg:x': -26.451709747314453
+    'sbg:y': -62.97845458984375
 outputs:
   - id: maf-files
     outputSource:
@@ -73,22 +73,8 @@ steps:
     run: >-
       https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
     label: synapse-query-tool
-    'sbg:x': 173.453125
-    'sbg:y': 207
-  - id: get-index-file
-    in:
-      - id: synapse_config
-        source: synapse_config
-      - id: vep-file-id
-        source: vep-file-id
-    out:
-      - id: dotvep-dir
-      - id: reference-fasta
-      - id: vep-dir
-    run: get-index-and-unzip.cwl
-    label: get-index-and-unzip
-    'sbg:x': 173.453125
-    'sbg:y': 79
+    'sbg:x': 175.4086151123047
+    'sbg:y': 211.81723022460938
   - id: get-samples-from-fv
     in:
       - id: query_tsv
@@ -98,20 +84,20 @@ steps:
     run: >-
       https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown-by-row.cwl
     label: breakdown-by-row-tool
-    'sbg:x': 451.26654052734375
-    'sbg:y': 214
+    'sbg:x': 356.9242248535156
+    'sbg:y': 288.06536865234375
   - id: get-vcf-run-vep
     in:
       - id: dotvepdir
-        source: get-index-file/dotvep-dir
+        source: get_index_and_unzip/dotvep-dir
       - id: indexfile
-        source: get-index-file/reference-fasta
+        source: get_index_and_unzip/reference-fasta
       - id: synapse_config
         source: synapse_config
       - id: vcfid
         source: get-samples-from-fv/id_array
       - id: vepdir
-        source: get-index-file/vep-dir
+        source: get_index_and_unzip/vep-dir
     out:
       - id: maffile
       - id: vcf-id
@@ -142,6 +128,18 @@ steps:
     label: join-fileview-by-specimen-tool
     'sbg:x': 898.4661865234375
     'sbg:y': 321
+  - id: get_index_and_unzip
+    in:
+      - id: vep_zip
+        source: vep_zip
+    out:
+      - id: dotvep-dir
+      - id: reference-fasta
+      - id: vep-dir
+    run: ./get-index-and-unzip-predownloaded.cwl
+    label: get-index-and-unzip
+    'sbg:x': 139.02154541015625
+    'sbg:y': 20.1292724609375
 requirements:
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement
