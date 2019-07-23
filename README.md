@@ -10,7 +10,7 @@ We have built a number of workflows that re-process raw data uploaded to Synapse
 
 | Data Type | Description | Location | Destination | Status
 | --- | --- | --- | --- | --- | 
-| RNA-Seq | This workflow runs Salmon alignment from FASTQ files to populate a both a public and private Synapse table that stores all NF-related gene expression data. | [./rna-seq-workflow/](rna-seq-workflow) | [Synapse Table]() | Complete 
+| RNA-Seq | This workflow runs Salmon alignment from FASTQ files to populate a both a public and private Synapse table that stores all NF-related gene expression data. | [rna-seq-workflow/](rna-seq-workflow) | [Synapse Table]() | Complete 
 | Exome/WGS-Seq | This workflow *currently* runs `vcf2maf` on uploaded `vcf` files and stores them on Synapse.  | [gene-variant-workflow](gene-variant-workflow) | Table TBD | Currently processed files, needs to be updated to store data on synapse.|
 | Somatic variant caller | This workflow should take the raw data and call somatic variants. | TBD | TBD | Not yet built|
 | Drug-Sensitivity Data | This workflow takes drug-sensitivity data and combines it to a single file. | [drug-screening-workflow](drug-screening-workflow) | Table TBD | Still requires table update |
