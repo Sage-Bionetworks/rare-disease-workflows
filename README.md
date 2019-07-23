@@ -1,5 +1,5 @@
-# rare-disease-workflows
-Workflows for processing rare disease data on Synapse.
+# Rare Disease Workflows
+This repo contains a list of workflows designed for accerating the interpretation of rare-disease data, currently applied to data within the NF-OSI.
 
 The goal of this repository is to faciliate harmonization across rare-disease datasets that are deposited onto [Synapse](http://synapse.org). These workflows will be centered around various stages of analysis, shown below.
 
