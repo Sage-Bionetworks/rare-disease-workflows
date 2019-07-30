@@ -19,6 +19,7 @@ arguments:
 
 outputs:
   []
+
 inputs:
   synapse_config:
    type: File
