@@ -46,7 +46,8 @@ steps:
       - id: dotvepdir
         source: dotvepdir
       - id: input_vcf
-        source: vcf_zip_check/out-file
+        source:
+          - liftover-vcf/grch37vcf
       - id: output-maf
         source: get-vcf/filepath
         valueFrom: $(self.nameroot + '.maf')
@@ -58,7 +59,16 @@ steps:
       - id: maf-file
     run: steps/run-vep.cwl
     label: run-vep
-requirements: 
+  - id: liftover-vcf
+    in:
+      - id: hg19vcf
+        source: vcf_zip_check/out-file
+    out:
+      - id: grch37vcf
+      - id: rejected
+    run: steps/liftover_hg19togrch37.cwl
+    label: liftover-vcf
+requirements:
+  - class: MultipleInputFeatureRequirement
   - class: StepInputExpressionRequirement
   - class: InlineJavascriptRequirement
-
