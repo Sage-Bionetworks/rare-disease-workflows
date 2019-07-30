@@ -4,7 +4,7 @@ suppressPackageStartupMessages(require(optparse))
 getArgs<-function(){
 
   option_list <- list(
-      make_option(c("-f", "--file"), default="merged-tidied.df.tsv", dest='file',help = "table file name"),
+      make_option(c("-f", "--file"), default="merged-tidied.df.tsv", dest='file',help = "tab-delimited table file name"),
       make_option(c("-p", "--tableparentid"), dest='tableparentid',help='List of synapse ids of projects containing data model',default=""),
       make_option(c("-n", "--tablename"), default="Default Table", dest='tablename',help='Comma-delimited list of table names'))
 
@@ -19,7 +19,7 @@ main<-function(){
     args<-getArgs()
 
 
-    with.prov<-args$file
+    with.prov<-read.table(args$file,sep='\t',header=T,as.is=T)
 
     if(args$tableparentid!=""){
         synids=unlist(strsplit(args$tableparentid,split=','))
