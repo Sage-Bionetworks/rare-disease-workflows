@@ -7,7 +7,7 @@ baseCommand: Rscript
 
 requirements:
    - class: DockerRequirement
-     dockerPull: nfosi/synapse-table-store-tool
+     dockerPull: nfosi/synapse-table-store
    - class: InitialWorkDirRequirement
      listing:
         - entryname: .synapseConfig
