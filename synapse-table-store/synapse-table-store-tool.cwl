@@ -17,6 +17,8 @@ requirements:
 arguments:
   - /usr/local/bin/synapse-table-store.R
 
+outputs:
+  []
 inputs:
   synapse_config:
    type: File
