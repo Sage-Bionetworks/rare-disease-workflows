@@ -18,26 +18,6 @@ getArgs<-function(){
 
 #prefix=paste(lubridate::today(),'coding_only_bioBank_glioma_cNF_pnf',sep='-')
 
-# Get synapse ID of files based on path and parent in manifest
-# @export
-# @requires synapser
-getIdsFromPathParent<-function(path.parent.df){
-  require(synapser)
-
-  synid<-apply(path.parent.df,1,function(x){
-  # print(x[['parent']])
-   children<-synapser::synGetChildren(x[['parent']])$asList()
-    #print(children)
-    for(c in children){
-      if(c$name==basename(x[['path']]))
-        return(c$id)
-      else
-          return(NA)}
-  })
-  print(synid)
-  path.parent.df<-data.frame(path.parent.df,used=synid)#rep(synid,nrow(path.parent.df)))
-  return(dplyr::select(path.parent.df,c(path,used)))
-}
 
 main<-function(){
 
@@ -85,8 +65,20 @@ main<-function(){
             for(a in 1:length(synids))
                 saveToTable(with.prov,tabnames[a],synids[a])
     }
-#    write.table(with.prov,file=args$output)
 
+
+}
+
+
+# @requires biomaRt
+getGeneMap<-function(){
+#####NOW DOWNLOAD COUNTS
+    library(biomaRt)
+#get mapping from enst to hgnc
+    mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
+    my_chr <- c(1:22,'X','Y')
+    map <- getBM(attributes=c("ensembl_transcript_id","hgnc_symbol"),mart=mart,filters='chromosome_name',values=my_chr)
+    return (map)
 }
 
 # @export
@@ -129,6 +121,28 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
     print(paste('table with unique gene counts:',nrow(with.z)))
     return(with.z)
 
+}
+
+
+# Get synapse ID of files based on path and parent in manifest
+# @export
+# @requires synapser
+getIdsFromPathParent<-function(path.parent.df){
+  require(synapser)
+
+  synid<-apply(path.parent.df,1,function(x){
+  # print(x[['parent']])
+   children<-synapser::synGetChildren(x[['parent']])$asList()
+    #print(children)
+    for(c in children){
+      if(c$name==basename(x[['path']]))
+        return(c$id)
+      else
+          return(NA)}
+  })
+  print(synid)
+  path.parent.df<-data.frame(path.parent.df,used=synid)#rep(synid,nrow(path.parent.df)))
+  return(dplyr::select(path.parent.df,c(path,used)))
 }
 
 # creates a new table unless one already exists
@@ -210,15 +224,5 @@ saveResultsToExistingTable<-function(tidied.df,tableid){
 }
 
 
-# @requires biomaRt
-getGeneMap<-function(){
-#####NOW DOWNLOAD COUNTS
-    library(biomaRt)
-#get mapping from enst to hgnc
-    mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
-    my_chr <- c(1:22,'X','Y')
-    map <- getBM(attributes=c("ensembl_transcript_id","hgnc_symbol"),mart=mart,filters='chromosome_name',values=my_chr)
-    return (map)
-}
 
 main()
