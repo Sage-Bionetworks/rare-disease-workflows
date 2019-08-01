@@ -22,22 +22,17 @@ inputs:
     type: string
   tableparentid:
     type: string[]
-  tablename: string[]
+  tablename:
+    type: string[]
 
 requirements:
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement
 
 outputs:
-  manifest:
+  merged:
     type: File
-    outputSource: join-fileview-by-specimen/newmanifest
-  files:
-    type: File[]
-    outputSource: run-alignment-by-specimen/quants
-  sampnames:
-    type: string[]
-    outputSource: run-alignment-by-specimen/dirname
+    outputSource: harmonize-counts/merged
 steps:
     get-index:
       run:  https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
@@ -100,11 +95,19 @@ steps:
 #        out:
 #          []
     harmonize-counts:
-      run: steps/merge-to-synapse-tool.cwl
+      run: steps/merge-counts-with-meta-tool.cwl
       in:
+        synapse_config: synapse_config
         manifest: join-fileview-by-specimen/newmanifest
         files: run-alignment-by-specimen/quants
+      out:
+        [merged]
+    add-to-table:
+      run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
+      in:
+        synapse_config: synapse_config
         tableparentid: tableparentid
         tablename: tablename
-        synapse_config: synapse_config
-      out: []
+        file: harmonize-counts/merged
+      out:
+        []
