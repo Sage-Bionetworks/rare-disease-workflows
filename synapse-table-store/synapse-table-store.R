@@ -42,6 +42,7 @@ main<-function(){
 # @export
 saveToTable<-function(tidied.df,tablename,parentId){
   require(synapser)
+  synapser::synLogin()
   ##first see if there is a table with an existing name
   children<-synapser::synGetChildren(parentId)$asList()
   id<-NULL
@@ -61,7 +62,8 @@ saveToTable<-function(tidied.df,tablename,parentId){
 # @export
 saveResultsToExistingTable<-function(tidied.df,tableid){
     require(synapser)
-    print(paste(tableid,'already exists with that name, adding'))
+    synapser::synLogin()
+print(paste(tableid,'already exists with that name, adding'))
   #first get table schema
   orig.tab<-synGet(tableid)
 
