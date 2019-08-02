@@ -118,7 +118,7 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
 # @requires synapser
 getIdsFromPathParent<-function(path.parent.df){
   require(synapser)
-
+  synLogin()
   synid<-apply(path.parent.df,1,function(x){
   # print(x[['parent']])
    children<-synapser::synGetChildren(x[['parent']])$asList()
