@@ -110,7 +110,8 @@ print(paste(tableid,'already exists with that name, adding'))
     	inds=seq(i*chsize+1,min((i+1)*chsize,nrow(tidied.df)))
         cdf<-tidied.df[inds,]
 	print(dim(cdf))
-        stab<-synapser::Table(orig.tab$properties$id,cdf)
+        stab<-synapser::Table(orig.tab,cdf)
+	
         synapser::synStore(stab)
     }
 }
