@@ -9,8 +9,8 @@ getArgs<-function(){
 
   option_list <- list(
       make_option(c("-f", "--files"), dest='files',help='Comma-delimited list of count files'),
-      make_option(c("-m", "--manifest"),dest='manifest',help='Single manifest file'),
-      make_option(c("-o", "--output"), default="merged-tidied.df.tsv", dest='output',help = "output file name"))
+      make_option(c("-m", "--manifest"),dest='manifest',help='Single manifest file'))#,
+    #  make_option(c("-o", "--output"), default="merged-tidied.df.tsv", dest='output',help = "output file name"))
 
     args=parse_args(OptionParser(option_list = option_list))
 
@@ -24,8 +24,8 @@ main<-function(){
 #  print(args)y
     ##here we have all the file metadata we need
     all.manifests<-read.table(args$manifest,header=T,sep='\t')
-   # print('Manifest dimensions')
-   # print(dim(all.manifests))
+   # message('Manifest dimensions')
+   # message(dim(all.manifests))
 
     #here we have all the counts
     all.count.files<-do.call(rbind,lapply(unlist(strsplit(args$files,split=',')),function(x){
@@ -33,8 +33,8 @@ main<-function(){
         tab$fname=rep(basename(x),nrow(tab))
         return(tab)
     }))
-   # print("Count dimensions")
-   # print(dim(all.count.files))
+    message("Count dimensions")
+    message(dim(all.count.files))
 
     #add in gene names and get total counts
     ensmap<-getGeneMap()
@@ -43,8 +43,8 @@ main<-function(){
                                         #now join with manifest
     require(dplyr)
     tidied.df<-genes.with.names%>%rename(path='fname')%>%left_join(all.manifests,by='path')%>%unique()
- #   print(paste("table with manifest:"))
- #   print(dim(tidied.df))
+    message(paste("table with manifest:"))
+   message(dim(tidied.df))
 
     ##get synapse id of origin file by parent and path
     syn.ids<-getIdsFromPathParent(select(tidied.df,c('path','parent'))%>%unique())
@@ -91,10 +91,10 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
     full.tab<-genetab%>%
         tidyr::separate(Name,into=c('ensembl_transcript_id',NA))%>%
         dplyr::inner_join(genemap,by='ensembl_transcript_id')
-  #  print(paste('table after join:',nrow(full.tab)))
+    message(paste('table after join:',nrow(full.tab)))
                                         #filter out genes
     red.tab<-subset(full.tab,hgnc_symbol%in%genes[,1])
-  #  print(paste('table with protein coding:',nrow(red.tab)))
+    message(paste('table with protein coding:',nrow(red.tab)))
 
 
                                         #now z score it
@@ -107,7 +107,7 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
 
     with.z=fin.tab%>%dplyr::group_by(fname)%>%dplyr::mutate(zScore=(totalCounts-mean(totalCounts+0.001,na.rm=T))/sd(totalCounts,na.rm=T))
 
-  #  print(paste('table with unique gene counts:',nrow(with.z)))
+    message(paste('table with unique gene counts:',nrow(with.z)))
     return(with.z)
 
 }
