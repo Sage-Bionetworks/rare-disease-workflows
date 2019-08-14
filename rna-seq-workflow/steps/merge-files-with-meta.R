@@ -16,8 +16,8 @@ main<-function(){
     args<-getArgs()
     ##here we have all the file metadata we need
     all.manifests<-read.table(args$manifest,header=T,sep='\t')
-   # message('Manifest dimensions')
-   # message(dim(all.manifests))
+    message('Manifest dimensions')
+    message(nrow(all.manifests))
 
     #here we have all the counts
     all.count.files<-do.call(rbind,lapply(unlist(strsplit(args$files,split=',')),function(x){
@@ -26,7 +26,7 @@ main<-function(){
         return(tab)
     }))
     message("Count dimensions")
-    message(dim(all.count.files))
+    message(nrow(all.count.files))
 
     #add in gene names and get total counts
     ensmap<-getGeneMap()
@@ -36,7 +36,7 @@ main<-function(){
     require(dplyr)
     tidied.df<-genes.with.names%>%rename(path='fname')%>%left_join(all.manifests,by='path')%>%unique()
     message(paste("table with manifest:"))
-   message(dim(tidied.df))
+   message(nrow(tidied.df))
 
     ##get synapse id of origin file by parent and path
     syn.ids<-getIdsFromPathParent(select(tidied.df,c('path','parent'))%>%unique())
@@ -112,9 +112,9 @@ getIdsFromPathParent<-function(path.parent.df){
   require(synapser)
   synLogin()
   synid<-apply(path.parent.df,1,function(x){
-  # print(x[['parent']])
+   message(x[['parent']])
    children<-synapser::synGetChildren(x[['parent']])$asList()
-    #print(children)
+    message(children)
     for(c in children){
       if(c$name==basename(x[['path']]))
         return(c$id)
