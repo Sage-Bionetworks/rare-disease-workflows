@@ -60,6 +60,12 @@ getGeneMap<-function(){
     return (map)
 }
 
+quiet <- function(x) {
+  sink(tempfile())
+  on.exit(sink())
+  invisible(force(x))
+}
+
 # This function filters out protein-coding genes for analysis, then maps to to HUGO gene ids, gets the z score
 # synapser dependencies is due to gene list downloaded from synapse.
 # @export
@@ -72,7 +78,7 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
     require(synapser)
     synLogin()
     ##now get all genes
-    path=synapser::synGet('syn18134565')$path
+    path=quiet(synapser::synGet('syn18134565')$path)
     R.utils::gunzip(path,overwrite=T)
     system(paste("grep protein_coding",gsub(".gz","",path),"|cut -d '|' -f 6 |uniq > gencode.v29.transcripts.txt"))
 
