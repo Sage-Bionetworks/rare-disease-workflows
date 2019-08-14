@@ -1,17 +1,11 @@
-```
-This script takes a set of salmon count files and joins them with the metadata from an upload main
-```
-
 suppressPackageStartupMessages(require(optparse))
 
 
 getArgs<-function(){
 
   option_list <- list(
-      make_option(c("-f", "--files"), dest='files',help='Comma-delimited list of count files'),
-      make_option(c("-m", "--manifest"),dest='manifest',help='Single manifest file'))#,
-    #  make_option(c("-o", "--output"), default="merged-tidied.df.tsv", dest='output',help = "output file name"))
-
+      make_option(c("-f", "--files"), dest = 'files', help= 'Comma-delimited list of count files'),
+      make_option(c("-m", "--manifest"), dest = 'manifest', help= 'Single manifest file'))
     args=parse_args(OptionParser(option_list = option_list))
 
     return(args)
@@ -19,9 +13,7 @@ getArgs<-function(){
 
 
 main<-function(){
-
     args<-getArgs()
-#  print(args)y
     ##here we have all the file metadata we need
     all.manifests<-read.table(args$manifest,header=T,sep='\t')
    # message('Manifest dimensions')
