@@ -42,7 +42,7 @@ main<-function(){
     syn.ids<-getIdsFromPathParent(select(tidied.df,c('path','parent'))%>%unique())
 
     with.prov<-tidied.df%>%left_join(syn.ids,by='path')%>%unique()
-
+    require(readr)
     cat(readr::format_tsv(with.prov))
 
 }
