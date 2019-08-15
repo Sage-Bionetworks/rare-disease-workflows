@@ -43,7 +43,7 @@ main<-function(){
 
     with.prov<-tidied.df%>%left_join(syn.ids,by='path')%>%unique()
 
-    cat(format_tsv(with.prov))
+    cat(readr::format_tsv(with.prov))
 
 }
 
