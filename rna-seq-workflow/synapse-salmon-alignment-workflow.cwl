@@ -86,14 +86,14 @@ steps:
         key: group_by
       out:
         [newmanifest]
-#    store-files:
-#        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
-#        in:
-#          synapse_config: synapse_config
-#          files: run-alignment-by-specimen/quants
-#          manifest_file: join-fileview-by-specimen/newmanifest
-#        out:
-#          []
+    store-files:
+        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
+        in:
+          synapse_config: synapse_config
+          files: run-alignment-by-specimen/quants
+          manifest_file: join-fileview-by-specimen/newmanifest
+        out:
+          []
     harmonize-counts:
       run: steps/merge-counts-with-meta-tool.cwl
       in:
@@ -102,12 +102,12 @@ steps:
         files: run-alignment-by-specimen/quants
       out:
         [merged]
-#    add-to-table:
-#      run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
- #     in:
- #       synapse_config: synapse_config
- #       tableparentid: tableparentid
- #       tablename: tablename
- #       file: harmonize-counts/merged
- #     out:
- #       []
+    add-to-table:
+      run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
+      in:
+        synapse_config: synapse_config
+        tableparentid: tableparentid
+        tablename: tablename
+        file: harmonize-counts/merged
+      out:
+        []

@@ -5,7 +5,7 @@ indexid: syn18134565
 index-type: gencode
 index-dir: gencode_v29
 idquery: SELECT id,specimenID,readPair from syn11678418 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "fileFormat" = 'fastq'))
-sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName,experimentalCondition FROM syn11678418 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "dataSubtype" = 'raw' ) )
+sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName,experimentalCondition,isCellLine,transplantationType FROM syn11678418 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "fileFormat" = 'fastq'))
 parentid: syn20558670
 group_by: specimenID
 tableparentid:
