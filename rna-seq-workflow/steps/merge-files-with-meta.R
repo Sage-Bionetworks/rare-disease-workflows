@@ -36,7 +36,7 @@ main<-function(){
     require(dplyr)
     tidied.df<-genes.with.names%>%rename(path='fname')%>%left_join(all.manifests,by='path')%>%unique()
     message(paste("table with manifest:"))
-   message(nrow(tidied.df))
+    message(nrow(tidied.df))
 
     ##get synapse id of origin file by parent and path
     syn.ids<-getIdsFromPathParent(select(tidied.df,c('path','parent'))%>%unique())
@@ -76,7 +76,7 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
     require(tidyr)
     require(dplyr)
     require(synapser)
-    synLogin()
+    quiet(synLogin())
     ##now get all genes
     path=quiet(synapser::synGet('syn18134565')$path)
     R.utils::gunzip(path,overwrite=T)
@@ -116,16 +116,16 @@ annotateGenesFilterGetCounts<-function(genetab,genemap){
 # @requires synapser
 getIdsFromPathParent<-function(path.parent.df){
   require(synapser)
-  synLogin()
+  quiet()
   synid<-apply(path.parent.df,1,function(x){
    message(x[['parent']])
    children<-synapser::synGetChildren(x[['parent']])$asList()
-    message(children)
-    for(c in children){
-      if(c$name==basename(x[['path']]))
-        return(c$id)
-      else
-          return(NA)}
+   message(children)
+   for(c in children){
+       if(c$name==basename(x[['path']]))
+           return(c$id)
+   }
+   return(NA)
   })
 #  print(synid)
   path.parent.df<-data.frame(path.parent.df,used=synid)#rep(synid,nrow(path.parent.df)))
