@@ -102,12 +102,12 @@ steps:
         files: run-alignment-by-specimen/quants
       out:
         [merged]
-    add-to-table:
-      run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
-      in:
-        synapse_config: synapse_config
-        tableparentid: tableparentid
-        tablename: tablename
-        file: harmonize-counts/merged
-      out:
-        []
+#    add-to-table:
+#      run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
+ #     in:
+ #       synapse_config: synapse_config
+ #       tableparentid: tableparentid
+ #       tablename: tablename
+ #       file: harmonize-counts/merged
+ #     out:
+ #       []
