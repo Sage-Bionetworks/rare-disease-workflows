@@ -4,7 +4,7 @@ synapse_config:
 indexid: syn18134565
 index-type: gencode
 index-dir: gencode_v29
-idquery: SELECT id,specimenID,readPair FROM syn15672871 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "dataSubtype" = 'raw' ) ) 
+idquery: SELECT id,specimenID,readPair FROM syn15672871 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "dataSubtype" = 'raw' ) ) limit 10 
 sample_query: SELECT distinct specimenID,individualID,assay,dataType,sex,consortium,study,diagnosis,tumorType,species,fundingAgency,resourceType,nf1Genotype,nf2Genotype,studyName,experimentalCondition FROM syn15672871 WHERE ( ( "assay" = 'rnaSeq' ) AND ( "dataSubtype" = 'raw' ) )
 parentid: syn20558670
 group_by: specimenID
