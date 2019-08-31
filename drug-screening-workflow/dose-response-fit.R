@@ -4,15 +4,21 @@ library(dplyr)
 library(nplr)
 
 args <- commandArgs(trailingOnly=T)
-print(args)
 data <- args[1] %>% read.csv()
   
-head(data)
-dose_response <- data %>%
+dose_response_single <- data %>%
+  group_by(drug_screen_id) %>% 
+  filter(length(unique(DT_explorer_internal_id)) == 1) %>%
   select(drug_screen_id, drug_name, dosage, response) %>% 
   mutate(id= paste0(drug_screen_id, "_", drug_name))
 
-test <- dose_response %>%
+# dose_response_combo <- data %>%
+#   group_by(drug_screen_id) %>% 
+#   filter(length(unique(DT_explorer_internal_id)) > 1) %>%
+#   select(drug_screen_id, drug_name, dosage, response) %>% 
+#   mutate(id= paste0(drug_screen_id, "_", drug_name))
+
+test <- dose_response_single %>%
   split(.$id)
 
 res <- lapply(test, function(x){
