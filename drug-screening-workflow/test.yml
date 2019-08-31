@@ -1,6 +1,6 @@
 {
     "synapseid": "syn20682897",
-    "output": "_August_2019",
+    "output": "_August_2019_v2",
     "parentid": "syn12292355",
     "synapse_config": {
         "class": "File",
@@ -9,3 +9,4 @@
         "secondaryFiles": []
     }
 }
+

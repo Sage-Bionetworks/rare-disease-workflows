@@ -10,7 +10,8 @@ dose_response_single <- data %>%
   group_by(drug_screen_id) %>% 
   filter(length(unique(DT_explorer_internal_id)) == 1) %>%
   select(drug_screen_id, drug_name, dosage, response) %>% 
-  mutate(id= paste0(drug_screen_id, "_", drug_name))
+  mutate(id= paste0(drug_screen_id, "_", drug_name)) %>% 
+  ungroup
 
 # dose_response_combo <- data %>%
 #   group_by(drug_screen_id) %>% 
@@ -23,8 +24,7 @@ test <- dose_response_single %>%
 
 res <- lapply(test, function(x){
   bar <- tryCatch({
-    foo<-nplr(x$dosage, x$response/10, silent = T)
-    
+    foo<-nplr(x$dosage, x$response, silent = T, useLog = T)
     simpson <- getAUC(foo)$Simpson
     trapezoid <- getAUC(foo)$trapezoid
     ic50_abs <- getEstimates(foo) %>% filter(y==0.5) %>% select(x) %>% purrr::set_names("IC50_absolute")
@@ -35,11 +35,11 @@ res <- lapply(test, function(x){
   })
   
   bar2 <- tryCatch({
-    foo2 <- nplr(x$dosage, scales::rescale(x$response,c(0,1)), silent = T)
+    foo2 <- nplr(x$dosage, convertToProp(x$response), silent = T, useLog = T)
     ic50_rel <- getEstimates(foo2) %>% filter(y==0.5) %>% select(x) %>% purrr::set_names("IC50_relative")
-    c('IC50_rel' = ic50_rel[1,1])
+    c('IC50_half_max' = ic50_rel[1,1])
   }, error = function(e) {
-    return(c('IC50_rel' = NA))
+    return(c('IC50_half_max' = NA))
   })
   
   c(bar,bar2)
@@ -70,7 +70,7 @@ res_df <- data %>%
 
 
 res_df %<>% mutate(response_unit = NA) %>% 
-  mutate(response_unit = replace(response_unit, response_type %in% c("IC50_abs", "IC50_rel"), 
+  mutate(response_unit = replace(response_unit, response_type %in% c("IC50_abs", "IC50_half_max"), 
                                  "uM")) %>% 
   mutate(response_unit = replace(response_unit, response_type %in% c("Min_viability"), 
                                  "%"))
