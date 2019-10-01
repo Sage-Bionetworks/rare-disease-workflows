@@ -1,6 +1,6 @@
-# NEXUS Gene Variant Workflow
-This workflow will consume a set of vcf files to create per-sample files and/or a larger tidied data frame of gene variant information
+# Gene Variant Workflow
 
+This workflow consumes a set of vcf files to create per-sample files and/or a larger tidied data frame of gene variant information in an expanded maf format that includes the source file annotations.
 
 # Running the workflow: 
 
