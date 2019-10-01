@@ -1,6 +1,6 @@
 # RNA-seq Salmon alignment workflow
 
-Below is the documentation for and end-to-end workflow to query Synapse to acquire files to be aligned to the `Gencode v29` transcriptome and quantified.
+This end-to-end workflow to queries Synapse, acquires FASTQs, aligns them to the `Gencode v29` transcriptome and quantifies transcript counts. The output of the workflow is a tidy data frame that contains all samples, counts, and metadata. This data frame is stored as a Synapse table. 
 
 ### Required inputs
 
