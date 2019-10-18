@@ -16,7 +16,7 @@ outputs:
 
 steps:
   get-files:
-    scatter: [uri]
+    scatter: uri
     scatterMethod: dotproduct
     run: steps/google-cloud-get.cwl
     in:

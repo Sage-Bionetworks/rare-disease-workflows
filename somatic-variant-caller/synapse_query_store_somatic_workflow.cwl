@@ -17,6 +17,20 @@ inputs:
       type: string
   - group_by:
       type: string
+  - uri-list:
+      type: string[]
+  - uri-names:
+      type: string[]
+  - vep-address:
+      type: string
+  - num-threads:
+      type: string
+  - chr-len:
+      type: string
+  - coeff-var:
+      type: string
+  - contamination_adjustment:
+      type: string
 
 outputs:
 
@@ -33,6 +47,18 @@ steps:
       query_tsv: get-fv/query_result
       group_by_column: group_by
     out: [names,tumor_ids,normal_ids]
+  get-files-from-cloud:
+    run: get-data-bundle-google.cwl
+    in:
+      uri-list: cloud-files
+    out:
+      [file-list]
+  get-files-from-ftp:
+    run: steps/ftp-get.cwl
+    in:
+      path: vep-address
+    out:
+      [filename]
   run-wf-by-sample:
     run:
     scatter: [tumorId,tumorFiles,normalFiles]
