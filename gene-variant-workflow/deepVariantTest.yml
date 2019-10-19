@@ -1,4 +1,4 @@
-vep-file-id: syn18491780
+index-url: ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/human_g1k_v37.fasta.gz
 synapse_config:
   class: File
   path: /Users/rallaway/.synapseConfig

@@ -9,14 +9,17 @@ hints:
 baseCommand: [wget]
 
 arguments:
-  - valueFrom: $(inputs.path)
+  - valueFrom: $(inputs.url)
   - valueFrom: .
 
 inputs:
-  path:
+  url:
     type: string
     inputBinding:
       position: 1
 
 outputs:
-  []
+  filepath:
+    type: File
+    outputBinding:
+      glob: '*'

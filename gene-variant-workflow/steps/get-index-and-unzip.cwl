@@ -7,18 +7,21 @@ class: Workflow
 inputs:
   index-url:
     type: string
+  samtools-arg:
+    type: string
+    valueFrom: faindex
 
 outputs:
   reference-fasta:
     type: File
-    outputSource: unzip-fasta-file/index-file
+    outputSource: index-fasta/indexed-file
 
 
 steps:
   get-index:
-    run:  ftp-get.cwl
+    run: ftp-get.cwl
     in:
-      path: index-url
+      url: index-url
     out: [filepath]
   unzip-fasta-file:
     run: unzip-file.cwl
@@ -26,3 +29,10 @@ steps:
       file: get-index/filepath
     out:
       [index-file]
+  index-fasta:
+    run: samtools-run.cwl
+    in:
+      filepath: unzip-fasta-file/index-file
+      arg: samtools-arg
+    out:
+      [indexed-file]

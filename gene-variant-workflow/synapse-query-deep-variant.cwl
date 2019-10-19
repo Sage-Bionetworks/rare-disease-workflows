@@ -36,7 +36,7 @@ outputs:
     outputSource: harmonize-calls/merged
   - id: maffile
     outputSource:
-      - run-vep/maf-file
+      - vcf2maf/maf-file
     type: File
   - id: vcf-id
     outputSource:
@@ -44,7 +44,7 @@ outputs:
     type: string
 steps:
   get-index:
-    run: steps/ftp-get.cwl
+    run: steps/get-index-and-unzip.cwl
     in:
       path: indexurl
     out:
@@ -66,8 +66,9 @@ steps:
       scatter: [synid]
       scatterMethod: dotproduct
       in:
-        syndid: get-samples-from-fv/names
+        synid: get-samples-from-fv/names
         synapse_config: synapse_config
+        index-file: get-index/file
       out: [synid,vcf]
   vcf2maf:
     run:
