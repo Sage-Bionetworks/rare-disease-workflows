@@ -38,3 +38,11 @@ inputs:
     type: File
 
 outputs:
+  vcf-file:
+    type: File
+    outputBinding:
+      glob: "*.vcf"
+  gvcf-file:
+    type: File
+    outputBinding:
+      glob: "*.gvcf"

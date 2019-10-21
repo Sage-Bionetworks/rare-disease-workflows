@@ -46,9 +46,9 @@ steps:
   get-index:
     run: steps/get-index-and-unzip.cwl
     in:
-      path: indexurl
+      url: indexurl
     out:
-      file
+      [indexed-file]
   get-fv:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
     in:
@@ -62,13 +62,13 @@ steps:
       group_by_column:
     out: [names]
   run-deepvar-by-specimen:
-      run: single-file-deep-variant.cwl
+      run: index-bam-run-deepvar.cwl
       scatter: [synid]
       scatterMethod: dotproduct
       in:
         synid: get-samples-from-fv/names
         synapse_config: synapse_config
-        index-file: get-index/file
+        index-file: get-index/index-file
       out: [synid,vcf]
   vcf2maf:
     run:

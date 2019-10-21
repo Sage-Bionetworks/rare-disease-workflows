@@ -1,7 +1,7 @@
 cwlVersion: v1.0
 label: index-bam-run-deepvar
 id: index-bam-run-deepvar
-
+class: Workflow
 
 inputs:
   synid:
@@ -13,7 +13,19 @@ inputs:
   samtools-arg:
     type: string
     valueFrom: index
+  model-type:
+    type: string
+  output-vcf:
+    type: string
+  output-gvcf:
+    type: string
+  num-shards:
+    type: string
 
+
+
+requirements:
+  - class: StepInputExpressionRequirement
 
 
 outputs:
@@ -28,18 +40,20 @@ steps:
       synapseid: synid
     out:
       [filepath]
-  index-file:
+  index-bam:
     run: steps/samtools-run.cwl
     in:
-      path: index-file
+      filepath: get-file/filepath
+      arg:
+        valueFrom: index
     out:
-      [indexed-file]
+      [indexed-bam]
   run-deepvar:
     run: steps/run-deepvar.cwl
     in:
-      bamfile:
-      indexedbam:
-      faindex:
-
+      bam-file: get-file/filepath
+      indexedbam: index-bam/indexed-bam
+      ref: index-file
+      model-type: model-type
     out:
-      vcf-file
+      [vcf-file]

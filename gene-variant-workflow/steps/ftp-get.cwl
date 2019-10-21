@@ -8,18 +8,19 @@ hints:
 
 baseCommand: [wget]
 
-arguments:
-  - valueFrom: $(inputs.url)
-  - valueFrom: .
+requirements:
+  - class: InlineJavascriptRequirement
 
 inputs:
+
   url:
     type: string
     inputBinding:
       position: 1
 
 outputs:
-  filepath:
+
+  output:
     type: File
     outputBinding:
-      glob: '*'
+      glob: $(inputs.url.split("/").slice(-1))
