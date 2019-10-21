@@ -14,17 +14,13 @@ arguments:
   - id: command
     valueFrom: $(inputs.arg)
   - id: filepath
-    valueFrom: $(inputs.filepath)
+    valueFrom: $(inputs.fpath)
 
 inputs:
   - id: arg
     type: string
-    inputBinding:
-      position: 1
-  - id: filepath
+  - id: fpath
     type: File
-    inputBinding:
-      position: 2
 
 outputs:
   indexed-files:

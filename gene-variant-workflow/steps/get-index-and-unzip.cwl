@@ -13,8 +13,8 @@ requirements:
 
 outputs:
   reference-fasta:
-    type: File
-    outputSource: index-fasta/indexed-file
+    type: File[]
+    outputSource: index-fasta/indexed-files
 
 
 steps:
@@ -32,7 +32,7 @@ steps:
   index-fasta:
     run: samtools-run.cwl
     in:
-      filepath: unzip-fasta-file/index-file
+      fpath: unzip-fasta-file/index-file
       arg:
         valueFrom: faidx
     out:

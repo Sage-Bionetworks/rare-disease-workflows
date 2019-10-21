@@ -10,7 +10,5 @@ parentid: syn20558670
 group_by: specimenID
 tableparentid: 
         - syn16941818
-        - syn16941818
 tablename: 
-        - Harmonized Gene Counts
         - Public Harmonized Gene Counts
