@@ -6,3 +6,8 @@ parentid: syn20540114
 group_by: mafid
 input-query: SELECT id FROM syn13363852 WHERE ( ( "assay" = 'exomeSeq' ) AND ( "sciDataRelease" = 'true' ) AND ( "fileFormat" = 'cram' ) ) limit 2
 clinical-query: SELECT id,specimenID,individualID,dataType,assay,nf1Genotype,nf2Genotype,age,sex,tumorType,tissue,diagnosis FROM syn13363852 WHERE ( ( "assay" = 'exomeSeq' ) AND ( "sciDataRelease" = 'true' ) AND ( "fileFormat" = 'cram' ) )
+synid: syn18633720
+index-fa: index.fa
+indexed-fa: index.fa.fai
+model-type: WES
+num-shards: 32

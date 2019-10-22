@@ -8,19 +8,17 @@ inputs:
     type: string
   synapse_config:
     type: File
-  index-file:
+  index-fa:
     type: File
   samtools-arg:
     type: string
-    valueFrom: index
+    default: "index"
   model-type:
-    type: string
-  output-vcf:
-    type: string
-  output-gvcf:
     type: string
   num-shards:
     type: string
+  indexed-fa:
+    type: File
 
 
 
@@ -30,7 +28,8 @@ requirements:
 
 outputs:
   vcffile:
-    valueFrom: run-deepvar/vcf-file
+    type: File
+    outputSource: run-deepvar/vcf-file
 
 steps:
   get-file:
@@ -43,17 +42,25 @@ steps:
   index-bam:
     run: steps/samtools-run.cwl
     in:
-      filepath: get-file/filepath
+      fpath: get-file/filepath
       arg:
         valueFrom: index
     out:
-      [indexed-bam]
+      [indexed_file]
   run-deepvar:
     run: steps/run-deepvar.cwl
     in:
       bam-file: get-file/filepath
-      indexedbam: index-bam/indexed-bam
-      ref: index-file
+      bam-index: index-bam/indexed_file
+      ref: index-fa
       model-type: model-type
+      indexed-fa: indexed-fa
+      bam-index: index-bam/indexed_file
+      num-shards: num-shards
+      output-gvcf:
+        valueFrom: $(inputs.synid).g.vcf.gz
+      output-vcf:
+        valueFrom: $(inputs.synid).vcf.gz
+
     out:
       [vcf-file]
