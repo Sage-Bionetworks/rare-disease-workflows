@@ -6,7 +6,11 @@ class: CommandLineTool
 requirements:
  - class: DockerRequirement
    dockerPull: biocontainers/samtools:v1.9-4-deb_cv1
+   dockerOutputDirectory: /tmp
  - class: StepInputExpressionRequirement
+ - class: InitialWorkDirRequirement
+   listing: 
+     -$(inputs.fpath)
 
 arguments:
   - id: samtools
