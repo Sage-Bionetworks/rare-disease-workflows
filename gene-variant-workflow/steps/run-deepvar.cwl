@@ -8,22 +8,22 @@ requirements:
     dockerPull: gcr.io/deepvariant-docker/deepvariant:0.8.0
   - class: InitialWorkDirRequirement
     listing:
-      - $(inputs.bam-file)
+      - $(inputs.bam_file)
       - $(inputs.ref)
-      - $(inputs.bam-index)
-      - $(inputs.indexed-fa)
+      - $(inputs.bam_index)
+      - $(inputs.indexed_fa)
   - class: InlineJavascriptRequirement
 arguments:
-  - valueFrom: $(inputs.output-prefix).vcf
+  - valueFrom: $(inputs.output_prefix + ".vcf")
     prefix: --output_vcf
-  - valueFrom: $(inputs.output-prefix).g.vcf
+  - valueFrom: $(inputs.output_prefix + ".g.vcf")
     prefix: --output_gvcf
 
 baseCommand:
   - /opt/deepvariant/bin/run_deepvariant
 
 inputs:
-  model-type:
+  model_type:
     type: string
     inputBinding:
       position: 1
@@ -33,21 +33,21 @@ inputs:
     inputBinding:
       position: 2
       prefix: --ref
-  bam-file:
+  bam_file:
     type: File
     inputBinding:
       position: 3
       prefix: --reads
-  num-shards:
+  num_shards:
     type: string
     inputBinding:
       position: 6
       prefix: --num_shards
-  bam-index:
+  bam_index:
     type: File
-  indexed-fa:
+  indexed_fa:
     type: File
-  output-prefix:
+  output_prefix:
     type: string
 
 outputs:
@@ -58,4 +58,4 @@ outputs:
   gvcf-file:
     type: File
     outputBinding:
-      glob: "*.gvcf"
+      glob: "*.g.vcf"

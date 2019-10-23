@@ -50,14 +50,14 @@ steps:
   run-deepvar:
     run: steps/run-deepvar.cwl
     in:
-      bam-file: get-file/filepath
-      bam-index: index-bam/indexed_file
+      bam_file: get-file/filepath
+      bamr_ndex: index-bam/indexed_file
       ref: index-fa
-      model-type: model-type
-      indexed-fa: indexed-fa
-      bam-index: index-bam/indexed_file
-      num-shards: num-shards
-      output-prefix: synid
+      model_type: model-type
+      indexed_fa: indexed-fa
+      bam_index: index-bam/indexed_file
+      num_shards: num-shards
+      output_prefix: synid
 
     out:
-      [vcf-file]
+      [vcf-file,gvcf-file]
