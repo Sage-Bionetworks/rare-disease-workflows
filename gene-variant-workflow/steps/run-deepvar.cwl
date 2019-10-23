@@ -12,6 +12,11 @@ requirements:
       - $(inputs.ref)
       - $(inputs.bam-index)
       - $(inputs.indexed-fa)
+arguments:
+  - valueFrom: $(inputs.output-prefix).vcf
+    prefix: --output_vcf
+  - valueFrom: $(inputs.output-prefix).g.vcf
+    prefix: --output_gvcf
 
 baseCommand:
   - /opt/deepvariant/bin/run_deepvariant
@@ -32,16 +37,6 @@ inputs:
     inputBinding:
       position: 3
       prefix: --reads
-  output-vcf:
-    type: string
-    inputBinding:
-      position: 4
-      prefix: --output_vcf
-  output-gvcf:
-    type: string
-    inputBinding:
-      position: 5
-      prefix: --output_gvcf
   num-shards:
     type: string
     inputBinding:
@@ -51,6 +46,8 @@ inputs:
     type: File
   indexed-fa:
     type: File
+  output-prefix:
+    type: string
 
 outputs:
   vcf-file:

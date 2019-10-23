@@ -57,10 +57,7 @@ steps:
       indexed-fa: indexed-fa
       bam-index: index-bam/indexed_file
       num-shards: num-shards
-      output-gvcf:
-        valueFrom: $(inputs.synid).g.vcf.gz
-      output-vcf:
-        valueFrom: $(inputs.synid).vcf.gz
+      output-prefix: synid
 
     out:
       [vcf-file]
