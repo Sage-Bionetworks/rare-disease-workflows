@@ -12,6 +12,7 @@ requirements:
       - $(inputs.ref)
       - $(inputs.bam-index)
       - $(inputs.indexed-fa)
+  - class: InlineJavascriptRequirement
 arguments:
   - valueFrom: $(inputs.output-prefix).vcf
     prefix: --output_vcf

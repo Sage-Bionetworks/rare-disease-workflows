@@ -43,7 +43,7 @@ steps:
     run: steps/samtools-run.cwl
     in:
       fpath: get-file/filepath
-      arg:
+      command:
         valueFrom: index
     out:
       [indexed_file]
