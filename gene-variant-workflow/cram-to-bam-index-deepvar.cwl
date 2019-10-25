@@ -22,6 +22,7 @@ inputs:
 
 requirements:
   - class: StepInputExpressionRequirement
+  - class: InlineJavascriptRequirement
 
 outputs:
   vcf-file:
