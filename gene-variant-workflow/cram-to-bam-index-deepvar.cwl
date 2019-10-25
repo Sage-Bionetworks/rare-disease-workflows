@@ -1,6 +1,6 @@
 cwlVersion: v1.0
-label: index-bam-run-deepvar
-id: index-bam-run-deepvar
+label: cram-to-bam-index-deepvar
+id: cram-to-bam-index-deepvar
 class: Workflow
 
 inputs:
@@ -47,7 +47,7 @@ steps:
       output_str:
         valueFrom: $(inputs.synid + ".bam")
     out:
-      bam_file
+      [bam_file]
   index-bam:
     run: steps/samtools-run.cwl
     in:
@@ -59,7 +59,7 @@ steps:
   run-deepvar:
     run: steps/run-deepvar.cwl
     in:
-      bam_file: get-file/filepath
+      bam_file: cram-to-bam/bam_file
       bam_index: index-bam/indexed_file
       ref: index-fa
       model_type: model-type
