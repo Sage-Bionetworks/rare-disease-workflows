@@ -61,3 +61,5 @@ steps:
 
     out:
       [vcf-file,gvcf-file]
+  vcf-2-maf:
+    run: step

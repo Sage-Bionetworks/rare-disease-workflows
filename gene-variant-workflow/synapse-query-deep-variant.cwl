@@ -42,6 +42,7 @@ outputs:
     outputSource:
       - vcfid
     type: string
+
 steps:
   get-index:
     run: steps/get-index-and-unzip.cwl
@@ -69,12 +70,7 @@ steps:
         synid: get-samples-from-fv/names
         synapse_config: synapse_config
         index-file: get-index/index-file
-      out: [synid,vcf]
-  vcf2maf:
-    run:
-
-    out:
-      maf-file
+      out: [synid,maf]
   get-clinical:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
     in:
