@@ -8,28 +8,28 @@ inputs:
     type: string
   synapse_config:
     type: File
+  indexed-fa:
+    type: File
   index-fa:
     type: File
-  samtools-arg:
-    type: string
-    default: "index"
   model-type:
     type: string
   num-shards:
     type: string
-  indexed-fa:
-    type: File
-
-
+  samtools-arg:
+    type: string
+    default: "index"
 
 requirements:
   - class: StepInputExpressionRequirement
 
-
 outputs:
-  vcffile:
+  vcf-file:
     type: File
     outputSource: run-deepvar/vcf-file
+  gvcf-file:
+    type: File
+    outputSource: run-deepvar/gvcf-file
 
 steps:
   get-file:
@@ -51,15 +51,11 @@ steps:
     run: steps/run-deepvar.cwl
     in:
       bam_file: get-file/filepath
-      bamr_ndex: index-bam/indexed_file
+      bam_index: index-bam/indexed_file
       ref: index-fa
       model_type: model-type
       indexed_fa: indexed-fa
-      bam_index: index-bam/indexed_file
       num_shards: num-shards
       output_prefix: synid
-
     out:
       [vcf-file,gvcf-file]
-  vcf-2-maf:
-    run: step

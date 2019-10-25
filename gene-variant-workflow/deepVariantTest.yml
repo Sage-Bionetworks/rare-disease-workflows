@@ -1,17 +1,13 @@
-index-url: ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/human_g1k_v37.fasta.gz
+indexurl: ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/human_g1k_v37.fasta.gz
+idquery: SELECT id FROM syn13363852 WHERE ( ( "assay" = 'exomeSeq' ) AND ( "sciDataRelease" = 'true' ) AND ( "fileFormat" = 'cram' ) ) limit 2
+sample_query: SELECT id,specimenID,individualID,dataType,assay,nf1Genotype,nf2Genotype,age,sex,tumorType,tissue,diagnosis FROM syn13363852 WHERE ( ( "assay" = 'exomeSeq' ) AND ( "sciDataRelease" = 'true' ) AND ( "fileFormat" = 'cram' ) )
+vcf_parentid: syn21052736
 synapse_config:
   class: File
   path: /home/sgosline/.synapseConfig
-parentid: syn20540114
-group_by: mafid
-input-query: SELECT id FROM syn13363852 WHERE ( ( "assay" = 'exomeSeq' ) AND ( "sciDataRelease" = 'true' ) AND ( "fileFormat" = 'cram' ) ) limit 2
-clinical-query: SELECT id,specimenID,individualID,dataType,assay,nf1Genotype,nf2Genotype,age,sex,tumorType,tissue,diagnosis FROM syn13363852 WHERE ( ( "assay" = 'exomeSeq' ) AND ( "sciDataRelease" = 'true' ) AND ( "fileFormat" = 'cram' ) )
-synid: syn18633720
-index-fa: 
-   class: File
-   path: index.fa
-indexed-fa: 
-   class: File
-   path: index.fa.fai
+group_by: id
 model-type: WES
 num-shards: "32"
+maf_parentid: syn21052737
+table_parentid: syn4939902
+tablename: "Biobank ExomeSeq DeepVariant Data"

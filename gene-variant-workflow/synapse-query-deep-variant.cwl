@@ -3,6 +3,9 @@ cwlVersion: v1.0
 id: synapse-query-deep-variant
 label: synapse-query-deep-variant
 
+requirements:
+  - class: SubworkflowFeatureRequirement
+  - class: ScatterFeatureRequirement
 
 inputs:
   - id: indexurl
@@ -11,7 +14,7 @@ inputs:
     type: string
   - id: sample_query
     type: string
-  - id: parentid
+  - id: vcf_parentid
     type: string
   - id: group_by
     type: string
@@ -19,37 +22,41 @@ inputs:
     type: string[]
   - id: tablename
     type: string[]
-  - id: dotvepdir
-    type: Directory
-  - id: indexfile
-    type: File
+#  - id: dotvepdir
+#    type: Directory
+#  - id: indexfile
+#    type: File
   - id: synapse_config
     type: File
-  - id: vcfid
+#  - id: vepdir
+#    type: Directory
+#  - id: maf_parentid
+#    type: string
+  - id: num-shards
     type: string
-  - id: vepdir
-    type: Directory
+  - id: model-type
+    type: string
 
 outputs:
-  - id: merged
-    type: File
-    outputSource: harmonize-calls/merged
-  - id: maffile
+#  - id: merged
+#    type: File
+ #   outputSource: harmonize-calls/merged
+  - id: vcffile
     outputSource:
-      - vcf2maf/maf-file
-    type: File
-  - id: vcf-id
+      - run-deepvar-by-specimen/vcf-file
+    type: File[]
+  - id: manifest
     outputSource:
-      - vcfid
-    type: string
+      - join-fileview-by-specimen/newmanifest
+    type: File
 
 steps:
   get-index:
     run: steps/get-index-and-unzip.cwl
     in:
-      url: indexurl
+      index-url: indexurl
     out:
-      [indexed-file]
+      [reference-fasta,indexed-fasta]
   get-fv:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
     in:
@@ -60,17 +67,19 @@ steps:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown.cwl
     in:
       query_tsv: get-fv/query_result
-      group_by_column:
+      group_by_column: group_by
     out: [names]
   run-deepvar-by-specimen:
-      run: index-bam-run-deepvar.cwl
-      scatter: [synid]
-      scatterMethod: dotproduct
-      in:
-        synid: get-samples-from-fv/names
-        synapse_config: synapse_config
-        index-file: get-index/index-file
-      out: [synid,maf]
+    run: index-bam-run-deepvar.cwl
+    scatter: synid
+    in:
+      synid: get-samples-from-fv/names
+      synapse_config: synapse_config
+      indexed-fa: get-index/indexed-fasta
+      index-fa: get-index/reference-fasta
+      model-type: model-type
+      num-shards: num-shards
+    out: [vcf-file,gvcf-file]
   get-clinical:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
     in:
@@ -78,37 +87,41 @@ steps:
       query: sample_query
     out: [query_result]
   join-fileview-by-specimen:
-      run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
-      in:
-        filelist: run-deepvar-by-specimen/vcf
-        values: run-deepvar-by-specimen/synid
-        manifest_file: get-clinical/query_result
-        parentid: parentid
-        key:
-      out:
-        [newmanifest]
-    store-files:
-        run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
-        in:
-          synapse_config: synapse_config
-          files: run-deepvar-by-specimen/vcf
-          manifest_file: join-fileview-by-specimen/newmanifest
-        out:
-          []
-    harmonize-counts:
-      run: steps/merge-maf-with-meta-tool.cwl
-      in:
-        synapse_config: synapse_config
-        manifest: join-fileview-by-specimen/newmanifest
-        files: run-deepvar-by-specimen/vcf
-      out:
-        [merged]
-    add-to-table:
-      run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
-      in:
-        synapse_config: synapse_config
-        tableparentid: tableparentid
-        tablename: tablename
-        file: harmonize-counts/merged
-      out:
-        []
+    run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
+    in:
+      filelist: run-deepvar-by-specimen/vcf-file
+      values: get-samples-from-fv/names
+      manifest_file: get-clinical/query_result
+      parentid: vcf_parentid
+      key: group_by
+    out:
+      [newmanifest]
+  store-files:
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
+    in:
+      synapse_config: synapse_config
+      files: run-deepvar-by-specimen/vcf-file
+      manifest_file: join-fileview-by-specimen/newmanifest
+    out:
+      []
+    # get-vep-index:
+    #   run: steps:
+    # run-vcf-2-maf:
+    #   run: steps/run-vep.cwl
+    # harmonize-counts:
+    #   run: steps/merge-maf-with-meta-tool.cwl
+    #   in:
+    #     synapse_config: synapse_config
+    #     manifest: join-fileview-by-specimen/newmanifest
+    #     files: run-deepvar-by-specimen/vcf
+    #   out:
+    #     [merged]
+    # add-to-table:
+    #   run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
+    #   in:
+    #     synapse_config: synapse_config
+    #     tableparentid: tableparentid
+    #     tablename: tablename
+    #     file: harmonize-counts/merged
+    #   out:
+    #     []

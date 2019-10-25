@@ -13,9 +13,11 @@ requirements:
 
 outputs:
   reference-fasta:
-    type: File[]
-    outputSource: index-fasta/indexed-files
-
+    type: File
+    outputSource: unzip-fasta-file/index-file
+  indexed-fasta:
+    type: File
+    outputSource: index-fasta/indexed_file
 
 steps:
   get-index:
@@ -36,4 +38,4 @@ steps:
       arg:
         valueFrom: faidx
     out:
-      [indexed-files]
+      [indexed_file]
