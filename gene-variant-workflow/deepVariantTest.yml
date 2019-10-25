@@ -9,5 +9,7 @@ group_by: id
 model-type: WES
 num-shards: "32"
 maf_parentid: syn21052737
-table_parentid: syn4939902
-tablename: "Biobank ExomeSeq DeepVariant Data"
+tableparentid: 
+   - syn4939902
+tablename: 
+   - "Biobank ExomeSeq DeepVariant Data"

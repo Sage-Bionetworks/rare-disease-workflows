@@ -64,16 +64,15 @@ steps:
       query: idquery
     out: [query_result]
   get-samples-from-fv:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/sage-workflows-sandbox/master/examples/tools/breakdown-by-row.cwl
     in:
       query_tsv: get-fv/query_result
-      group_by_column: group_by
-    out: [names]
+    out: [id_array]
   run-deepvar-by-specimen:
     run: index-bam-run-deepvar.cwl
     scatter: synid
     in:
-      synid: get-samples-from-fv/names
+      synid: get-samples-from-fv/id_array
       synapse_config: synapse_config
       indexed-fa: get-index/indexed-fasta
       index-fa: get-index/reference-fasta
@@ -90,7 +89,7 @@ steps:
     run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
     in:
       filelist: run-deepvar-by-specimen/vcf-file
-      values: get-samples-from-fv/names
+      values: get-samples-from-fv/id_array
       manifest_file: get-clinical/query_result
       parentid: vcf_parentid
       key: group_by
