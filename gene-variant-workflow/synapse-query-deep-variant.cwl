@@ -69,7 +69,7 @@ steps:
       query_tsv: get-fv/query_result
     out: [id_array]
   run-deepvar-by-specimen:
-    run: index-bam-run-deepvar.cwl
+    run: cram-to-bam-index-deepvar.cwl
     scatter: synid
     in:
       synid: get-samples-from-fv/id_array
