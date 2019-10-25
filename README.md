@@ -6,12 +6,12 @@ The goal of this repository is to faciliate harmonization across rare-disease da
 ![Alt text](doc/workflowCats.png?raw=true "Workflows")
 
 ## Data Harmonization workflows
-We have built a number of workflows that re-process raw data uploaded to Synapse to create a single data repository.
+We have built a number of workflows that re-process raw data uploaded to Synapse to create a single data repository. All harmonized datasets will be colated in a [single table](https://www.synapse.org/#!Synapse:syn21050200/tables/) that should be uploaded every time we have a new dataset processed. 
 
-| Data Type | Description | Location | Destination | Status
+| Data Type | Description | Location | Destinations | Status
 | --- | --- | --- | --- | --- | 
-| RNA-Seq | This workflow runs Salmon alignment from FASTQ files to populate a both a public and private Synapse table that stores all NF-related gene expression data. | [rna-seq-workflow/](rna-seq-workflow) | [Synapse Table]() | Complete 
-| Exome/WGS-Seq | This workflow *currently* runs `vcf2maf` on uploaded `vcf` files and stores them on Synapse.  | [gene-variant-workflow](gene-variant-workflow) | Table TBD | Currently processed files, needs to be updated to store data on synapse.|
+| RNA-Seq | This workflow runs Salmon alignment from FASTQ files to populate a both a public and private Synapse table that stores all NF-related gene expression data. | [rna-seq-workflow/](rna-seq-workflow) | [JHU Biobank RNA-Seq](https://www.synapse.org/#!Synapse:syn20812185/tables/)| Complete 
+| Exome/WGS-Seq | This workflow *currently* runs `vcf2maf` on uploaded `vcf` files and stores them on Synapse.  | [gene-variant-workflow](gene-variant-workflow) | [JHU Biobank Exome Seq](https://www.synapse.org/#!Synapse:syn20812188/tables/)| Currently processed files, needs to be updated to store data on synapse. Currently being uploaded to run DeepVariant caller|
 | Somatic variant caller | This workflow should take the raw data and call somatic variants. | [somatic-variant-caller/](somatic-variant-caller/) | TBD | Currently adding Synapse pieces to Kids-First variant caller|
 | Drug-Sensitivity Data | This workflow takes drug-sensitivity data and combines it to a single file. | [drug-screening-workflow](drug-screening-workflow) | Table TBD | Still requires table update |
 
