@@ -103,24 +103,34 @@ steps:
       manifest_file: join-fileview-by-specimen/newmanifest
     out:
       []
-    # get-vep-index:
-    #   run: steps:
-    # run-vcf-2-maf:
-    #   run: steps/run-vep.cwl
-    # harmonize-counts:
-    #   run: steps/merge-maf-with-meta-tool.cwl
-    #   in:
-    #     synapse_config: synapse_config
-    #     manifest: join-fileview-by-specimen/newmanifest
-    #     files: run-deepvar-by-specimen/vcf
-    #   out:
-    #     [merged]
-    # add-to-table:
-    #   run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
-    #   in:
-    #     synapse_config: synapse_config
-    #     tableparentid: tableparentid
-    #     tablename: tablename
-    #     file: harmonize-counts/merged
-    #   out:
-    #     []
+   get-vep-index:
+     run: get-index-and-unzip.cwl
+     in: 
+  	vep-file-id: vep-file-id
+  	synapse_config: synapse_config 
+     out: 
+ 	 [reference-fasta,dotvep-dir,vep-dir]
+   run-vcf-2-maf:
+     run: steps/run-vep.cwl
+     scatter: vcf-file
+     in:
+        vep-dir: get-vep-index/vep-dir
+        dotvepdir: get-vep-index/dotvep-dir
+        indexfile: 
+   harmonize-counts:
+     run: steps/merge-maf-with-meta-tool.cwl
+       in:
+         synapse_config: synapse_config
+       manifest: join-fileview-by-specimen/newmanifest
+         files: run-deepvar-by-specimen/vcf
+       out:
+         [merged]
+     add-to-table:
+       run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
+       in:
+         synapse_config: synapse_config
+         tableparentid: tableparentid
+         tablename: tablename
+         file: harmonize-counts/merged
+       out:
+        []
