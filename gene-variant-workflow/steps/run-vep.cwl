@@ -2,7 +2,7 @@ label: run-vep
 id: run-vep
 cwlVersion: v1.0
 class: CommandLineTool
-baseCommand: perl 
+baseCommand: perl
 
 requirements:
   - class: DockerRequirement
@@ -33,18 +33,26 @@ inputs:
     inputBinding:
       position: 2
       prefix: --output-maf
+      default:
+        valueFrom: $(input_vcf.basename + ".maf")
   ref_fasta:
     type: File
     inputBinding:
       position: 3
       prefix: --ref-fasta
+  vcf-id:
+    type: string
+    inputBinding:
+      default: $(input_vcf.basename)
 
 outputs:
   maf-file:
     type: File
     outputBinding:
       glob: "*.maf"
+  vcf-id:
+    type: string
+    valueFrom: $(inputs.vcf-id)
 
 arguments:
   ["/root/vcf2maf-1.6.17/vcf2maf.pl"]
-
