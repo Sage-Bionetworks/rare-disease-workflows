@@ -103,15 +103,15 @@ steps:
     run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
     in:
       synapse_config: synapse_config
-      vep-file-id: vep-file-id
+      synapseid: vep-file-id
     out:
-      [vep-file]
+      [filepath]
   uz-vep-index:
     run: steps/unzip-dir.cwl
     in:
-      file: get-vep-index/vep-file
+      file: get-vep-index/filepath
     out:
-      [reference-fasta,dotvep-dir,vep-dir]
+      [gz-index-file,dotvep-dir,vep-dir]
   run-vep:
     run: steps/run-vep.cwl
     scatter: [input_vcf,vcf-id]
@@ -121,14 +121,13 @@ steps:
       dotvepdir: uz-vep-index/dotvep-dir
       input_vcf: run-deepvar-by-specimen/vcf-file
       vcf-id: get-samples-from-fv/id_array
-      synapse_config: synapse_config
-      ref_fasta: uz-vep-index/reference-fasta
+      ref_fasta: uz-vep-index/gz-index-file
     out:
-      [vcf-id,maffile]
+      [vcf-id,maf-file]
   join-mafs-by-specimen:
     run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
     in:
-      filelist: run-vep/maffile
+      filelist: run-vep/maf-file
       values: run-vep/vcf-id
       manifest_file: get-clinical/query_result
       parentid: maf_parentid
@@ -140,7 +139,7 @@ steps:
     in:
       synapse_config: synapse_config
       manifest: join-mafs-by-specimen/newmanifest
-      files: run-vep/maffile
+      files: run-vep/maf-file
     out:
       [merged]
   add-to-table:

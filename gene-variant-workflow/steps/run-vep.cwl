@@ -29,12 +29,11 @@ inputs:
       position: 1
       prefix: --input-vcf
   output-maf:
-    type: string
+    type: string?
     inputBinding:
       position: 2
       prefix: --output-maf
-      default:
-        valueFrom: $(input_vcf.basename + ".maf")
+      valueFrom: $(input_vcf.basename + ".maf")
   ref_fasta:
     type: File
     inputBinding:
@@ -43,7 +42,7 @@ inputs:
   vcf-id:
     type: string
     inputBinding:
-      default: $(input_vcf.basename)
+      valueFrom: $(input_vcf.basename)
 
 outputs:
   maf-file:
@@ -52,7 +51,8 @@ outputs:
       glob: "*.maf"
   vcf-id:
     type: string
-    valueFrom: $(inputs.vcf-id)
+    outputBinding:
+      glob: $(inputs.vcf-id)
 
 arguments:
   ["/root/vcf2maf-1.6.17/vcf2maf.pl"]
