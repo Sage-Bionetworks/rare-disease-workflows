@@ -22,16 +22,12 @@ inputs:
     type: string[]
   - id: tablename
     type: string[]
-#  - id: dotvepdir
-#    type: Directory
-#  - id: indexfile
-#    type: File
   - id: synapse_config
     type: File
-#  - id: vepdir
-#    type: Directory
-#  - id: maf_parentid
-#    type: string
+  - id: vep-file-id
+    type: string
+  - id: maf_parentid
+    type: string
   - id: num-shards
     type: string
   - id: model-type
@@ -69,7 +65,7 @@ steps:
       query_tsv: get-fv/query_result
     out: [id_array]
   run-deepvar-by-specimen:
-    run: index-bam-run-deepvar.cwl
+    run: cram-to-bam-index-deepvar.cwl
     scatter: synid
     in:
       synid: get-samples-from-fv/id_array
@@ -103,24 +99,55 @@ steps:
       manifest_file: join-fileview-by-specimen/newmanifest
     out:
       []
-    # get-vep-index:
-    #   run: steps:
-    # run-vcf-2-maf:
-    #   run: steps/run-vep.cwl
-    # harmonize-counts:
-    #   run: steps/merge-maf-with-meta-tool.cwl
-    #   in:
-    #     synapse_config: synapse_config
-    #     manifest: join-fileview-by-specimen/newmanifest
-    #     files: run-deepvar-by-specimen/vcf
-    #   out:
-    #     [merged]
-    # add-to-table:
-    #   run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
-    #   in:
-    #     synapse_config: synapse_config
-    #     tableparentid: tableparentid
-    #     tablename: tablename
-    #     file: harmonize-counts/merged
-    #   out:
-    #     []
+  get-vep-index:
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
+    in:
+      synapse_config: synapse_config
+      synapseid: vep-file-id
+    out:
+      [filepath]
+  uz-vep-index:
+    run: steps/unzip-dir.cwl
+    in:
+      file: get-vep-index/filepath
+    out:
+      [gz-index-file,dotvep-dir,vep-dir]
+  run-vep:
+    run: steps/run-vep.cwl
+    scatter: [input_vcf,vcf-id]
+    scatterMethod: dotproduct
+    in:
+      vepdir: uz-vep-index/vep-dir
+      dotvepdir: uz-vep-index/dotvep-dir
+      input_vcf: run-deepvar-by-specimen/vcf-file
+      vcf-id: get-samples-from-fv/id_array
+      ref_fasta: uz-vep-index/gz-index-file
+    out:
+      [vcf-id,maf-file]
+  join-mafs-by-specimen:
+    run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
+    in:
+      filelist: run-vep/maf-file
+      values: run-vep/vcf-id
+      manifest_file: get-clinical/query_result
+      parentid: maf_parentid
+      key: group_by
+    out:
+      [newmanifest]
+  harmonize-counts:
+    run: steps/merge-maf-with-meta-tool.cwl
+    in:
+      synapse_config: synapse_config
+      manifest: join-mafs-by-specimen/newmanifest
+      files: run-vep/maf-file
+    out:
+      [merged]
+  add-to-table:
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
+    in:
+      synapse_config: synapse_config
+      tableparentid: tableparentid
+      tablename: tablename
+      file: harmonize-counts/merged
+    out:
+      []

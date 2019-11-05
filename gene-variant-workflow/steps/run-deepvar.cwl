@@ -17,7 +17,7 @@ requirements:
 arguments:
   - valueFrom: $(inputs.output_prefix + ".vcf")
     prefix: --output_vcf
-  - valueFrom: $(inputs.output_prefix + ".g.vcf")
+  - valueFrom: $(inputs.output_prefix + ".gvcf")
     prefix: --output_gvcf
 
 baseCommand:
@@ -59,4 +59,4 @@ outputs:
   gvcf-file:
     type: File
     outputBinding:
-      glob: "*.g.vcf"
+      glob: "*.gvcf"
