@@ -123,12 +123,12 @@ steps:
       vcf-id: get-samples-from-fv/id_array
       ref_fasta: uz-vep-index/gz-index-file
     out:
-      [vcf-id,maf-file]
+      [vcfid,maf-file]
   join-mafs-by-specimen:
     run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
     in:
       filelist: run-vep/maf-file
-      values: run-vep/vcf-id
+      values: run-vep/vcfid
       manifest_file: get-clinical/query_result
       parentid: maf_parentid
       key: group_by

@@ -49,7 +49,7 @@ outputs:
     type: File
     outputBinding:
       glob: "*.maf"
-  vcf-id:
+  vcfid:
     type: string
     outputBinding:
       glob: $(inputs.vcf-id)
