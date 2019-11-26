@@ -34,9 +34,9 @@ inputs:
     type: string
 
 outputs:
-#  - id: merged
-#    type: File
- #   outputSource: harmonize-calls/merged
+  - id: merged
+    type: File
+    outputSource: harmonize-counts/merged
   - id: vcffile
     outputSource:
       - run-deepvar-by-specimen/vcf-file
@@ -45,6 +45,7 @@ outputs:
     outputSource:
       - join-fileview-by-specimen/newmanifest
     type: File
+  
 
 steps:
   get-index:
@@ -114,21 +115,20 @@ steps:
       [gz-index-file,dotvep-dir,vep-dir]
   run-vep:
     run: steps/run-vep.cwl
-    scatter: [input_vcf,vcf-id]
+    scatter: [input_vcf]
     scatterMethod: dotproduct
     in:
       vepdir: uz-vep-index/vep-dir
       dotvepdir: uz-vep-index/dotvep-dir
       input_vcf: run-deepvar-by-specimen/vcf-file
-      vcf-id: get-samples-from-fv/id_array
-      ref_fasta: uz-vep-index/gz-index-file
+      ref_fasta: get-index/reference-fasta
     out:
-      [vcfid,maf-file]
+      [maf-file]
   join-mafs-by-specimen:
     run: https://raw.githubusercontent.com/sgosline/synapse-workflow-cwl-tools/master/join-fileview-by-specimen-tool.cwl
     in:
       filelist: run-vep/maf-file
-      values: run-vep/vcfid
+      values: get-samples-from-fv/id_array
       manifest_file: get-clinical/query_result
       parentid: maf_parentid
       key: group_by
