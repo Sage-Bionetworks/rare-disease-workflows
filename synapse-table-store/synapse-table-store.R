@@ -19,7 +19,7 @@ main<-function(){
     args<-getArgs()
 
 
-    with.prov<-read.table(args$file,sep='\t',header=T,as.is=T,check.names=F)
+    with.prov<-read.table(args$file,sep='\t',header=T,as.is=T,check.names=F,quote="'")
 
     if(args$tableparentid!=""){
         synids=unlist(strsplit(args$tableparentid,split=','))
