@@ -8,9 +8,12 @@ synapse_config:
 group_by: id
 model-type: WES
 num-shards: "32"
-maf_parentid: syn21052737
+maf_parentid: syn21305583
 vep-file-id: syn18491780
 tableparentid: 
    - syn4939902
 tablename: 
    - "Biobank ExomeSeq DeepVariant Data"
+indexfile:
+  class: File
+  path: index.fa

@@ -17,6 +17,7 @@ requirements:
          writable: true
        - entry: $(inputs.dotvepdir)
          writable: true
+  - class: InlineJavascriptRequirement
 
 inputs:
   vepdir:
@@ -33,26 +34,18 @@ inputs:
     inputBinding:
       position: 2
       prefix: --output-maf
-      valueFrom: $(input_vcf.basename + ".maf")
+      valueFrom: $(inputs.input_vcf.basename + ".maf")
   ref_fasta:
     type: File
     inputBinding:
       position: 3
       prefix: --ref-fasta
-  vcf-id:
-    type: string
-    inputBinding:
-      valueFrom: $(input_vcf.basename)
 
 outputs:
   maf-file:
     type: File
     outputBinding:
       glob: "*.maf"
-  vcfid:
-    type: string
-    outputBinding:
-      glob: $(inputs.vcf-id)
 
 arguments:
   ["/root/vcf2maf-1.6.17/vcf2maf.pl"]
