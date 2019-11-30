@@ -45,6 +45,10 @@ outputs:
     outputSource:
       - join-fileview-by-specimen/newmanifest
     type: File
+  - id: mafs
+    type: File[]
+    outputSource:
+      - run-vep/maf-file
   
 
 steps:
