@@ -54,7 +54,7 @@ steps:
     out:
       [reference-fasta,indexed-fasta]
   get-fv:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-query-tool.cwl
     in:
       synapse_config: synapse_config
       query: idquery
@@ -76,7 +76,7 @@ steps:
       num-shards: num-shards
     out: [vcf-file,gvcf-file]
   get-clinical:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-query-tool.cwl
     in:
       synapse_config: synapse_config
       query: sample_query
@@ -92,7 +92,7 @@ steps:
     out:
       [newmanifest]
   store-files:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-sync-to-synapse-tool.cwl
     in:
       synapse_config: synapse_config
       files: run-deepvar-by-specimen/vcf-file
@@ -100,7 +100,7 @@ steps:
     out:
       []
   get-vep-index:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-get-tool.cwl
     in:
       synapse_config: synapse_config
       synapseid: vep-file-id
