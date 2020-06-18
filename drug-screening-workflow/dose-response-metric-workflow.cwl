@@ -27,7 +27,7 @@ steps:
     out:
       - id: filepath
     run: >-
-      https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
+      https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-get-tool.cwl
   - id: dose_response_fitting_tool
     in:
       - id: data
@@ -51,6 +51,6 @@ steps:
     out:
       - id: stdout
     run: >-
-      https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-store-tool.cwl
+      https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-store-tool.cwl
     label: Synapse command line client subcommand for storing a file.
 requirements: []

@@ -36,7 +36,7 @@ outputs:
 
 steps:
   get-fv:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-query-tool.cwl
     in:
       synapse_config: synapse_config
       query: idquery
@@ -70,7 +70,7 @@ steps:
       synapse_config: synapse_config
     out: [vars,dirname] ##figure out what the output is
   get-clinical:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-query-tool.cwl
     in:
       synapse_config: synapse_config
       query: sample_query

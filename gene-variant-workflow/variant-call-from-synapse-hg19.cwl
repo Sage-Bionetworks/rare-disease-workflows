@@ -38,7 +38,7 @@ steps:
     out:
       - id: query_result
     run: >-
-      https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
+      https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-query-tool.cwl
     label: synapse-query-tool
   - id: get-fv
     in:
@@ -49,7 +49,7 @@ steps:
     out:
       - id: query_result
     run: >-
-      https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
+      https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-query-tool.cwl
     label: synapse-query-tool
   - id: get-samples-from-fv
     in:

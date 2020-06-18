@@ -30,14 +30,14 @@ requirements:
 
 steps:
   download-mate1-files:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-get-tool.cwl
     scatter: synapseid
     in:
       synapseid: mate1-ids
       synapse_config: synapse_config
     out: [filepath]
   download-mate2-files:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-get-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-get-tool.cwl
     scatter: synapseid
     in:
       synapseid: mate2-ids

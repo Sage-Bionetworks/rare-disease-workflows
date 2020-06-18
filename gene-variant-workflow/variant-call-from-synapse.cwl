@@ -39,7 +39,7 @@ outputs:
 
 steps:
   get-fv:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-query-tool.cwl
     in:
         synapse_config: synapse_config
         query: input-query
@@ -68,7 +68,7 @@ steps:
     out:
       [vcf-id,maffile]
   get-clinical:
-    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-query-tool.cwl
+    run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-query-tool.cwl
     in:
       synapse_config: synapse_config
       query: clinical-query
@@ -84,7 +84,7 @@ steps:
     out:
       [newmanifest]
  # store-files:
- #   run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/master/synapse-sync-to-synapse-tool.cwl
+ #   run: https://raw.githubusercontent.com/Sage-Bionetworks/synapse-client-cwl-tools/v0.1/synapse-sync-to-synapse-tool.cwl
  #   in:
  #     synapse_config: synapse_config
  #     files: get-vcf-run-vep/maffile
