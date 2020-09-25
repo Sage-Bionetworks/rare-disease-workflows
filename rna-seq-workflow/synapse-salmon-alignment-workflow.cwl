@@ -103,7 +103,7 @@ steps:
       out:
         [merged]
     add-to-table:
-      run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/master/synapse-table-store/synapse-table-store-tool.cwl
+      run: https://raw.githubusercontent.com/Sage-Bionetworks/rare-disease-workflows/main/synapse-table-store/synapse-table-store-tool.cwl
       in:
         synapse_config: synapse_config
         tableparentid: tableparentid
